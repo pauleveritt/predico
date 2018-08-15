@@ -5,7 +5,8 @@ import pytest
 from dectate import ConflictError
 
 from kaybee_component.predicate_registry import Kaybee
-from kaybee_component.predicates import ForPredicate
+from kaybee_component.predicates import ForPredicate, ResourcePredicate
+from kaybee_component.resources import Resource
 from kaybee_component.views import IndexView, ViewAction
 
 
@@ -18,8 +19,18 @@ def registry():
 
 
 @pytest.fixture
-def simple_view(registry):
+def for_view(registry):
     @registry.view(for_=IndexView)
+    @dataclass
+    class ForView:
+        logo: str = 'Logo XX'
+
+    dectate.commit(registry)
+
+
+@pytest.fixture
+def resource_view(registry):
+    @registry.view(for_=IndexView, resource=Resource)
     @dataclass
     class ResourceView:
         logo: str = 'Logo XX'
@@ -45,18 +56,36 @@ class TestForPredicate:
         predicate = ForPredicate(value=IndexView)
         assert 'for_' == predicate.key
 
-    def test_simple_registration(self, registry, simple_view):
+    def test_simple_registration(self, registry, for_view):
         q = dectate.Query('view')
         actions = list(q(registry))
         assert 1 == len(actions)
         action, target = actions[0]
         assert 'for_-IndexView' == action.name
         assert 'ViewForPredicate' == action.for_.__class__.__name__
+        assert target.__name__.endswith('ForView')
+
+
+class TestResourcePredicate:
+    def test_import(self):
+        assert 'ResourcePredicate' == ResourcePredicate.__name__
+
+    def test_construction(self):
+        predicate = ResourcePredicate(value=Resource)
+        assert 'resource' == predicate.key
+
+    def test_simple_registration(self, registry, resource_view):
+        q = dectate.Query('view')
+        actions = list(q(registry))
+        assert 1 == len(actions)
+        action, target = actions[0]
+        assert 'for_-IndexView--resource-Resource' == action.name
+        assert 'ViewForPredicate' == action.for_.__class__.__name__
         assert target.__name__.endswith('ResourceView')
 
 
 class TestConflict:
-    def test_conflict_error(self, registry, simple_view):
+    def test_conflict_error(self, registry, for_view):
         @registry.view(for_=IndexView)
         @dataclass
         class ArticleView:
@@ -66,6 +95,8 @@ class TestConflict:
             dectate.commit(registry)
 
 
-class TestFindBestMatch:
-    def test_two(self, registry, simple_view, two_predicate_view):
-        pass
+class TestTwoViews:
+    def test_two(self, registry, for_view, resource_view):
+        q = dectate.Query('view')
+        actions = list(q(registry))
+        assert 2 == len(actions)
