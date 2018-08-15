@@ -1,13 +1,11 @@
 import dectate
 
-
-def make_dict():
-    return dict()
+from kaybee_component.views import ViewAction
 
 
 class ServiceAction(dectate.Action):
     config = {
-        'plugins': make_dict
+        'plugins': dict
     }
 
     def __init__(self, name):
@@ -25,7 +23,7 @@ class ServiceAction(dectate.Action):
 
 class AdapterAction(dectate.Action):
     config = {
-        'plugins': make_dict
+        'plugins': dict
     }
 
     def __init__(self, name):
@@ -42,5 +40,6 @@ class AdapterAction(dectate.Action):
 
 
 class Kaybee(dectate.App):
+    view = dectate.directive(ViewAction)
     service = dectate.directive(ServiceAction)
     adapter = dectate.directive(AdapterAction)
