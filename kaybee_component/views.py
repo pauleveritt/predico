@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Sequence, Optional
 
 import dectate
 
@@ -15,7 +15,6 @@ class ViewForPredicate(ForPredicate):
 
 
 class ViewAction(dectate.Action):
-    name: str
     config = {
         'plugins': dict
     }
@@ -29,9 +28,14 @@ class ViewAction(dectate.Action):
         super().__init__()
         self.for_ = ViewForPredicate(value=for_)
         self.name = f'{self.for_}'
+        self.sort_order = self.for_.rank
+
+        # Now start going through each optional predicate and
+        # adjusting this action's state.
         if resource:
             self.resource = ResourcePredicate(value=resource)
             self.name += f'--{self.resource}'
+            self.sort_order += self.resource.rank
 
     def identifier(self, plugins, app_class=None):
         return self.name
@@ -40,3 +44,25 @@ class ViewAction(dectate.Action):
         if plugins is None:
             plugins = []
         plugins[self.name] = obj
+
+    @classmethod
+    def sorted_actions(cls, app: dectate.App) -> Sequence[dectate.Action]:
+        q = dectate.Query('view')
+        sorted_actions = sorted(q(app),
+                                key=lambda x: x[0].sort_order,
+                                reverse=True)
+        return sorted_actions
+
+    @classmethod
+    def get_class(cls,
+                  app: dectate.App,
+                  for_target: Optional[IndexView] = None,
+                  resource_target: Optional[Resource] = None,
+                  ):
+        sorted_actions = cls.sorted_actions(app)
+        for action, view_class in sorted_actions:
+            if resource_target:
+                action_resource = getattr(action, 'resource', False)
+                if action_resource and action_resource.value == \
+                        resource_target:
+                    return view_class
