@@ -11,25 +11,23 @@ class ViewForPredicate(ForPredicate):
     value: Type[IndexView]
 
 
+msg = "__init__() missing 1 required positional argument: "
+
+
 class PredicateAction(dectate.Action):
     config = {
         'plugins': dict
     }
 
-    def __init__(self,
-                 **args,
-                 # for_: Type[IndexView],
-                 # resource: Type[Resource] = None,
-                 ):
+    def __init__(self, **args):
         super().__init__()
         self.predicates = {}
 
         for predicate_choice in self.REQUIRED_PREDICATES:
             key = predicate_choice.key
             if key not in args:
-                msg = f"__init__() missing 1 required positional argument: " \
-                      f"'{key}'"
-                raise TypeError(msg)
+                m = msg + key
+                raise TypeError(m)
             predicate = predicate_choice(value=args[key])
             self.predicates[key] = predicate
 

@@ -32,7 +32,7 @@ class TestViewAction:
 
         with pytest.raises(DirectiveReportError) as exc:
             dectate.commit(registry)
-        m = '__init__() missing 1 required positional argument: \'for_\''
+        m = '__init__() missing 1 required positional argument: for_'
         assert str(exc.value).startswith(m)
 
     def test_construction(self, actions):
