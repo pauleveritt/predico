@@ -23,16 +23,29 @@ class ViewAction(dectate.Action):
                  resource: Type[Resource] = None,
                  ):
         super().__init__()
-        self.for_ = ViewForPredicate(value=for_)
-        self.name = f'{self.for_}'
-        self.sort_order = self.for_.rank
+        predicates = self.predicates = {
+            'for_': ViewForPredicate(value=for_)
+        }
+        # self.name = f"{predicates['for_']}"
+        # self.sort_order = self.for_.rank
 
         # Now start going through each optional predicate and
         # adjusting this action's state.
         if resource:
-            self.resource = ResourcePredicate(value=resource)
-            self.name += f'--{self.resource}'
-            self.sort_order += self.resource.rank
+            self.predicates['resource'] = ResourcePredicate(value=resource)
+            # self.name += f'--{self.resource}'
+            # self.sort_order += self.resource.rank
+
+        predicate_values = self.predicates.values()
+        self.name = '--'.join(
+            [str(predicate) for predicate in predicate_values]
+        )
+        self.sort_order = sum(
+            [predicate.rank for predicate in predicate_values]
+        )
+
+    def __str__(self):
+        return self.name
 
     def identifier(self, plugins, app_class=None):
         return self.name
