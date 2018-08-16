@@ -1,0 +1,2 @@
+class IndexView:
+    pass

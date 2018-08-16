@@ -4,10 +4,7 @@ import dectate
 
 from kaybee_component.predicates import ForPredicate, ResourcePredicate
 from kaybee_component.resources import Resource
-
-
-class IndexView:
-    pass
+from kaybee_component.viewtypes import IndexView
 
 
 class ViewForPredicate(ForPredicate):
@@ -61,8 +58,28 @@ class ViewAction(dectate.Action):
                   ):
         sorted_actions = cls.sorted_actions(app)
         for action, view_class in sorted_actions:
+            #
+            # TODO
+            # Change this. Instead of choosing based on what was passed
+            # in, choose based on what the action is asking for. This
+            # means:
+            # - Store the action's predicates in self.predicates
+            # - Sniff at predicate's .match() args to see what it wants
             if resource_target:
-                action_resource = getattr(action, 'resource', False)
-                if action_resource and action_resource.value == \
-                        resource_target:
+                # Does this action have a resource predicate?
+                action_resource: ResourcePredicate = getattr(action,
+                                                             'resource', False)
+                if action_resource and action_resource.matches(
+                        resource_target):
+                    return view_class
+                else:
+                    # We asked for it, but it didn't match, on to the
+                    # next action
+                    continue
+
+            if for_target:
+                # Does this action have a for_ predicate?
+                action_for: ForPredicate = getattr(action,
+                                                   'for_', False)
+                if action_for and action_for.matches(for_target):
                     return view_class

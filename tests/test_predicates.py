@@ -119,6 +119,6 @@ class TestTwoViews:
 
     def test_select_for_view(self, registry, for_view, resource_view):
         sorted_actions = ViewAction.sorted_actions(registry)
-        resource_view = sorted_actions[1][1]
-        view_class = ViewAction.get_class(registry)
-        assert resource_view == view_class
+        for_view = sorted_actions[1][1]
+        view_class = ViewAction.get_class(registry, for_target=IndexView)
+        assert for_view == view_class
