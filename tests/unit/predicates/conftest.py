@@ -8,11 +8,6 @@ from kaybee_component.views import ViewAction
 from kaybee_component.viewtypes import IndexView
 
 
-@dataclass
-class ForView:
-    logo: str = 'Logo XX'
-
-
 @pytest.fixture
 def registry():
     class PredicateApp(dectate.App):
