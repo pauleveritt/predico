@@ -10,6 +10,6 @@ class ViewForPredicate(ForPredicate):
 
 
 class ViewAction(PredicateAction):
-    REQUIRED_PREDICATES = (ForPredicate,)
+    REQUIRED_PREDICATES = (ViewForPredicate,)
     OPTIONAL_PREDICATES = (ResourcePredicate,)
     predicates: Mapping[str, Union[ForPredicate, ResourcePredicate]]

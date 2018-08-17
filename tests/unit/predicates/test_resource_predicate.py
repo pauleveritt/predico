@@ -36,24 +36,25 @@ class TestResourcePredicate:
         assert 1 == len(actions)
         action, target = actions[0]
         assert 'for_-IndexView--resource-Resource' == action.name
-        assert 'ViewForPredicate' == action.for_.__class__.__name__
+        resource = action.predicates['resource']
+        assert 'ResourcePredicate' == resource.__class__.__name__
         assert 20 == action.sort_order
         assert target.__name__.endswith('ResourceView')
 
     def test_str(self, actions):
         action, target = actions[0]
-        resource = action.resource
+        resource = action.predicates['resource']
         assert 'resource-Resource' == str(resource)
 
     def test_matches(self, actions):
         action, target = actions[0]
-        resource = action.resource
-        resource_class = actions[0][0].resource.value
+        resource = action.predicates['resource']
+        resource_class = resource.value
         assert resource.matches(resource_class)
 
     def test_not_matches(self, actions):
         action, target = actions[0]
-        resource = action.resource
+        resource = action.predicates['resource']
 
         class OtherResource:
             pass

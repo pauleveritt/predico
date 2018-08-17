@@ -36,24 +36,25 @@ class TestForPredicate:
         assert 1 == len(actions)
         action, target = actions[0]
         assert 'for_-IndexView' == action.name
-        assert 'ViewForPredicate' == action.for_.__class__.__name__
+        for_ = action.predicates['for_']
+        assert 'ViewForPredicate' == for_.__class__.__name__
         assert 10 == action.sort_order
         assert target.__name__.endswith('ForView')
 
     def test_str(self, actions):
         action, target = actions[0]
-        for_ = action.for_
+        for_ = action.predicates['for_']
         assert 'for_-IndexView' == str(for_)
 
     def test_matches(self, actions):
         action, target = actions[0]
-        for_ = action.for_
-        view_class = actions[0][0].for_.value
+        for_ = action.predicates['for_']
+        view_class = for_.value
         assert for_.matches(view_class)
 
     def test_not_matches(self, actions):
         action, target = actions[0]
-        for_ = action.for_
+        for_ = action.predicates['for_']
 
         class OtherView:
             pass

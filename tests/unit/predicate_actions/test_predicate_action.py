@@ -64,3 +64,10 @@ class TestViewAction:
         first = sorted_actions[0][0]
         assert 'for_-IndexView--resource-Resource' == first.name
 
+
+class TestGetClass:
+    def test_sort_order(self, actions):
+        first_action = actions[0][0]
+        assert 10 == first_action.sort_order
+        second_action = actions[1][0]
+        assert 20 == second_action.sort_order
