@@ -34,12 +34,3 @@ def resource_view(registry):
         logo: str = 'Logo XX'
 
     dectate.commit(registry)
-
-# @pytest.fixture
-# def two_predicate_view(registry):
-#     return
-#
-#     @registry.view(for_=IndexView)
-#     @dataclass
-#     class ArticleView:
-#         logo: str = 'Logo XX'

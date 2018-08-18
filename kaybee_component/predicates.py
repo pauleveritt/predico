@@ -6,26 +6,27 @@ from kaybee_component.viewtypes import IndexView
 
 
 @dataclass
-class ForPredicate:
+class Predicate:
     value: Type[Any]
-    key: str = 'for_'
+    key: str
     rank: int = 10
 
     def __str__(self):
-        return f'for_-{self.value.__name__}'
+        return f'{self.key}-{self.value.__name__}'
+
+
+@dataclass
+class ForPredicate(Predicate):
+    key: str = 'for_'
 
     def matches(self, target: IndexView) -> bool:
         return target == self.value
 
 
 @dataclass
-class ResourcePredicate:
+class ResourcePredicate(Predicate):
     value: Type[Resource]
     key: str = 'resource'
-    rank: int = 10
-
-    def __str__(self):
-        return f'resource-{self.value.__name__}'
 
     def matches(self, target: Resource) -> bool:
         return self.value == target
