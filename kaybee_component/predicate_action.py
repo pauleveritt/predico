@@ -9,19 +9,9 @@ UNKNOWN_LOOKUP = 'Lookup supplied unknown predicate argument: '
 
 
 def _predicate_matches_lookup(predicate, lookup_args) -> bool:
-    # Given a predicate and arguments from a lookup, see if this
-    # predicate matches
-
-    # if type(predicate.value) == type(IndexView):
-    #     is_match = predicate.matches(for_)
-    # elif type(predicate.value) == type(Resource):
-    #     is_match = predicate.matches(resource)
-    # else:
-    #     raise TypeError('Unknown predicate value type')
-
-    # Get the lookup argument matching the key of this predicate
-    lookup_value = lookup_args[predicate.key]
-    return predicate.matches(lookup_value)
+    # Make sure the lookup args actually have this predicate's key
+    lookup_value = lookup_args.get(predicate.key, False)
+    return lookup_value and predicate.matches(lookup_value)
 
 
 class PredicateAction(dectate.Action):
@@ -122,6 +112,19 @@ class PredicateAction(dectate.Action):
                 # Bail out immediately
                 return False
         return True
+
+    @classmethod
+    def get_class(cls, registry, action_name, **args):
+        """ Look through all the actions, return best """
+
+        sorted_actions = cls.sorted_actions(action_name, registry)
+
+        # Find the first action which matches the args
+        for action, target in sorted_actions:
+            if action.all_predicates_match(**args):
+                return target
+
+        return None
 
     def __lt__(self, other):
         return self.sort_order < other.sort_order

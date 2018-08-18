@@ -124,3 +124,23 @@ class TestPredicatesMatch:
             for_=IndexView,
             resource=NotResource
         )
+
+    def test_predicates_resource_not_for__match(self,
+                                                second_action: ViewAction):
+        class NotView:
+            pass
+
+        assert False is second_action.all_predicates_match(
+            for_=NotView,
+            resource=Resource
+        )
+
+    def test_second_action_not_handed_resource(self, second_action):
+        assert False is second_action.all_predicates_match(for_=IndexView)
+
+
+class TestMultipleActions:
+    def test_match_first_action(self, registry, actions):
+        for_view = actions[0][1]
+        view_class = ViewAction.get_class(registry, 'view', for_=IndexView)
+        assert for_view == view_class
