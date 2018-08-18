@@ -9,6 +9,14 @@ from kaybee_component.views import ViewAction
 from kaybee_component.viewtypes import IndexView
 
 
+class NotView:
+    pass
+
+
+class NotResource:
+    pass
+
+
 @pytest.fixture
 def committed_registry(registry, for_view, resource_view):
     dectate.commit(registry)
@@ -105,9 +113,6 @@ class TestPredicatesMatch:
         assert True is first_action.all_predicates_match(for_=IndexView)
 
     def test_predicates_for_not_match(self, first_action: ViewAction):
-        class NotView:
-            pass
-
         assert False is first_action.all_predicates_match(for_=NotView)
 
     def test_predicates_resource_match(self, second_action: ViewAction):
@@ -117,9 +122,6 @@ class TestPredicatesMatch:
         )
 
     def test_predicates_resource_not_match(self, second_action: ViewAction):
-        class NotResource:
-            pass
-
         assert False is second_action.all_predicates_match(
             for_=IndexView,
             resource=NotResource
@@ -127,9 +129,6 @@ class TestPredicatesMatch:
 
     def test_predicates_resource_not_for__match(self,
                                                 second_action: ViewAction):
-        class NotView:
-            pass
-
         assert False is second_action.all_predicates_match(
             for_=NotView,
             resource=Resource
@@ -144,3 +143,30 @@ class TestMultipleActions:
         for_view = actions[0][1]
         view_class = ViewAction.get_class(registry, 'view', for_=IndexView)
         assert for_view == view_class
+
+    def test_match_resource(self, registry, actions):
+        resource_view = actions[1][1]
+        view_class = ViewAction.get_class(registry, 'view',
+                                          for_=IndexView,
+                                          resource=Resource,
+                                          )
+        assert resource_view == view_class
+
+    def test_not_match_resource(self, registry, actions):
+        for_view = actions[0][1]
+
+        class Article:
+            pass
+
+        view_class = ViewAction.get_class(registry, 'view',
+                                          for_=IndexView,
+                                          resource=Article,
+                                          )
+        assert for_view == view_class
+
+    def test_no_matches(self, registry, actions):
+        view_class = ViewAction.get_class(registry, 'view',
+                                          for_=NotView,
+                                          resource=NotResource,
+                                          )
+        assert None is view_class
