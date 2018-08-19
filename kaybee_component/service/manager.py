@@ -55,6 +55,8 @@ class ServiceManager:
             self.config.__class__.__name__: self.config
         }
 
+        # For convenience, allow each configured
+
         return _injectables
 
     def initialize(self):
