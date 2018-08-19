@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Type
+from typing import Type, Sequence, Any
 
 import pytest
 
-from kaybee_component.field_types import injected
+from kaybee_component.field_types import injected, injectedattr
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
@@ -46,7 +46,9 @@ def register_services(sm_registry):
     @sm_registry.service(name='view')
     @dataclass(frozen=True)
     class ViewService(BaseService):
-        sm_config: ServiceManagerConfig = injected()
+        config: ViewServiceConfig = injected()
+        allconfigs: Sequence[Any] = injectedattr(ServiceManagerConfig,
+                                                 'serviceconfigs')
 
         @classmethod
         def register(cls):
@@ -55,6 +57,8 @@ def register_services(sm_registry):
     @sm_registry.service(name='request')
     @dataclass(frozen=True)
     class RequestService(BaseService):
+        sm_config: ServiceManagerConfig = injected()
+
         @classmethod
         def register(cls):
             pass

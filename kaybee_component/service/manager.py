@@ -52,10 +52,13 @@ class ServiceManager:
         """
 
         _injectables = {
-            self.config.__class__.__name__: self.config
+            self.config.__class__.__name__: self.config,
         }
 
-        # For convenience, allow each configured
+        # For convenience, allow each configured service's configs
+        # to be in the top level
+        for config in self.config.serviceconfigs.values():
+            _injectables[config.__class__.__name__] = config
 
         return _injectables
 
@@ -78,6 +81,8 @@ class ServiceManager:
 
             # Inspect target dataclass and find what it wants injected
             for field in fields(target):
+                field_name = field.name
+
                 if field.metadata.get('injected', False):
                     # Sucks that we have to use strings for keys, instead
                     # of actual classes
@@ -96,7 +101,32 @@ class ServiceManager:
 
                     # Add this to the arguments we are providing to
                     # construct the dataclass
-                    args['sm_config'] = injectables[field_type]
+                    args[field_name] = injectables[field_type]
+
+                elif field.metadata.get('injectedattr', False):
+                    injectedattr = field.metadata['injectedattr']
+                    field_type = injectedattr['type_'].__name__
+
+                    # If we don't have this value in the injectables,
+                    # raise a custom exception
+                    injected_value = injectables.get(field_type, False)
+                    if injected_value is False:
+                        fmt = InvalidInjectable.fmt
+                        msg = fmt.format(
+                            type=field_type,
+                            klass=self.__class__.__name__
+                        )
+                        raise InvalidInjectable(msg)
+
+                    # Add this to the arguments we are providing to
+                    # construct the dataclass
+                    type_ = injectables[field_type]
+                    attr_ = injectedattr['attr']
+                    value = getattr(type_, attr_, False)
+                    if not value:
+                        # Raise an exception
+                        pass
+                    args[field_name] = value
 
             service = target(**args)
             name = action.name

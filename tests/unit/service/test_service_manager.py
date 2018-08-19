@@ -16,8 +16,22 @@ class TestServiceManager:
         assert 2 == len(initialized_sm.registry.config.services)
         services = initialized_sm.services
         assert ('view', 'request') == tuple(services.keys())
+
+    def test_valid_injected(self, register_services, initialized_sm):
+        services = initialized_sm.services
+        sm_config = initialized_sm.config
         view = services['view']
-        assert initialized_sm.config.debug == view.sm_config.debug
+        viewservice_config = sm_config.serviceconfigs['viewservice']
+        assert viewservice_config.flag == view.config.flag
+        request = services['request']
+        assert sm_config.debug == request.sm_config.debug
+
+    def test_valid_injectedattr(self, register_services, initialized_sm):
+        services = initialized_sm.services
+        sm_config = initialized_sm.config
+        view = services['view']
+        serviceconfigs = sm_config.serviceconfigs
+        assert serviceconfigs == view.allconfigs
 
     def test_invalid_injectable(self, invalid_injectable_type, sm):
         with pytest.raises(InvalidInjectable) as exc:
