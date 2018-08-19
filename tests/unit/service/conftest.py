@@ -7,12 +7,23 @@ from kaybee_component.field_types import injected
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
+from kaybee_component.services.view.config import ViewServiceConfig
 from tests.unit.service.registry import ServiceRegistry
 
 
 @pytest.fixture
-def sm_config() -> ServiceManagerConfig:
-    config = ServiceManagerConfig()
+def viewservice_config() -> ViewServiceConfig:
+    config = ViewServiceConfig(flag=99)
+    return config
+
+
+@pytest.fixture
+def sm_config(viewservice_config) -> ServiceManagerConfig:
+    config = ServiceManagerConfig(
+        serviceconfigs=dict(
+            viewservice=viewservice_config,
+        )
+    )
     return config
 
 
