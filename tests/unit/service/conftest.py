@@ -3,6 +3,7 @@ from typing import Type
 
 import pytest
 
+from kaybee_component.field_types import injected
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
@@ -34,11 +35,7 @@ def register_services(sm_registry):
     @sm_registry.service(name='view')
     @dataclass(frozen=True)
     class ViewService(BaseService):
-        sm_config: ServiceManagerConfig = field(
-            metadata=dict(
-                injected=True
-            )
-        )
+        sm_config: ServiceManagerConfig = injected()
 
         @classmethod
         def register(cls):
