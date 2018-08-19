@@ -1,3 +1,7 @@
+# Now
+
+- ServiceManager
+
 # Next
 
 - Look for TODO and fix
@@ -23,3 +27,5 @@
 # Later
 
 - Proxies on request which implement the "traversal"
+
+- Allow `for_` to default to some stated default (`IndexView`)

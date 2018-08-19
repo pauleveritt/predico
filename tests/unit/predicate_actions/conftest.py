@@ -5,8 +5,8 @@ import dectate
 import pytest
 
 from kaybee_component.predicates import ForPredicate, ResourcePredicate
-from kaybee_component.resources import Resource
-from kaybee_component.views import PredicateAction, ViewAction
+from kaybee_component.resource import Resource
+from kaybee_component.view import PredicateAction, ViewAction
 from kaybee_component.viewtypes import IndexView
 
 

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Type, Any
 
-from kaybee_component.resources import Resource
+from kaybee_component.resource import Resource
 from kaybee_component.viewtypes import IndexView
 
 
