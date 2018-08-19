@@ -1,3 +1,0 @@
-import dectate
-import pytest
-

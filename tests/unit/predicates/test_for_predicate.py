@@ -5,7 +5,7 @@ import pytest
 from dectate import ConflictError
 
 from kaybee_component.predicates import ForPredicate
-from kaybee_component.viewtypes import IndexView
+from kaybee_component.services.view.base_view import IndexView
 
 
 @pytest.fixture

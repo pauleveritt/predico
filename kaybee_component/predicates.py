@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Type, Any
 
 from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.viewtypes import IndexView
+from kaybee_component.services.view.base_view import IndexView
 
 
 @dataclass

@@ -1,7 +1,5 @@
 # Now
 
-- Migrate stuff from views.py and resource.py into services/*
-
 - Have an "environment" that gets passed down
 
 # Next
