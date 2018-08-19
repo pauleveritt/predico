@@ -22,6 +22,11 @@ def actions(committed_registry):
     return actions
 
 
+@pytest.fixture
+def first_action(actions):
+    return actions[0][0]
+
+
 class TestResourcePredicate:
     def test_import(self):
         assert 'ResourcePredicate' == ResourcePredicate.__name__
@@ -41,21 +46,17 @@ class TestResourcePredicate:
         assert 20 == action.sort_order
         assert target.__name__.endswith('ResourceView')
 
-    def test_str(self, actions):
-        action, target = actions[0]
-        resource = action.predicates['resource']
+    def test_str(self, first_action):
+        resource = first_action.predicates['resource']
         assert 'resource-Resource' == str(resource)
 
-    def test_matches(self, actions):
-        action, target = actions[0]
-        resource = action.predicates['resource']
+    def test_matches(self, first_action):
+        resource = first_action.predicates['resource']
         resource_class = resource.value
         assert resource.matches(resource_class)
 
-    def test_not_matches(self, actions):
-        action, target = actions[0]
-        resource = action.predicates['resource']
-
+    def test_not_matches(self, first_action):
+        resource = first_action.predicates['resource']
         class OtherResource:
             pass
 

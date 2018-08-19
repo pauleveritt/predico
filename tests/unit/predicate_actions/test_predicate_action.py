@@ -14,6 +14,9 @@ class TestViewAction:
     def test_import(self, actions):
         assert 'ViewAction' == ViewAction.__name__
 
+    def test_construction(self, actions):
+        assert 2 == len(actions)
+
     def test_missing_for(self, registry):
         @registry.view()
         @dataclass
@@ -25,27 +28,18 @@ class TestViewAction:
         m = '__init__() missing 1 required positional argument: for_'
         assert str(exc.value).startswith(m)
 
-    def test_construction(self, actions):
-        assert 2 == len(actions)
-
-    def test_predicates(self, actions):
-        forview_action: ViewAction = actions[0][0]
+    def test_predicates(self, forview_action, resourceview_action):
         first_predicates = forview_action.predicates
         assert ('for_',) == tuple(first_predicates.keys())
-        resourceview_action = actions[1][0]
         second_predicates = resourceview_action.predicates
         assert ('for_', 'resource') == tuple(second_predicates.keys())
 
-    def test_str(self, actions):
-        forview_action = actions[0][0]
+    def test_str(self, forview_action, resourceview_action):
         assert 'for_-IndexView' == forview_action.name == str(forview_action)
-        resourceview_action = actions[1][0]
         assert 'for_-IndexView--resource-Resource' == str(resourceview_action)
 
-    def test_sort_order(self, actions):
-        forview_action = actions[0][0]
+    def test_sort_order(self, forview_action, resourceview_action):
         assert 10 == forview_action.sort_order
-        resourceview_action = actions[1][0]
         assert 20 == resourceview_action.sort_order
 
     def test_sorted_actions(self, committed_registry):

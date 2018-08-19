@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 
-import pytest
-
 import dectate
+import pytest
 from dectate import ConflictError
 
 from kaybee_component.predicates import ForPredicate
@@ -20,6 +19,11 @@ def actions(committed_registry):
     q = dectate.Query('view')
     actions = list(q(committed_registry))
     return actions
+
+
+@pytest.fixture
+def first_action(actions):
+    return actions[0][0]
 
 
 class TestForPredicate:
@@ -41,20 +45,17 @@ class TestForPredicate:
         assert 10 == action.sort_order
         assert target.__name__.endswith('ForView')
 
-    def test_str(self, actions):
-        action, target = actions[0]
-        for_ = action.predicates['for_']
+    def test_str(self, first_action):
+        for_ = first_action.predicates['for_']
         assert 'for_-IndexView' == str(for_)
 
-    def test_matches(self, actions):
-        action, target = actions[0]
-        for_ = action.predicates['for_']
+    def test_matches(self, first_action):
+        for_ = first_action.predicates['for_']
         view_class = for_.value
         assert for_.matches(view_class)
 
-    def test_not_matches(self, actions):
-        action, target = actions[0]
-        for_ = action.predicates['for_']
+    def test_not_matches(self, first_action):
+        for_ = first_action.predicates['for_']
 
         class OtherView:
             pass

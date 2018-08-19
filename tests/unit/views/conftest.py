@@ -34,3 +34,26 @@ def resource_view(registry):
         logo: str = 'Logo XX'
 
     dectate.commit(registry)
+
+
+@pytest.fixture
+def committed_registry(registry, for_view, resource_view):
+    dectate.commit(registry)
+    return registry
+
+
+@pytest.fixture
+def actions(committed_registry):
+    q = dectate.Query('view')
+    actions = list(q(committed_registry))
+    return actions
+
+
+@pytest.fixture
+def forview_action(actions) -> ViewAction:
+    return actions[0][0]
+
+
+@pytest.fixture
+def resourceview_action(actions) -> ViewAction:
+    return actions[1][0]
