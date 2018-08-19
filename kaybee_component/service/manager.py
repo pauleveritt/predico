@@ -26,7 +26,6 @@ from tests.unit.service.registry import ServiceRegistry
 
 class InvalidInjectable(Exception):
     fmt = 'Invalid injectable type {type} requested from {klass}'
-    pass
 
 
 class ServiceManager:

@@ -4,6 +4,11 @@ import dectate
 import pytest
 from dectate import DirectiveReportError
 
+from kaybee_component.predicate_action import (
+    UnknownArgument, MissingArgument,
+    LookupMissingRequired,
+    UnknownLookup
+)
 from kaybee_component.resource import Resource
 from kaybee_component.view import ViewAction
 from kaybee_component.viewtypes import IndexView
@@ -23,7 +28,7 @@ class TestViewAction:
         class ForView:
             logo: str = 'Logo XX'
 
-        with pytest.raises(DirectiveReportError) as exc:
+        with pytest.raises(MissingArgument) as exc:
             dectate.commit(registry)
         m = '__init__() missing 1 required positional argument: for_'
         assert str(exc.value).startswith(m)
@@ -54,7 +59,7 @@ class TestViewAction:
         class ForView:
             logo: str = 'Logo XX'
 
-        with pytest.raises(DirectiveReportError) as exc:
+        with pytest.raises(UnknownArgument) as exc:
             dectate.commit(registry)
         m = 'Decorator supplied unknown predicate: bogus'
         assert str(exc.value).startswith(m)
@@ -62,13 +67,13 @@ class TestViewAction:
 
 class TestPredicatesMatch:
     def test_missing_argument(self, forview_action):
-        with pytest.raises(TypeError) as exc:
+        with pytest.raises(LookupMissingRequired) as exc:
             forview_action.all_predicates_match(resource=999)
         m = 'Lookup is missing required field: for_'
         assert str(exc.value).startswith(m)
 
     def test_unknown_argument(self, forview_action):
-        with pytest.raises(TypeError) as exc:
+        with pytest.raises(UnknownLookup) as exc:
             forview_action.all_predicates_match(for_=IndexView, bogus=999)
         m = 'Lookup supplied unknown predicate argument: bogus'
         assert str(exc.value).startswith(m)

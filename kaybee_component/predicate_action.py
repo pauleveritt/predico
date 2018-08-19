@@ -2,10 +2,19 @@ from typing import Sequence
 
 import dectate
 
-MISSING_ARG_MSG = '__init__() missing 1 required positional argument: '
-UNKNOWN_ARG_MSG = 'Decorator supplied unknown predicate: '
-LOOKUP_MISSING_REQUIRED = 'Lookup is missing required field: '
-UNKNOWN_LOOKUP = 'Lookup supplied unknown predicate argument: '
+
+class UnknownArgument(Exception):
+    fmt = 'Decorator supplied unknown predicate: {name}'
+
+
+class MissingArgument(Exception):
+    fmt = '__init__() missing 1 required positional argument: {name}'
+
+class LookupMissingRequired(Exception):
+    fmt ='Lookup is missing required field: {name}'
+
+class UnknownLookup(Exception):
+    fmt = 'Lookup supplied unknown predicate argument: {name}'
 
 
 def _predicate_matches_lookup(predicate, lookup_args) -> bool:
@@ -31,14 +40,14 @@ class PredicateAction(dectate.Action):
         ]
         for argument_name in args.keys():
             if argument_name not in defined_predicate_keys:
-                m = UNKNOWN_ARG_MSG + argument_name
-                raise TypeError(m)
+                m = UnknownArgument.fmt.format(name=argument_name)
+                raise UnknownArgument(m)
 
         for predicate_choice in self.REQUIRED_PREDICATES:
             key = predicate_choice.key
             if key not in args:
-                m = MISSING_ARG_MSG + key
-                raise TypeError(m)
+                m = MissingArgument.fmt.format(name=key)
+                raise MissingArgument(m)
             predicate = predicate_choice(value=args[key])
             self.predicates[key] = predicate
 
@@ -93,8 +102,8 @@ class PredicateAction(dectate.Action):
         missing_required = required_keys - arg_keys
         if missing_required:
             mr = ', '.join(missing_required)
-            m = LOOKUP_MISSING_REQUIRED + mr
-            raise TypeError(m)
+            m = LookupMissingRequired.fmt.format(name=mr)
+            raise LookupMissingRequired(m)
 
         # Phase 2: Argument not in predicate
         # If the lookup asks for a predicate that isn't known to
@@ -102,8 +111,8 @@ class PredicateAction(dectate.Action):
         unknown_predicate = arg_keys - all_keys
         if unknown_predicate:
             mr = ', '.join(unknown_predicate)
-            m = UNKNOWN_LOOKUP + mr
-            raise TypeError(m)
+            m = UnknownLookup.fmt.format(name=mr)
+            raise UnknownLookup(m)
 
         # TODO do less computation at runtime, move some to instance
         for predicate in self.predicates.values():
