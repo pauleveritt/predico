@@ -1,30 +1,26 @@
 # Now
 
-- ServiceManager
+- Migrate stuff from views.py and resource.py into services/*
+
+- Have an "environment" that gets passed down
 
 # Next
 
-- Look for TODO and fix
-
-- Look for any hardwiring and fix
-
-- Write tests that cover a rich range of registration scenarios
-
-- Make a Sphinx install and start writing some docs
-
-# Soon
-
 - Request which encases the possible values
 
-- Service (and ViewService)
-
 - Renderer
+
+# Soon
 
 - Schema
 
 - Adapter
 
 # Later
+
+- Look for TODO and fix
+
+- Make a Sphinx install and start writing some docs
 
 - Proxies on request which implement the "traversal"
 
