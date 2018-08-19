@@ -7,37 +7,7 @@ from dectate import DirectiveReportError
 from kaybee_component.resources import Resource
 from kaybee_component.views import ViewAction
 from kaybee_component.viewtypes import IndexView
-
-
-class NotView:
-    pass
-
-
-class NotResource:
-    pass
-
-
-@pytest.fixture
-def committed_registry(registry, for_view, resource_view):
-    dectate.commit(registry)
-    return registry
-
-
-@pytest.fixture
-def actions(committed_registry):
-    q = dectate.Query('view')
-    actions = list(q(committed_registry))
-    return actions
-
-
-@pytest.fixture
-def first_action(actions) -> ViewAction:
-    return actions[0][0]
-
-
-@pytest.fixture
-def second_action(actions) -> ViewAction:
-    return actions[1][0]
+from tests.unit.predicate_actions.conftest import NotView, NotResource
 
 
 class TestViewAction:
@@ -59,24 +29,24 @@ class TestViewAction:
         assert 2 == len(actions)
 
     def test_predicates(self, actions):
-        first_action: ViewAction = actions[0][0]
-        first_predicates = first_action.predicates
+        forview_action: ViewAction = actions[0][0]
+        first_predicates = forview_action.predicates
         assert ('for_',) == tuple(first_predicates.keys())
-        second_action = actions[1][0]
-        second_predicates = second_action.predicates
+        resourceview_action = actions[1][0]
+        second_predicates = resourceview_action.predicates
         assert ('for_', 'resource') == tuple(second_predicates.keys())
 
     def test_str(self, actions):
-        first_action = actions[0][0]
-        assert 'for_-IndexView' == first_action.name == str(first_action)
-        second_action = actions[1][0]
-        assert 'for_-IndexView--resource-Resource' == str(second_action)
+        forview_action = actions[0][0]
+        assert 'for_-IndexView' == forview_action.name == str(forview_action)
+        resourceview_action = actions[1][0]
+        assert 'for_-IndexView--resource-Resource' == str(resourceview_action)
 
     def test_sort_order(self, actions):
-        first_action = actions[0][0]
-        assert 10 == first_action.sort_order
-        second_action = actions[1][0]
-        assert 20 == second_action.sort_order
+        forview_action = actions[0][0]
+        assert 10 == forview_action.sort_order
+        resourceview_action = actions[1][0]
+        assert 20 == resourceview_action.sort_order
 
     def test_sorted_actions(self, committed_registry):
         sorted_actions = ViewAction.sorted_actions('view', committed_registry)
@@ -97,49 +67,53 @@ class TestViewAction:
 
 
 class TestPredicatesMatch:
-    def test_missing_argument(self, first_action):
+    def test_missing_argument(self, forview_action):
         with pytest.raises(TypeError) as exc:
-            first_action.all_predicates_match(resource=999)
+            forview_action.all_predicates_match(resource=999)
         m = 'Lookup is missing required field: for_'
         assert str(exc.value).startswith(m)
 
-    def test_unknown_argument(self, first_action):
+    def test_unknown_argument(self, forview_action):
         with pytest.raises(TypeError) as exc:
-            first_action.all_predicates_match(for_=IndexView, bogus=999)
+            forview_action.all_predicates_match(for_=IndexView, bogus=999)
         m = 'Lookup supplied unknown predicate argument: bogus'
         assert str(exc.value).startswith(m)
 
-    def test_predicates_for_match(self, first_action: ViewAction):
-        assert True is first_action.all_predicates_match(for_=IndexView)
+    def test_predicates_for_match(self, forview_action: ViewAction):
+        assert True is forview_action.all_predicates_match(for_=IndexView)
 
-    def test_predicates_for_not_match(self, first_action: ViewAction):
-        assert False is first_action.all_predicates_match(for_=NotView)
+    def test_predicates_for_not_match(self, forview_action: ViewAction):
+        assert False is forview_action.all_predicates_match(for_=NotView)
 
-    def test_predicates_resource_match(self, second_action: ViewAction):
-        assert True is second_action.all_predicates_match(
+    def test_predicates_resource_match(self, resourceview_action: ViewAction):
+        assert True is resourceview_action.all_predicates_match(
             for_=IndexView,
             resource=Resource
         )
 
-    def test_predicates_resource_not_match(self, second_action: ViewAction):
-        assert False is second_action.all_predicates_match(
+    def test_predicates_resource_not_match(self,
+                                           resourceview_action: ViewAction):
+        assert False is resourceview_action.all_predicates_match(
             for_=IndexView,
             resource=NotResource
         )
 
     def test_predicates_resource_not_for__match(self,
-                                                second_action: ViewAction):
-        assert False is second_action.all_predicates_match(
+                                                resourceview_action:
+                                                ViewAction):
+        assert False is resourceview_action.all_predicates_match(
             for_=NotView,
             resource=Resource
         )
 
-    def test_second_action_not_handed_resource(self, second_action):
-        assert False is second_action.all_predicates_match(for_=IndexView)
+    def test_resourceview_action_not_handed_resource(self,
+                                                     resourceview_action):
+        assert False is resourceview_action.all_predicates_match(
+            for_=IndexView)
 
 
 class TestMultipleActions:
-    def test_match_first_action(self, registry, actions):
+    def test_match_forview_action(self, registry, actions):
         for_view = actions[0][1]
         view_class = ViewAction.get_class(registry, 'view', for_=IndexView)
         assert for_view == view_class

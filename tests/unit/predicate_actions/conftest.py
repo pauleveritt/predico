@@ -6,8 +6,16 @@ import pytest
 
 from kaybee_component.predicates import ForPredicate, ResourcePredicate
 from kaybee_component.resources import Resource
-from kaybee_component.views import PredicateAction
+from kaybee_component.views import PredicateAction, ViewAction
 from kaybee_component.viewtypes import IndexView
+
+
+class NotView:
+    pass
+
+
+class NotResource:
+    pass
 
 
 @pytest.fixture
@@ -42,3 +50,25 @@ def resource_view(registry):
 
     dectate.commit(registry)
 
+
+@pytest.fixture
+def committed_registry(registry, for_view, resource_view):
+    dectate.commit(registry)
+    return registry
+
+
+@pytest.fixture
+def actions(committed_registry):
+    q = dectate.Query('view')
+    actions = list(q(committed_registry))
+    return actions
+
+
+@pytest.fixture
+def forview_action(actions) -> ViewAction:
+    return actions[0][0]
+
+
+@pytest.fixture
+def resourceview_action(actions) -> ViewAction:
+    return actions[1][0]
