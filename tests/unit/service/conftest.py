@@ -8,7 +8,7 @@ from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.view.config import ViewServiceConfig
-from tests.unit.service.registry import ServiceRegistry
+from kaybee_component.service.registry import ServiceRegistry
 
 
 @pytest.fixture

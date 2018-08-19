@@ -21,7 +21,7 @@ import dectate
 
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
-from tests.unit.service.registry import ServiceRegistry
+from kaybee_component.service.registry import ServiceRegistry
 
 
 class InvalidInjectable(Exception):

@@ -1,6 +1,6 @@
 import dectate
 
-from tests.unit.service.registry import ServiceRegistry
+from kaybee_component.service.registry import ServiceRegistry
 
 
 def test_import():

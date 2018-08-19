@@ -5,5 +5,5 @@ def test_import():
     assert 'RequestServiceConfig' == RequestServiceConfig.__name__
 
 
-def test_construction(requestservice_config):
-    assert 99 == requestservice_config.flag
+def test_construction(rs_config):
+    assert 99 == rs_config.flag
