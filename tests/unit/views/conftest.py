@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import dectate
 import pytest
 
-from kaybee_component.resource import Resource
+from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.view import ViewAction
 from kaybee_component.viewtypes import IndexView
 

@@ -6,7 +6,7 @@
 
 # Next
 
-- Request which encases the possible values
+- request which encases the possible values
 
 - Renderer
 

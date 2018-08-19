@@ -1,4 +1,4 @@
-# Fake kaybee.resource
+# Fake resource
 from dataclasses import dataclass
 
 

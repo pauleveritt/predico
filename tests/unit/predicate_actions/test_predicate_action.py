@@ -2,14 +2,13 @@ from dataclasses import dataclass
 
 import dectate
 import pytest
-from dectate import DirectiveReportError
 
 from kaybee_component.predicate_action import (
     UnknownArgument, MissingArgument,
     LookupMissingRequired,
     UnknownLookup
 )
-from kaybee_component.resource import Resource
+from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.view import ViewAction
 from kaybee_component.viewtypes import IndexView
 from tests.unit.predicate_actions.conftest import NotView, NotResource
