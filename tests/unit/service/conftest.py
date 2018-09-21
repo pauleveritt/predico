@@ -1,27 +1,54 @@
 from dataclasses import dataclass, field
-from typing import Type, Sequence, Any
+from typing import Type
 
 import pytest
 
-from kaybee_component.field_types import injected, injectedattr
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.service.registry import services
+from kaybee_component.services.request.config import RequestServiceConfig
+from kaybee_component.services.request.service import \
+    setup as requestservice_setup
 from kaybee_component.services.view.config import ViewServiceConfig
+from kaybee_component.services.view.service import setup as viewservice_setup
 
+
+# -------------------------------------------
+# Service Manager
+#
+# - Get configurations for each of the configured services,
+# - Combine into the ServiceManagerConfig
+# - Use that to bootstrap the ServiceManager
+#
+# -------------------------------------------
 
 @pytest.fixture
 def viewservice_config() -> ViewServiceConfig:
+    """ Isolate the config of the ViewService """
+
     config = ViewServiceConfig(flag=99)
     return config
 
 
 @pytest.fixture
-def sm_config(viewservice_config) -> ServiceManagerConfig:
+def requestservice_config() -> RequestServiceConfig:
+    """ Isolate the config of the RequestService """
+
+    config = RequestServiceConfig(flag=99)
+    return config
+
+
+@pytest.fixture
+def sm_config(
+        viewservice_config,
+        requestservice_config) -> ServiceManagerConfig:
+    """ Gather each service's config into one for ServiceManager """
+
     config = ServiceManagerConfig(
         serviceconfigs=dict(
             viewservice=viewservice_config,
+            requestservice=requestservice_config,
         )
     )
     return config
@@ -29,6 +56,8 @@ def sm_config(viewservice_config) -> ServiceManagerConfig:
 
 @pytest.fixture
 def sm_registry():
+    """ Make a registry solely for services, one single action """
+
     # Provide test isolation by making a local subclass which is
     # blown away on each test run
     class TestServiceRegistry(services):
@@ -39,32 +68,23 @@ def sm_registry():
 
 @pytest.fixture
 def sm(sm_config, sm_registry) -> ServiceManager:
+    """ Make a ServiceManager """
+
     sm = ServiceManager(sm_config)
     sm.registry = sm_registry
     return sm
 
 
+# -------------------------------------------
+# Services
+#
+# - Take the well-known services and configure them
+# -------------------------------------------
+
 @pytest.fixture
 def register_services(sm_registry):
-    @sm_registry.service(name='view')
-    @dataclass(frozen=True)
-    class ViewService(BaseService):
-        config: ViewServiceConfig = injected()
-        allconfigs: Sequence[Any] = injectedattr(ServiceManagerConfig,
-                                                 'serviceconfigs')
-
-        @classmethod
-        def register(cls):
-            pass
-
-    @sm_registry.service(name='request')
-    @dataclass(frozen=True)
-    class RequestService(BaseService):
-        sm_config: ServiceManagerConfig = injected()
-
-        @classmethod
-        def register(cls):
-            pass
+    requestservice_setup(sm_registry)
+    viewservice_setup(sm_registry)
 
 
 @pytest.fixture

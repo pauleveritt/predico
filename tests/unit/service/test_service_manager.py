@@ -12,18 +12,22 @@ def test_construction(sm):
 def test_register_services(register_services, initialized_sm):
     assert 2 == len(initialized_sm.registry.config.services)
     services = initialized_sm.services
-    assert ('view', 'request') == tuple(services.keys())
+    assert ('request', 'view') == tuple(services.keys())
 
 
 def test_valid_injected(register_services, initialized_sm):
     services = initialized_sm.services
     sm_config = initialized_sm.config
-    view = services['view']
-    viewservice_config = sm_config.serviceconfigs['viewservice']
-    assert viewservice_config.flag == view.config.flag
-    request = services['request']
-    assert sm_config.debug == request.sm_config.debug
 
+    # Test the view service
+    viewservice = services['view']
+    viewservice_config = sm_config.serviceconfigs['viewservice']
+    assert viewservice_config.flag == viewservice.config.flag
+
+    # Test the request service
+    requestservice = services['request']
+    requestservice_config = sm_config.serviceconfigs['requestservice']
+    assert requestservice_config.flag == requestservice.config.flag
 
 def test_valid_injectedattr(register_services, initialized_sm):
     services = initialized_sm.services
