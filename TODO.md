@@ -1,15 +1,10 @@
 # Now
 
-- Refactor tests
-
-    - Move everything up to above unit
-
 - Refactor
 
     - "registry" and "services"
     
     - Store the registry on the servicemanager at construction
-
 
 - Request service
 

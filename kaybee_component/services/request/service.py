@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from kaybee_component.field_types import injected
-from kaybee_component.registry import PredicoRegistry
+from kaybee_component.registry import PredicateRegistry
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.service.registry import services
@@ -13,7 +13,7 @@ from kaybee_component.services.view.service import ViewService
 class SphinxRequest:
     resource_id: str
     sm: ServiceManager
-    app_registry: PredicoRegistry
+    app_registry: PredicateRegistry
 
     @property
     def view(self):

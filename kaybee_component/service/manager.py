@@ -67,7 +67,7 @@ class ServiceManager:
         # - Of course, resolve the whole registry vs. services vs. etc.
         _injectables['ViewAction'] = ViewAction
         _injectables['RequestAction'] = RequestAction
-        _injectables['PredicoRegistry'] = app_registry
+        _injectables['PredicateRegistry'] = app_registry
 
         return _injectables
 
