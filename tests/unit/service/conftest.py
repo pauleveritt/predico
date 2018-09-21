@@ -1,12 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Type
 
+import dectate
 import pytest
 
+from kaybee_component.service.action import ServiceAction
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
-from kaybee_component.service.registry import services
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.request.service import \
     setup as requestservice_setup
@@ -60,8 +61,8 @@ def sm_registry():
 
     # Provide test isolation by making a local subclass which is
     # blown away on each test run
-    class TestServiceRegistry(services):
-        pass
+    class TestServiceRegistry(dectate.App):
+        service = dectate.directive(ServiceAction)
 
     return TestServiceRegistry
 
@@ -70,7 +71,7 @@ def sm_registry():
 def sm(sm_config, sm_registry) -> ServiceManager:
     """ Make a ServiceManager """
 
-    sm = ServiceManager(sm_config)
+    sm = ServiceManager(sm_config, sm_registry)
     sm.registry = sm_registry
     return sm
 

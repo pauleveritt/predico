@@ -1,2 +1,1 @@
-from kaybee_component.registry import PredicateRegistry as registry
-from kaybee_component.service.registry import services
+from kaybee_component.registry import Registry as registry

@@ -33,8 +33,8 @@ def test_valid_injectedattr(register_services, initialized_sm):
     services = initialized_sm.services
     sm_config = initialized_sm.config
     view = services['view']
-    serviceconfigs = sm_config.serviceconfigs
-    assert serviceconfigs == view.allconfigs
+    viewservice_config = sm_config.serviceconfigs['viewservice']
+    assert viewservice_config == view.config
 
 
 def test_invalid_injectable(invalid_injectable_type, sm):

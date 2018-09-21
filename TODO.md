@@ -1,11 +1,5 @@
 # Now
 
-- Refactor
-
-    - "registry" and "services"
-    
-    - Store the registry on the servicemanager at construction
-
 - Request service
 
 - App service

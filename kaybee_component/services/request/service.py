@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 
 from kaybee_component.field_types import injected
-from kaybee_component.registry import PredicateRegistry
+from kaybee_component.registry import Registry
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.manager import ServiceManager
-from kaybee_component.service.registry import services
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.view.service import ViewService
 
@@ -13,7 +12,7 @@ from kaybee_component.services.view.service import ViewService
 class SphinxRequest:
     resource_id: str
     sm: ServiceManager
-    app_registry: PredicateRegistry
+    app_registry: Registry
 
     @property
     def view(self):
@@ -32,5 +31,5 @@ class RequestService(BaseService):
         return SphinxRequest(**kwargs)
 
 
-def setup(registry: services):
+def setup(registry: Registry):
     registry.service(name='request')(RequestService)

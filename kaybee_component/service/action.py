@@ -1,10 +1,6 @@
 """
 
-Dectate app for registering services.
-
-This is not a registry for all kinds of everything. It only knows about
-service actions, not views, renderers, etc. Each of those have a service
-with manages their registrations.
+Dectate action for registering services.
 
 """
 import dectate
@@ -23,7 +19,3 @@ class ServiceAction(dectate.Action):
 
     def perform(self, obj, services):
         services[self.name] = obj
-
-
-class services(dectate.App):
-    service = dectate.directive(ServiceAction)

@@ -9,7 +9,8 @@ from dataclasses import dataclass
 import dectate
 import pytest
 
-from kaybee_component import registry, services
+from kaybee_component import registry
+from kaybee_component.service.action import ServiceAction
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
@@ -64,8 +65,8 @@ def sm_config(
 def sm_registry():
     """ Provide test isolation for builtin service registry """
 
-    class TestServiceRegistry(services):
-        pass
+    class TestServiceRegistry(dectate.App):
+        service = dectate.directive(ServiceAction)
 
     return TestServiceRegistry
 
@@ -74,7 +75,7 @@ def sm_registry():
 def sm(sm_config, sm_registry) -> ServiceManager:
     """ Make a ServiceManager """
 
-    sm = ServiceManager(sm_config)
+    sm = ServiceManager(sm_config, sm_registry)
     sm.registry = sm_registry
     return sm
 

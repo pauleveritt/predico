@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 
+import dectate
 import pytest
 
-from kaybee_component import registry, services
+from kaybee_component import registry
+from kaybee_component.service.action import ServiceAction
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
+from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.config import ViewServiceConfig
 from kaybee_component.services.view.service import setup as viewservice_setup
@@ -17,12 +20,19 @@ def viewservice_config() -> ViewServiceConfig:
 
 
 @pytest.fixture
-def sm_config(viewservice_config) -> ServiceManagerConfig:
+def requestservice_config() -> RequestServiceConfig:
+    config = RequestServiceConfig(flag=99)
+    return config
+
+
+@pytest.fixture
+def sm_config(viewservice_config, requestservice_config) -> ServiceManagerConfig:
     """ Gather service's config into one for ServiceManager """
 
     config = ServiceManagerConfig(
         serviceconfigs=dict(
             viewservice=viewservice_config,
+            requestservice=requestservice_config,
         )
     )
     return config
@@ -32,8 +42,8 @@ def sm_config(viewservice_config) -> ServiceManagerConfig:
 def sm_registry():
     """ Provide test isolation for builtin service registry """
 
-    class TestServiceRegistry(services):
-        pass
+    class TestServiceRegistry(dectate.App):
+        service = dectate.directive(ServiceAction)
 
     return TestServiceRegistry
 
@@ -42,7 +52,7 @@ def sm_registry():
 def sm(sm_config, sm_registry) -> ServiceManager:
     """ Make a ServiceManager """
 
-    sm = ServiceManager(sm_config)
+    sm = ServiceManager(sm_config, sm_registry)
     sm.registry = sm_registry
     return sm
 

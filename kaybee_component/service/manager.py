@@ -19,10 +19,9 @@ from typing import Dict
 
 import dectate
 
+from kaybee_component.registry import Registry
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.service.registry import services
-from kaybee_component import registry as app_registry
 from kaybee_component.services.request.action import RequestAction
 from kaybee_component.services.view.action import ViewAction
 
@@ -33,56 +32,42 @@ class InvalidInjectable(Exception):
 
 class ServiceManager:
     config: ServiceManagerConfig
-    registry: services
+    registry: Registry
     services: Dict[str, BaseService]
 
-    def __init__(self, config: ServiceManagerConfig):
+    def __init__(self,
+                 config: ServiceManagerConfig,
+                 registry: Registry
+                 ):
         self.config = config
-        self.registry = services
+        self.registry = registry
         self.services = {}
-
-    @property
-    def injectables(self):
-        """ Provide a mapping of what this container can inject
-
-        The keys are the type information the consumer will ask for. The
-        values are what to pass in.
-
-        """
-
-        _injectables = {
-            self.config.__class__.__name__: self.config,
-        }
-
-        # For convenience, allow each configured service's configs
-        # to be in the top level
-        for config in self.config.serviceconfigs.values():
-            _injectables[config.__class__.__name__] = config
-
-        # The actions in the registry
-        # TODO
-        # - Remove this hardwiring
-        # - Get the "app_registry" passed into the service manager
-        #   rather than imported
-        # - Of course, resolve the whole registry vs. services vs. etc.
-        _injectables['ViewAction'] = ViewAction
-        _injectables['RequestAction'] = RequestAction
-        _injectables['PredicateRegistry'] = app_registry
-
-        return _injectables
+        self.injectables = {}
 
     def initialize(self):
-        """ Commit the actions and initialize services """
+        """ Commit the actions and initialize the registry """
         dectate.commit(self.registry)
-
-        # Get a list of services
-        query = dectate.Query('service')
-        services = list(query(self.registry))
 
         # Get the injectables
         injectables = self.injectables
 
-        # Go through each service, initialize it, commit, then
+        # Stash ServiceManager stuff in injectables
+        injectables[ServiceManagerConfig.__name__] = self.config,
+        injectables[ServiceManager.__name__] = self
+
+        # TODO Introspect the other actions instead of hardwiring
+        serviceconfigs = self.config.serviceconfigs
+        injectables['ViewAction'] = ViewAction
+        injectables['ViewServiceConfig'] = serviceconfigs['viewservice']
+        injectables['RequestAction'] = RequestAction
+        injectables['RequestServiceConfig'] = serviceconfigs['requestservice']
+        injectables['Registry'] = self.registry
+
+        # Get a list of services
+        q = dectate.Query('service')
+        services = list(q(self.registry))
+
+        # Go through each service, initialize it, then
         # put an instance in the service manager
         for action, target in services:
             # Place to build up the args passed into the dataclass
@@ -131,12 +116,12 @@ class ServiceManager:
                     # construct the dataclass
                     type_ = injectables[field_type]
                     attr_ = injectedattr['attr']
-                    value = getattr(type_, attr_, False)
-                    if not value:
-                        # Raise an exception
-                        pass
+                    value = getattr(type_, attr_)
                     args[field_name] = value
 
             service = target(**args)
             name = action.name
             self.services[name] = service
+
+            # Add this service, and its config, as injectable
+            injectables[service.__class__.__name__] = service
