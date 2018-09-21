@@ -27,9 +27,6 @@ def first_action(actions):
 
 
 class TestForPredicate:
-    def test_import(self):
-        assert 'ForPredicate' == ForPredicate.__name__
-
     def test_construction(self):
         predicate = ForPredicate(value=IndexView)
         assert 'for_' == predicate.key

@@ -5,10 +5,6 @@ class BogusResource:
     pass
 
 
-def test_import():
-    assert 'injectedattr' == injectedattr.__name__
-
-
 def test_basic():
     i = injectedattr(BogusResource, 'title')
     assert BogusResource == i.metadata['injectedattr']['type_']

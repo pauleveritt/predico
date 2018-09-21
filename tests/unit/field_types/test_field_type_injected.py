@@ -1,10 +1,6 @@
 from kaybee_component.field_types import injected
 
 
-def test_import():
-    assert 'injected' == injected.__name__
-
-
 def test_basic():
     i = injected()
     assert True is i.metadata['injected']

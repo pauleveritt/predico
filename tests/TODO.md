@@ -1,7 +1,5 @@
 # Now
 
-- Start docs as doctests
-
 - Get rid of all import tests
 
 - Move more stuff out of classes, into fixutres

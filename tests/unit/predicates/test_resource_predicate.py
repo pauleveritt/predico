@@ -28,9 +28,6 @@ def first_action(actions):
 
 
 class TestResourcePredicate:
-    def test_import(self):
-        assert 'ResourcePredicate' == ResourcePredicate.__name__
-
     def test_construction(self):
         predicate = ResourcePredicate(value=Resource)
         assert 'resource' == predicate.key
@@ -57,6 +54,7 @@ class TestResourcePredicate:
 
     def test_not_matches(self, first_action):
         resource = first_action.predicates['resource']
+
         class OtherResource:
             pass
 

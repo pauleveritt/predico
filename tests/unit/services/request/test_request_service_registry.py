@@ -3,15 +3,10 @@ import dectate
 from kaybee_component.services.request.registry import RequestRegistry
 
 
-def test_import():
-    assert 'RequestRegistry' == RequestRegistry.__name__
-
-
 def test_construction(rs_registry):
     dectate.commit(rs_registry)
     requests = rs_registry.config.requests
     assert 0 == len(requests)
-
 
 # def test_whole_damn_thing(initialized_sm):
 #     services = initialized_sm.services

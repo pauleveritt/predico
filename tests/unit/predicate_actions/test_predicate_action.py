@@ -15,9 +15,6 @@ from tests.unit.predicate_actions.conftest import NotView, NotResource
 
 
 class TestViewAction:
-    def test_import(self, actions):
-        assert 'ViewAction' == ViewAction.__name__
-
     def test_construction(self, actions):
         assert 2 == len(actions)
 
