@@ -1,13 +1,13 @@
 import dectate
 
-from kaybee_component.service.registry import ServiceRegistry
+from kaybee_component.service.registry import services
 
 
 def test_import():
-    assert 'ServiceRegistry' == ServiceRegistry.__name__
+    assert 'services' == services.__name__
 
 
 def test_construction(sm_registry):
     dectate.commit(sm_registry)
-    services = sm_registry.config.services
-    assert 0 == len(services)
+    s = sm_registry.config.services
+    assert 0 == len(s)

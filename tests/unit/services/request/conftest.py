@@ -2,9 +2,11 @@ from dataclasses import dataclass
 
 import pytest
 
-from kaybee_component.field_types import injected
-from kaybee_component.services.request.registry import BaseRequestRegistry
+from kaybee_component.service.configuration import ServiceManagerConfig
+from kaybee_component.service.manager import ServiceManager
+from kaybee_component.service.registry import services
 from kaybee_component.services.request.config import RequestServiceConfig
+from kaybee_component.services.request.registry import RequestRegistry
 from kaybee_component.services.request.service import RequestService
 
 
@@ -16,7 +18,7 @@ def rs_config() -> RequestServiceConfig:
 
 @pytest.fixture
 def rs_registry():
-    class TestRequestServiceRegistry(BaseRequestRegistry):
+    class TestRequestServiceRegistry(RequestRegistry):
         pass
 
     return TestRequestServiceRegistry
@@ -29,18 +31,41 @@ def rs(rs_config, rs_registry) -> RequestService:
 
 
 @pytest.fixture
-def register_services(rs_registry):
-    @rs_registry.request(name='request')
-    @dataclass(frozen=True)
-    class SphinxRequest(BaseService):
-        config: RequestServiceConfig = injected()
-
-        @classmethod
-        def register(cls):
-            pass
+def sm_config(rs_config) -> ServiceManagerConfig:
+    config = ServiceManagerConfig(
+        serviceconfigs=dict(
+            requestservice=rs_config,
+        )
+    )
+    return config
 
 
 @pytest.fixture
-def initialized_rs(rs):
-    rs.initialize()
-    return rs
+def sm_registry():
+    # Provide test isolation by making a local subclass which is
+    # blown away on each test run
+    class TestServiceRegistry(services):
+        pass
+
+    return TestServiceRegistry
+
+
+@pytest.fixture
+def sm(sm_config, sm_registry) -> ServiceManager:
+    sm = ServiceManager(sm_config)
+    sm.registry = sm_registry
+    return sm
+
+
+@pytest.fixture
+def register_service(sm_registry):
+    @sm_registry.service(name='request')
+    @dataclass(frozen=True)
+    class TestRequestService(RequestService):
+        pass
+
+
+@pytest.fixture
+def initialized_sm(register_service, sm):
+    sm.initialize()
+    return sm

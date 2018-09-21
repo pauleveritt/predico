@@ -8,7 +8,7 @@ from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.view.config import ViewServiceConfig
-from kaybee_component.service.registry import ServiceRegistry
+from kaybee_component.service.registry import services
 
 
 @pytest.fixture
@@ -29,7 +29,9 @@ def sm_config(viewservice_config) -> ServiceManagerConfig:
 
 @pytest.fixture
 def sm_registry():
-    class TestServiceRegistry(ServiceRegistry):
+    # Provide test isolation by making a local subclass which is
+    # blown away on each test run
+    class TestServiceRegistry(services):
         pass
 
     return TestServiceRegistry
@@ -37,7 +39,8 @@ def sm_registry():
 
 @pytest.fixture
 def sm(sm_config, sm_registry) -> ServiceManager:
-    sm = ServiceManager(sm_config, sm_registry)
+    sm = ServiceManager(sm_config)
+    sm.registry = sm_registry
     return sm
 
 

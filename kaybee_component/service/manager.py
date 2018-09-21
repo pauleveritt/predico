@@ -21,7 +21,7 @@ import dectate
 
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.service.registry import ServiceRegistry
+from kaybee_component.service.registry import services
 
 
 class InvalidInjectable(Exception):
@@ -30,15 +30,12 @@ class InvalidInjectable(Exception):
 
 class ServiceManager:
     config: ServiceManagerConfig
-    registry: ServiceRegistry
+    registry: services
     services: Dict[str, BaseService]
 
-    def __init__(self,
-                 config: ServiceManagerConfig,
-                 registry: ServiceRegistry,
-                 ):
+    def __init__(self, config: ServiceManagerConfig):
         self.config = config
-        self.registry = registry
+        self.registry = services
         self.services = {}
 
     @property

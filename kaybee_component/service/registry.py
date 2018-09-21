@@ -25,5 +25,5 @@ class ServiceAction(dectate.Action):
         services[self.name] = obj
 
 
-class ServiceRegistry(dectate.App):
+class services(dectate.App):
     service = dectate.directive(ServiceAction)

@@ -10,8 +10,10 @@ class UnknownArgument(Exception):
 class MissingArgument(Exception):
     fmt = '__init__() missing 1 required positional argument: {name}'
 
+
 class LookupMissingRequired(Exception):
-    fmt ='Lookup is missing required field: {name}'
+    fmt = 'Lookup is missing required field: {name}'
+
 
 class UnknownLookup(Exception):
     fmt = 'Lookup supplied unknown predicate argument: {name}'

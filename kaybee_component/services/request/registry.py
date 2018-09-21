@@ -26,6 +26,6 @@ class RequestAction(dectate.Action):
         requests[self.name] = obj
 
 
-class BaseRequestRegistry(dectate.App):
+class RequestRegistry(dectate.App):
     request = dectate.directive(RequestAction)
 

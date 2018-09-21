@@ -1,5 +1,6 @@
 from kaybee_component.field_types import injected
 
+
 def test_import():
     assert 'injected' == injected.__name__
 
