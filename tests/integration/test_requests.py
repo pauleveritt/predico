@@ -15,4 +15,4 @@ def test_request(test_registry, initialized_sm):
         app_registry=test_registry,
     )
     view = request.view
-    assert 911 == view
+    assert 'ForView1' in view.__class__.__name__
