@@ -1,15 +1,15 @@
 # Now
 
-- Move more stuff out of classes, into fixtures
+- App service
 
-- Convert class-based tests to function-based
+- Request service
+
+# Next
 
 - Remove "injected" field, the caller implicitly looks up things it is not 
   provided
   
   - Move the "attr" field type
-
-# Next
 
 - Have an "environment" that gets passed down
 
