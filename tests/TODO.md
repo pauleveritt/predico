@@ -1,8 +1,6 @@
 # Now
 
-- Get rid of all import tests
-
-- Move more stuff out of classes, into fixutres
+- Move more stuff out of classes, into fixtures
 
 - Convert class-based tests to function-based
 
