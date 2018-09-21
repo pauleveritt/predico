@@ -1,1 +1,2 @@
-from kaybee_component.application import PredicoApp as app
+from kaybee_component.registry import PredicoRegistry as registry
+from kaybee_component.service.registry import services

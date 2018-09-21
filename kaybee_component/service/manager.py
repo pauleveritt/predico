@@ -22,6 +22,9 @@ import dectate
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.registry import services
+from kaybee_component import registry as app_registry
+from kaybee_component.services.request.action import RequestAction
+from kaybee_component.services.view.action import ViewAction
 
 
 class InvalidInjectable(Exception):
@@ -55,6 +58,16 @@ class ServiceManager:
         # to be in the top level
         for config in self.config.serviceconfigs.values():
             _injectables[config.__class__.__name__] = config
+
+        # The actions in the registry
+        # TODO
+        # - Remove this hardwiring
+        # - Get the "app_registry" passed into the service manager
+        #   rather than imported
+        # - Of course, resolve the whole registry vs. services vs. etc.
+        _injectables['ViewAction'] = ViewAction
+        _injectables['RequestAction'] = RequestAction
+        _injectables['PredicoRegistry'] = app_registry
 
         return _injectables
 
