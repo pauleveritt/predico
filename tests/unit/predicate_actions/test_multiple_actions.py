@@ -1,4 +1,3 @@
-from kaybee_component.services.resource.base_resource import Resource
 from tests.unit.predicate_actions.conftest import (
     NotView,
     NotResource,
@@ -13,11 +12,12 @@ def test_match_forview_action(committed_registry, actions, testindexview):
     assert for_view == view_class
 
 
-def test_match_resource(committed_registry, actions, testindexview):
+def test_match_resource(committed_registry, actions, testindexview,
+                        testresource):
     resource_view = actions[1][1]
     view_class = TestViewAction.get_class(committed_registry,
                                           for_=testindexview,
-                                          resource=Resource,
+                                          resource=testresource,
                                           )
     assert resource_view == view_class
 

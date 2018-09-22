@@ -15,8 +15,7 @@ class ViewService(BaseService):
     config: ViewServiceConfig = injected()
 
     def get_view(self, app_registry):
-        view_class = self.action.get_class(app_registry, 'view',
-                                           for_=IndexView)
+        view_class = self.action.get_class(app_registry, for_=IndexView)
         view_instance = view_class()
         return view_instance
 

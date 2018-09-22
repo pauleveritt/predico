@@ -4,7 +4,6 @@ from kaybee_component.predicate_action import (
     LookupMissingRequired,
     UnknownLookup
 )
-from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.view.action import ViewAction
 from tests.unit.predicate_actions.conftest import NotView, NotResource
 
@@ -32,10 +31,11 @@ def test_predicates_for_not_match(forview_action: ViewAction):
 
 
 def test_predicates_resource_match(resourceview_action: ViewAction,
-                                   testindexview):
+                                   testindexview,
+                                   testresource):
     assert True is resourceview_action.all_predicates_match(
         for_=testindexview,
-        resource=Resource
+        resource=testresource
     )
 
 
@@ -47,10 +47,11 @@ def test_predicates_resource_not_match(resourceview_action: ViewAction,
     )
 
 
-def test_predicates_resource_not_for__match(resourceview_action: ViewAction):
+def test_predicates_resource_not_for__match(resourceview_action: ViewAction,
+                                            testresource):
     assert False is resourceview_action.all_predicates_match(
         for_=NotView,
-        resource=Resource
+        resource=testresource
     )
 
 

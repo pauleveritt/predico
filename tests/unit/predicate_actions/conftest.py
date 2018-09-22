@@ -5,8 +5,12 @@ import dectate
 import pytest
 
 from kaybee_component.predicates import ForPredicate, ResourcePredicate
-from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.view.action import PredicateAction
+
+
+@dataclass
+class Resource:
+    pass
 
 
 class NotView:
@@ -25,6 +29,11 @@ class TestIndexView:
 def testindexview():
     # Bleh, different import paths generate different equality
     return TestIndexView
+
+@pytest.fixture
+def testresource():
+    # Bleh, different import paths generate different equality
+    return Resource
 
 
 class TestViewAction(PredicateAction):
