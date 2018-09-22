@@ -7,7 +7,6 @@ import pytest
 from kaybee_component.predicates import ForPredicate, ResourcePredicate
 from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.view.action import PredicateAction
-from kaybee_component.services.view.base_view import IndexView
 
 
 class NotView:
@@ -18,11 +17,31 @@ class NotResource:
     pass
 
 
+class TestIndexView:
+    pass
+
+
+@pytest.fixture
+def testindexview():
+    # Bleh, different import paths generate different equality
+    return TestIndexView
+
+
 class TestViewAction(PredicateAction):
     action_name = 'view'
     REQUIRED_PREDICATES = (ForPredicate,)
     OPTIONAL_PREDICATES = (ResourcePredicate,)
     predicates: Mapping[str, Union[ForPredicate, ResourcePredicate]]
+
+
+@dataclass
+class TestForView:
+    logo: str = 'Logo XX'
+
+
+@dataclass
+class TestResourceView:
+    logo: str = 'Logo XX'
 
 
 @pytest.fixture
@@ -35,22 +54,12 @@ def registry():
 
 @pytest.fixture
 def for_view(registry):
-    @registry.view(for_=IndexView)
-    @dataclass
-    class ForView:
-        logo: str = 'Logo XX'
+    registry.view(for_=TestIndexView)(TestForView)
 
-    dectate.commit(registry)
-
-@dataclass
-class ResourceView:
-    logo: str = 'Logo XX'
 
 @pytest.fixture
 def resource_view(registry):
-    registry.view(for_=IndexView, resource=Resource)(ResourceView)
-
-    dectate.commit(registry)
+    registry.view(for_=TestIndexView, resource=Resource)(TestResourceView)
 
 
 @pytest.fixture

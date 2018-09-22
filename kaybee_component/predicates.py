@@ -20,7 +20,8 @@ class ForPredicate(Predicate):
     key: str = 'for_'
 
     def matches(self, target: IndexView) -> bool:
-        return target == self.value
+        # target and self.value are both classes. Are they the same?
+        return target is self.value
 
 
 @dataclass
@@ -29,4 +30,5 @@ class ResourcePredicate(Predicate):
     key: str = 'resource'
 
     def matches(self, target: Resource) -> bool:
-        return self.value == target
+        # target and self.value are both classes. Are they the same?
+        return target is self.value

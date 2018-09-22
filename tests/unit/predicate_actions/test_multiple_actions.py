@@ -1,5 +1,4 @@
 from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.view.base_view import IndexView
 from tests.unit.predicate_actions.conftest import (
     NotView,
     NotResource,
@@ -7,36 +6,37 @@ from tests.unit.predicate_actions.conftest import (
 )
 
 
-def test_match_forview_action(registry, actions):
+def test_match_forview_action(committed_registry, actions, testindexview):
     for_view = actions[0][1]
-    view_class = TestViewAction.get_class(registry, for_=IndexView)
+    view_class = TestViewAction.get_class(committed_registry,
+                                          for_=testindexview)
     assert for_view == view_class
 
 
-def test_match_resource(registry, actions):
+def test_match_resource(committed_registry, actions, testindexview):
     resource_view = actions[1][1]
-    view_class = TestViewAction.get_class(registry,
-                                          for_=IndexView,
+    view_class = TestViewAction.get_class(committed_registry,
+                                          for_=testindexview,
                                           resource=Resource,
                                           )
     assert resource_view == view_class
 
 
-def test_not_match_resource(registry, actions):
+def test_not_match_resource(committed_registry, actions, testindexview):
     for_view = actions[0][1]
 
     class Article:
         pass
 
-    view_class = TestViewAction.get_class(registry,
-                                          for_=IndexView,
+    view_class = TestViewAction.get_class(committed_registry,
+                                          for_=testindexview,
                                           resource=Article,
                                           )
     assert for_view == view_class
 
 
-def test_no_matches(registry, actions):
-    view_class = TestViewAction.get_class(registry,
+def test_no_matches(committed_registry, actions):
+    view_class = TestViewAction.get_class(committed_registry,
                                           for_=NotView,
                                           resource=NotResource,
                                           )
