@@ -6,7 +6,7 @@ import pytest
 
 from kaybee_component.predicates import ForPredicate, ResourcePredicate
 from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.view.action import PredicateAction, ViewAction
+from kaybee_component.services.view.action import PredicateAction
 from kaybee_component.services.view.base_view import IndexView
 
 
@@ -18,15 +18,17 @@ class NotResource:
     pass
 
 
+class TestViewAction(PredicateAction):
+    action_name = 'view'
+    REQUIRED_PREDICATES = (ForPredicate,)
+    OPTIONAL_PREDICATES = (ResourcePredicate,)
+    predicates: Mapping[str, Union[ForPredicate, ResourcePredicate]]
+
+
 @pytest.fixture
 def registry():
-    class ViewAction(PredicateAction):
-        REQUIRED_PREDICATES = (ForPredicate,)
-        OPTIONAL_PREDICATES = (ResourcePredicate,)
-        predicates: Mapping[str, Union[ForPredicate, ResourcePredicate]]
-
     class PredicateApp(dectate.App):
-        view = dectate.directive(ViewAction)
+        view = dectate.directive(TestViewAction)
 
     return PredicateApp
 
@@ -40,13 +42,13 @@ def for_view(registry):
 
     dectate.commit(registry)
 
+@dataclass
+class ResourceView:
+    logo: str = 'Logo XX'
 
 @pytest.fixture
 def resource_view(registry):
-    @registry.view(for_=IndexView, resource=Resource)
-    @dataclass
-    class ResourceView:
-        logo: str = 'Logo XX'
+    registry.view(for_=IndexView, resource=Resource)(ResourceView)
 
     dectate.commit(registry)
 
@@ -65,10 +67,10 @@ def actions(committed_registry):
 
 
 @pytest.fixture
-def forview_action(actions) -> ViewAction:
+def forview_action(actions) -> TestViewAction:
     return actions[0][0]
 
 
 @pytest.fixture
-def resourceview_action(actions) -> ViewAction:
+def resourceview_action(actions) -> TestViewAction:
     return actions[1][0]

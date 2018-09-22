@@ -125,11 +125,15 @@ class PredicateAction(dectate.Action):
         return True
 
     @classmethod
-    def get_class(cls, registry, action_name, **args):
-        """ Look through all the actions, return best """
+    def get_class(cls, registry, **args):
+        """ Look through all the actions, return best
 
-        # TODO: Get action_name from cls instead of passing in
+        The actions get sorted based on the best score. Then we
+        walk through each, finding the first that matches the args.
 
+        """
+
+        action_name = cls.action_name
         sorted_actions = cls.sorted_actions(action_name, registry)
 
         # Find the first action which matches the args

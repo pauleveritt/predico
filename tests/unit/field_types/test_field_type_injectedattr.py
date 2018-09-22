@@ -12,6 +12,7 @@ def test_basic():
 
 
 def test_other_data():
+    # Ensure the field can have other stuff in it
     i = injectedattr(BogusResource, 'title', metadata=dict(a=1), init=False)
     assert BogusResource == i.metadata['injectedattr']['type_']
     assert 'title' == i.metadata['injectedattr']['attr']
