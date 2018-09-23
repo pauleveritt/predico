@@ -1,7 +1,9 @@
 from kaybee_component.services.request.service import RequestService
+from tests.conftest import ForView1
 
 
-def test_request(test_registry, initialized_sm):
+def test_request(initialized_sm):
+    test_registry = initialized_sm.registry
     services = initialized_sm.services
     request_service: RequestService = services['request']
 
@@ -14,5 +16,6 @@ def test_request(test_registry, initialized_sm):
         resource_id='more/about',
         app_registry=test_registry,
     )
-    view = request.view
+    view: ForView1 = request.view
     assert 'ForView1' in view.__class__.__name__
+    assert 99 == view.viewservice_config.flag

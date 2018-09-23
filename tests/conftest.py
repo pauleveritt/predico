@@ -59,21 +59,21 @@ def sm_config(
 
 
 @pytest.fixture
-def sm_registry():
+def test_registry():
     """ Provide test isolation for builtin service registry """
 
-    class TestServiceRegistry(dectate.App):
-        service = dectate.directive(ServiceAction)
+    class TestServiceRegistry(registry):
+        pass
 
     return TestServiceRegistry
 
 
 @pytest.fixture
-def sm(sm_config, sm_registry) -> ServiceManager:
+def sm(sm_config, test_registry) -> ServiceManager:
     """ Make a ServiceManager """
 
-    sm = ServiceManager(sm_config, sm_registry)
-    sm.registry = sm_registry
+    sm = ServiceManager(sm_config, test_registry)
+    sm.registry = test_registry
     return sm
 
 
@@ -85,22 +85,15 @@ def sm(sm_config, sm_registry) -> ServiceManager:
 # - etc.
 # -------------------------------------------
 
-@pytest.fixture
-def test_registry():
-    """ Provide an isolated registry """
-
-    class TestRegistry(registry):
-        pass
-
-    return TestRegistry
+@dataclass
+class ForView1:
+    viewservice_config: ViewServiceConfig
+    name: str = 'For View One'
 
 
 @pytest.fixture
 def for_view1(test_registry):
-    @test_registry.view(for_=IndexView)
-    @dataclass
-    class ForView1:
-        name: str = 'For View One'
+    test_registry.view(for_=IndexView)(ForView1)
 
 
 @pytest.fixture
@@ -109,7 +102,7 @@ def registrations(test_registry, for_view1):
 
 
 @pytest.fixture
-def initialized_sm(register_services, registrations, sm):
+def initialized_sm(registrations, sm):
     """ The equivalent of an app with commit """
     sm.initialize()
     return sm
