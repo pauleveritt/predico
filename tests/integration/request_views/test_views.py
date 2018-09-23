@@ -1,5 +1,5 @@
 from kaybee_component.services.request.service import RequestService
-from tests.conftest import ForView1
+from tests.integration.request_views.conftest import ForView1
 
 
 def test_request(initialized_sm):

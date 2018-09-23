@@ -85,20 +85,10 @@ def sm(sm_config, test_registry) -> ServiceManager:
 # - etc.
 # -------------------------------------------
 
-@dataclass
-class ForView1:
-    viewservice_config: ViewServiceConfig
-    name: str = 'For View One'
-
 
 @pytest.fixture
-def for_view1(test_registry):
-    test_registry.view(for_=IndexView)(ForView1)
-
-
-@pytest.fixture
-def registrations(test_registry, for_view1):
-    dectate.commit(test_registry)
+def registrations(test_registry):
+    pass
 
 
 @pytest.fixture
