@@ -10,7 +10,6 @@ from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.config import ViewServiceConfig
-from kaybee_component.services.view.service import setup as viewservice_setup
 
 
 @pytest.fixture
@@ -26,7 +25,8 @@ def requestservice_config() -> RequestServiceConfig:
 
 
 @pytest.fixture
-def sm_config(viewservice_config, requestservice_config) -> ServiceManagerConfig:
+def sm_config(viewservice_config,
+              requestservice_config) -> ServiceManagerConfig:
     """ Gather service's config into one for ServiceManager """
 
     config = ServiceManagerConfig(
@@ -55,12 +55,6 @@ def sm(sm_config, sm_registry) -> ServiceManager:
     sm = ServiceManager(sm_config, sm_registry)
     sm.registry = sm_registry
     return sm
-
-
-@pytest.fixture
-def register_services(sm_registry):
-    """ Configure the well-known services """
-    viewservice_setup(sm_registry)
 
 
 # -------------------------------------------
@@ -95,7 +89,7 @@ def registrations(for_view1):
 
 
 @pytest.fixture
-def initialized_sm(register_services, registrations, sm):
+def initialized_sm(registrations, sm):
     """ The equivalent of an app with commit """
     sm.initialize()
     return sm

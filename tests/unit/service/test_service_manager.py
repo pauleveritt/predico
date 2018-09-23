@@ -1,7 +1,5 @@
 import pytest
 
-from kaybee_component.service.manager import InvalidInjectable
-
 
 def test_construction(sm):
     assert True is sm.config.debug
@@ -9,13 +7,12 @@ def test_construction(sm):
     assert {} == sm.services
 
 
-def test_register_services(register_services, initialized_sm):
-    assert 2 == len(initialized_sm.registry.config.services)
+def test_register_services(initialized_sm):
     services = initialized_sm.services
-    assert ('request', 'view') == tuple(services.keys())
+    assert ['request', 'view'] == sorted(tuple(services.keys()))
 
 
-def test_valid_injected(register_services, initialized_sm):
+def test_valid_injected(initialized_sm):
     services = initialized_sm.services
     sm_config = initialized_sm.config
 
@@ -30,7 +27,7 @@ def test_valid_injected(register_services, initialized_sm):
     assert requestservice_config.flag == requestservice.config.flag
 
 
-def test_valid_injectedattr(register_services, initialized_sm):
+def test_valid_injectedattr(initialized_sm):
     services = initialized_sm.services
     sm_config = initialized_sm.config
     view = services['view']

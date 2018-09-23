@@ -22,8 +22,6 @@ from kaybee_component.injector import inject
 from kaybee_component.registry import Registry
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.services.request.action import RequestAction
-from kaybee_component.services.view.action import ViewAction
 
 
 class InvalidInjectable(Exception):
@@ -55,13 +53,12 @@ class ServiceManager:
         injectables[ServiceManagerConfig.__name__] = self.config,
         injectables[ServiceManager.__name__] = self
 
-        # TODO Introspect the other actions instead of hardwiring
-        serviceconfigs = self.config.serviceconfigs
-        injectables['ViewAction'] = ViewAction
-        injectables['ViewServiceConfig'] = serviceconfigs['viewservice']
-        injectables['RequestAction'] = RequestAction
-        injectables['RequestServiceConfig'] = serviceconfigs['requestservice']
+        # Make the Registry injectable
         injectables['Registry'] = self.registry
+
+        # Make each service config available as injectable
+        for serviceconfig in self.config.serviceconfigs.values():
+            injectables[serviceconfig.__class__.__name__] = serviceconfig
 
         # Get a list of services
         q = dectate.Query('service')

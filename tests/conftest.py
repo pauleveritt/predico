@@ -14,11 +14,8 @@ from kaybee_component.service.action import ServiceAction
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
-from kaybee_component.services.request.service import \
-    setup as requestservice_setup
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.config import ViewServiceConfig
-from kaybee_component.services.view.service import setup as viewservice_setup
 
 
 # -------------------------------------------
@@ -78,19 +75,6 @@ def sm(sm_config, sm_registry) -> ServiceManager:
     sm = ServiceManager(sm_config, sm_registry)
     sm.registry = sm_registry
     return sm
-
-
-# -------------------------------------------
-# Services
-#
-# - Take the well-known services and configure them
-# -------------------------------------------
-
-@pytest.fixture
-def register_services(sm_registry):
-    """ Configure the well-known services """
-    requestservice_setup(sm_registry)
-    viewservice_setup(sm_registry)
 
 
 # -------------------------------------------
