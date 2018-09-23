@@ -14,11 +14,11 @@ to do -- views, renderers, etc. This single entry point needs:
 - A way to retrieve services
 
 """
-from dataclasses import fields
 from typing import Dict
 
 import dectate
 
+from kaybee_component.injector import inject
 from kaybee_component.registry import Registry
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
@@ -73,53 +73,11 @@ class ServiceManager:
             # Place to build up the args passed into the dataclass
             args = {}
 
-            # Inspect target dataclass and find what it wants injected
-            for field in fields(target):
-                field_name = field.name
+            # Use injector to make our target class
+            props = dict()
+            service = inject(props, injectables, target)
 
-                if field.metadata.get('injected', False):
-                    # Sucks that we have to use strings for keys, instead
-                    # of actual classes
-                    field_type = field.type.__name__
-
-                    # If we don't have this value in the injectables,
-                    # raise a custom exception
-                    injected_value = injectables.get(field_type, False)
-                    if injected_value is False:
-                        fmt = InvalidInjectable.fmt
-                        msg = fmt.format(
-                            type=field_type,
-                            klass=self.__class__.__name__
-                        )
-                        raise InvalidInjectable(msg)
-
-                    # Add this to the arguments we are providing to
-                    # construct the dataclass
-                    args[field_name] = injectables[field_type]
-
-                elif field.metadata.get('injectedattr', False):
-                    injectedattr = field.metadata['injectedattr']
-                    field_type = injectedattr['type_'].__name__
-
-                    # If we don't have this value in the injectables,
-                    # raise a custom exception
-                    injected_value = injectables.get(field_type, False)
-                    if injected_value is False:
-                        fmt = InvalidInjectable.fmt
-                        msg = fmt.format(
-                            type=field_type,
-                            klass=self.__class__.__name__
-                        )
-                        raise InvalidInjectable(msg)
-
-                    # Add this to the arguments we are providing to
-                    # construct the dataclass
-                    type_ = injectables[field_type]
-                    attr_ = injectedattr['attr']
-                    value = getattr(type_, attr_)
-                    args[field_name] = value
-
-            service = target(**args)
+            # Store this in our dict of services
             name = action.name
             self.services[name] = service
 

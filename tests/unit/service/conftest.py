@@ -102,10 +102,6 @@ def invalid_injectable_type(sm_registry) -> Type[BaseService]:
     @sm_registry.service(name='view')
     @dataclass(frozen=True)
     class InvalidService(BaseService):
-        sm_config: BogusType = field(
-            metadata=dict(
-                injected=True
-            )
-        )
+        sm_config: BogusType
 
     return InvalidService

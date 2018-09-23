@@ -37,7 +37,7 @@ def test_construction():
 def test_simple_registration(actions):
     assert 1 == len(actions)
     action, target = actions[0]
-    assert 'for_-IndexView--resource-Resource' == action.name
+    assert 'for_-TestIndexView--resource-Resource' == action.name
     resource = action.predicates['resource']
     assert 'ResourcePredicate' == resource.__class__.__name__
     assert 20 == action.sort_order
@@ -64,8 +64,8 @@ def test_not_matches(first_action):
     assert not resource.matches(OtherResource)
 
 
-def test_conflict_error(committed_registry):
-    @committed_registry.view(for_=IndexView, resource=Resource)
+def test_conflict_error(committed_registry, testindexview):
+    @committed_registry.view(for_=testindexview, resource=Resource)
     @dataclass
     class ResourceView:
         logo: str = 'Logo XX'

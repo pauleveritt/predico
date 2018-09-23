@@ -39,5 +39,5 @@ def test_valid_injectedattr(register_services, initialized_sm):
 
 
 def test_invalid_injectable(invalid_injectable_type, sm):
-    with pytest.raises(InvalidInjectable) as exc:
+    with pytest.raises(TypeError) as exc:
         sm.initialize()
