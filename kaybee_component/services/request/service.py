@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from kaybee_component.field_types import injected
 from kaybee_component.registry import Registry
 from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.manager import ServiceManager
@@ -25,7 +24,7 @@ class SphinxRequest:
 
 @dataclass(frozen=True)
 class RequestService(BaseService):
-    config: RequestServiceConfig = injected()
+    config: RequestServiceConfig
 
     def make_request(self, **kwargs):
         return SphinxRequest(**kwargs)

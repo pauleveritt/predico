@@ -19,16 +19,6 @@ cases.
 from dataclasses import field, Field
 
 
-def injected(**args) -> Field:
-    """ Pass in a value of the field's type from the injectables """
-    # Pass along any other args, but make sure metadata
-    # has injectable
-    if 'metadata' not in args:
-        args['metadata'] = {}
-    args['metadata']['injected'] = True
-    return field(**args)
-
-
 def injectedattr(type_, attr: str, **args) -> Field:
     """ Get an attribute off an injected type
 
