@@ -9,6 +9,10 @@ from typing import Dict, Any, TypeVar, Generic
 T = TypeVar('T')
 
 
+class InvalidInjectable(Exception):
+    fmt = 'Invalid injectedattr type {type} requested from {klass}'
+
+
 def inject(
         props: Dict[str, Any],
         injectables: Dict[str, Any],
@@ -23,6 +27,7 @@ def inject(
     for field in fields(target):
         # Basic rules of precedence
         # - First try in the props
+        # - Then see if injectedattr is being used
         # - Then try in injectables
         # - Finally, if no field default value, dataclass will fail
         #   to construct
@@ -30,6 +35,29 @@ def inject(
         field_name = field.name
         if field_name in props:
             args[field_name] = props[field_name]
+        elif field.metadata.get('injectedattr', False):
+            # This dataclass field is using the injectedattr support
+            injectedattr = field.metadata['injectedattr']
+            field_type = injectedattr['type_'].__name__
+
+            # If we don't have this value in the injectables,
+            # raise a custom exception
+            injected_value = injectables.get(field_type, False)
+            if injected_value is False:
+                fmt = InvalidInjectable.fmt
+                msg = fmt.format(
+                    type=field_type,
+                    klass=target.__class__.__name__
+                )
+                raise InvalidInjectable(msg)
+
+            # Add the type's attribute value to the arguments we are
+            # providing to construct the dataclass
+            type_ = injectables[field_type]
+            attr_ = injectedattr['attr']
+            value = getattr(type_, attr_)
+            args[field_name] = value
+
         else:
             # Not in the passed-in props, let's try via injectables
 

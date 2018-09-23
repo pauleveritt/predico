@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 import pytest
 
-from kaybee_component.injector import inject
+from kaybee_component.field_types import injectedattr
+from kaybee_component.injector import inject, InvalidInjectable
 
 
 @dataclass
@@ -25,7 +26,7 @@ def test_injector_props():
     assert 55 == athlete.shoe.size
 
 
-def test_injector_injector():
+def test_injector_injected():
     """ Create instance from data based on injectables """
 
     shoe = Shoe(size=66)
@@ -33,6 +34,39 @@ def test_injector_injector():
     injectables = {Shoe.__name__: shoe}
     athlete = inject(props, injectables, Athlete)
     assert 66 == athlete.shoe.size
+
+
+def test_injector_injectedattr():
+    """ Tell the injector to hand attribute of another injectable """
+
+    @dataclass
+    class InjectedAttrAthlete:
+        shoe_size: int = injectedattr(Shoe, 'size')
+
+    shoe = Shoe(size=88)
+    props = dict()
+    injectables = {Shoe.__name__: shoe}
+    athlete = inject(props, injectables, InjectedAttrAthlete)
+    assert 88 == athlete.shoe_size
+
+
+def test_injector_injectedattr_missing_class():
+    """ Ask for a class not registered as injectable """
+
+    class Jersey:
+        pass
+
+    @dataclass
+    class InjectedAttrAthlete:
+        shoe_size: int = injectedattr(Jersey, 'size')
+
+    shoe = Shoe(size=88)
+    props = dict()
+    injectables = {Shoe.__name__: shoe}
+    with pytest.raises(InvalidInjectable) as exc:
+        inject(props, injectables, InjectedAttrAthlete)
+    expected = 'Invalid injectedattr type Jersey requested from type'
+    assert expected == str(exc.value)
 
 
 def test_injector_fielddefault():

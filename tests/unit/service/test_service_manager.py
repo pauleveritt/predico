@@ -29,6 +29,7 @@ def test_valid_injected(register_services, initialized_sm):
     requestservice_config = sm_config.serviceconfigs['requestservice']
     assert requestservice_config.flag == requestservice.config.flag
 
+
 def test_valid_injectedattr(register_services, initialized_sm):
     services = initialized_sm.services
     sm_config = initialized_sm.config
