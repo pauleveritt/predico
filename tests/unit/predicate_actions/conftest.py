@@ -30,6 +30,7 @@ def testindexview():
     # Bleh, different import paths generate different equality
     return TestIndexView
 
+
 @pytest.fixture
 def testresource():
     # Bleh, different import paths generate different equality

@@ -5,7 +5,18 @@ import pytest
 
 from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.view.action import ViewAction
-from kaybee_component.services.view.base_view import IndexView
+
+
+class TestIndexView:
+    pass
+
+
+@pytest.fixture
+def testindexview():
+    # Use a fixture so that equality test works. pytest puts the
+    # import at a different place so it wrongly fails equality match.
+
+    return TestIndexView
 
 
 @pytest.fixture
@@ -17,8 +28,8 @@ def registry():
 
 
 @pytest.fixture
-def for_view(registry):
-    @registry.view(for_=IndexView)
+def for_view(registry, testindexview):
+    @registry.view(for_=testindexview)
     @dataclass
     class ForView:
         logo: str = 'Logo XX'
@@ -27,8 +38,8 @@ def for_view(registry):
 
 
 @pytest.fixture
-def resource_view(registry):
-    @registry.view(for_=IndexView, resource=Resource)
+def resource_view(registry, testindexview):
+    @registry.view(for_=testindexview, resource=Resource)
     @dataclass
     class ResourceView:
         logo: str = 'Logo XX'
