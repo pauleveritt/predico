@@ -2,11 +2,12 @@ import dectate
 import pytest
 from dectate import ConflictError
 
-from kaybee_component.predicates import ParentSelfPredicate
+from kaybee_component.predicates import ResourcePredicate
+from kaybee_component.services.resource.base_resource import Resource
 
 
 @pytest.fixture
-def committed_registry(registry, resource_view):
+def committed_registry(registry, parentself_view):
     dectate.commit(registry)
     return registry
 
@@ -23,41 +24,38 @@ def first_action(actions):
     return actions[0][0]
 
 
+@pytest.fixture
+def parentself(first_action):
+    return first_action.predicates['parentself']
+
+
 def test_construction():
-    predicate = ParentSelfPredicate(value='more/about', action=None)
-    assert 'parentself' == predicate.key
-    assert 'more/about' == predicate.value
-    assert 20 == predicate.rank
+    predicate = ResourcePredicate(value=Resource, action=None)
+    assert 'resource' == predicate.key
+    assert Resource == predicate.value
+    assert 10 == predicate.rank
 
 
-def test_simple_registration(actions):
+def test_simple_registration(actions, parentself):
     assert 1 == len(actions)
     action, target = actions[0]
-    assert 'for_-TestIndexView--resource-Resource' == action.name
-    resource = action.predicates['resource']
-    assert 'ResourcePredicate' == resource.__class__.__name__
-    assert 20 == action.sort_order
-    assert target.__name__.endswith('ResourceView')
+    assert 'for_-TestIndexView--parentself-more/about' == action.name
+    assert 'ParentSelfPredicate' == parentself.__class__.__name__
+    assert 30 == action.sort_order
+    assert target.__name__.endswith('TestParentSelfView')
 
 
-def test_str(first_action):
-    resource = first_action.predicates['resource']
-    assert 'resource-Resource' == str(resource)
+def test_str(first_action, parentself):
+    assert 'parentself-more/about' == str(parentself)
 
 
-def test_matches(first_action):
-    resource = first_action.predicates['resource']
-    resource_class = resource.value
-    assert resource.matches(resource_class)
+def test_matches(first_action, parentself):
+    parentself_value = parentself.value
+    assert parentself.matches(parentself_value)
 
 
-def test_not_matches(first_action):
-    resource = first_action.predicates['resource']
-
-    class OtherResource:
-        pass
-
-    assert not resource.matches(OtherResource)
+def test_not_matches(first_action, parentself):
+    assert not parentself.matches('another/place')
 
 
 def test_conflict_error(generate_conflict_resource):
