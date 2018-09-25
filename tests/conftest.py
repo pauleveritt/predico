@@ -9,7 +9,7 @@ import pytest
 
 from kaybee_component import registry
 from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.service.manager import ServiceManager
+from kaybee_component.service.manager import ServiceManager, Services
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.resource.config import ResourceServiceConfig
 from kaybee_component.services.view.config import ViewServiceConfig
@@ -104,3 +104,9 @@ def initialized_sm(registrations, sm):
     """ The equivalent of an app with commit """
     sm.initialize()
     return sm
+
+
+@pytest.fixture
+def services(initialized_sm) -> Services:
+    services: Services = initialized_sm.services
+    return services
