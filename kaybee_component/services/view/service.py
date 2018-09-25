@@ -18,10 +18,11 @@ class ViewService(BaseService):
     app_registry: Registry
     config: ViewServiceConfig
 
-    def get_view(self, app_registry, for_, resource: Resource):
+    def get_view(self, for_, resource: Resource):
         # Use the predicate registry to find the right view class
         view_class = ViewAction.get_class(
-            app_registry,
+            self.sm,
+            self.app_registry,
             for_=IndexView,
             resource=resource
         )

@@ -24,7 +24,7 @@ class Predicate:
 class ForPredicate(Predicate):
     key: str = 'for_'
 
-    def matches(self, target: IndexView) -> bool:
+    def matches(self, target: IndexView, sm=None) -> bool:
         # target and self.value are both classes. Are they the same?
         return target is self.value
 
@@ -34,7 +34,7 @@ class ResourcePredicate(Predicate):
     value: Type[Resource]
     key: str = 'resource'
 
-    def matches(self, target: Resource) -> bool:
+    def matches(self, target: Resource, sm=None) -> bool:
         # target and self.value are both classes. Are they the same?
         return target is self.value
 
@@ -50,6 +50,8 @@ class ParentSelfPredicate(Predicate):
     key: str = 'parentself'
     rank: int = 20
 
-    def matches(self, target: str) -> bool:
-        # We are given an resourceid. Look first at
+    def matches(self, target: str, sm=None) -> bool:
+        # We are given an resourceid. Get the resource and look at
+        # it's resource id, then up the parents.
+
         return target == self.value

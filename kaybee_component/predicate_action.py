@@ -19,10 +19,10 @@ class UnknownLookup(Exception):
     fmt = 'Lookup supplied unknown predicate argument: {name}'
 
 
-def _predicate_matches_lookup(predicate, lookup_args) -> bool:
+def _predicate_matches_lookup(sm, predicate, lookup_args) -> bool:
     # Make sure the lookup args actually have this predicate's key
     lookup_value = lookup_args.get(predicate.key, False)
-    return lookup_value and predicate.matches(lookup_value)
+    return lookup_value and predicate.matches(lookup_value, sm)
 
 
 class PredicateAction(dectate.Action):
@@ -85,7 +85,7 @@ class PredicateAction(dectate.Action):
         sorted_actions = sorted(q(app), reverse=True)
         return sorted_actions
 
-    def all_predicates_match(self, **args):
+    def all_predicates_match(self, sm, **kwargs):
         """ See if match on all this registered action's predicates"""
 
         # Let's do this in phases, eliminating the least-cost things first.
@@ -93,7 +93,7 @@ class PredicateAction(dectate.Action):
         required_keys = {p.key for p in self.REQUIRED_PREDICATES}
         optional_keys = {p.key for p in self.OPTIONAL_PREDICATES}
         all_keys = required_keys | optional_keys
-        arg_keys = set(args.keys())
+        arg_keys = set(kwargs.keys())
 
         # Phase 1: Missing required arguments
         # You can't do a lookup without a 'for_', for example, this
@@ -118,14 +118,14 @@ class PredicateAction(dectate.Action):
 
         # TODO do less computation at runtime, move some to instance
         for predicate in self.predicates.values():
-            is_match = _predicate_matches_lookup(predicate, args)
+            is_match = _predicate_matches_lookup(sm, predicate, kwargs)
             if not is_match:
                 # Bail out immediately
                 return False
         return True
 
     @classmethod
-    def get_class(cls, registry, **args):
+    def get_class(cls, sm, registry, **args):
         """ Look through all the actions, return best
 
         The actions get sorted based on the best score. Then we
@@ -138,7 +138,7 @@ class PredicateAction(dectate.Action):
 
         # Find the first action which matches the args
         for action, target in sorted_actions:
-            if action.all_predicates_match(**args):
+            if action.all_predicates_match(sm, **args):
                 return target
 
         return None

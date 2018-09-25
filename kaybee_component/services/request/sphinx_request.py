@@ -27,7 +27,6 @@ class SphinxRequest:
         services = self.sm.services
         view_service: ViewService = services['view']
         return view_service.get_view(
-            self.app_registry,
             for_=IndexView,
             resource=self.resource.__class__,
         )
