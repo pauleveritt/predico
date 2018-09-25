@@ -79,3 +79,12 @@ def generate_conflict_resource(registry, resource_view):
         dectate.commit(registry)
 
     return conflict
+
+@pytest.fixture
+def request(registry):
+    class Request:
+        pass
+
+    r = Request()
+    r.registry = registry
+    return r

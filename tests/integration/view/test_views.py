@@ -41,3 +41,21 @@ def test_resourceclass_view(initialized_sm, test_resources):
     assert 'TestSectionView' in view.__class__.__name__
     assert 99 == view.viewservice_config.flag
     assert 'Section View' == view.name
+
+
+def test_self_view(initialized_sm, test_resources):
+    """ Get a view registered for a specific resource """
+    # Get the request service
+    services = initialized_sm.services
+    request_service: RequestService = services['request']
+
+    request = request_service.make_request(resourceid='more/specificid')
+
+    # Request: Did the request get the correct one?
+    assert 'more/specificid' == request.resource.id
+
+    # View: Did the request get the correct one?
+    view = request.view
+    assert 'TestSectionView' in view.__class__.__name__
+    assert 99 == view.viewservice_config.flag
+    assert 'Section View' == view.name

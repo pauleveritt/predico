@@ -13,11 +13,11 @@ from kaybee_component.services.request.sphinx_request import SphinxRequest
 class RequestService(BaseService):
     config: RequestServiceConfig
     sm: ServiceManager
-    app_registry: Registry
+    registry: Registry
 
     def make_request(self, resourceid: str):
         return SphinxRequest(
             sm=self.sm,
-            app_registry=self.app_registry,
+            registry=self.registry,
             resourceid=resourceid
         )

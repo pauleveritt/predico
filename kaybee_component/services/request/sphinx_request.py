@@ -10,7 +10,7 @@ from kaybee_component.services.view.service import ViewService
 class SphinxRequest:
     resourceid: str
     sm: ServiceManager
-    app_registry: Registry
+    registry: Registry
 
     @property
     def resource(self):
@@ -27,6 +27,7 @@ class SphinxRequest:
         services = self.sm.services
         view_service: ViewService = services['view']
         return view_service.get_view(
+            self,
             for_=IndexView,
             resource=self.resource.__class__,
         )

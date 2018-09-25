@@ -54,7 +54,7 @@ def registrations(test_registry):
     test_registry.view(for_=IndexView)(TestResourceView)
     test_registry.view(for_=IndexView, resource=TestArticle)(
         TestSectionView)
-    test_registry.view(for_=IndexView, resourceid='more/specificid')(
+    test_registry.view(for_=IndexView, parentself='more/specificid')(
         TestResourceIdView)
 
 

@@ -19,10 +19,10 @@ class UnknownLookup(Exception):
     fmt = 'Lookup supplied unknown predicate argument: {name}'
 
 
-def _predicate_matches_lookup(sm, predicate, lookup_args) -> bool:
+def _predicate_matches_lookup(request, predicate, lookup_args) -> bool:
     # Make sure the lookup args actually have this predicate's key
     lookup_value = lookup_args.get(predicate.key, False)
-    return lookup_value and predicate.matches(lookup_value, sm)
+    return lookup_value and predicate.matches(lookup_value, request)
 
 
 class PredicateAction(dectate.Action):
@@ -85,7 +85,7 @@ class PredicateAction(dectate.Action):
         sorted_actions = sorted(q(app), reverse=True)
         return sorted_actions
 
-    def all_predicates_match(self, sm, **kwargs):
+    def all_predicates_match(self, request, **kwargs):
         """ See if match on all this registered action's predicates"""
 
         # Let's do this in phases, eliminating the least-cost things first.
@@ -118,14 +118,14 @@ class PredicateAction(dectate.Action):
 
         # TODO do less computation at runtime, move some to instance
         for predicate in self.predicates.values():
-            is_match = _predicate_matches_lookup(sm, predicate, kwargs)
+            is_match = _predicate_matches_lookup(request, predicate, kwargs)
             if not is_match:
                 # Bail out immediately
                 return False
         return True
 
     @classmethod
-    def get_class(cls, sm, registry, **args):
+    def get_class(cls, request, **args):
         """ Look through all the actions, return best
 
         The actions get sorted based on the best score. Then we
@@ -134,11 +134,11 @@ class PredicateAction(dectate.Action):
         """
 
         action_name = cls.action_name
-        sorted_actions = cls.sorted_actions(action_name, registry)
+        sorted_actions = cls.sorted_actions(action_name, request.registry)
 
         # Find the first action which matches the args
         for action, target in sorted_actions:
-            if action.all_predicates_match(sm, **args):
+            if action.all_predicates_match(request, **args):
                 return target
 
         return None

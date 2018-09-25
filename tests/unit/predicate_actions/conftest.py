@@ -93,3 +93,12 @@ def forview_action(actions) -> TestViewAction:
 @pytest.fixture
 def resourceview_action(actions) -> TestViewAction:
     return actions[1][0]
+
+@pytest.fixture
+def request(registry):
+    class Request:
+        pass
+
+    r = Request()
+    r.registry = registry
+    return r
