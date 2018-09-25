@@ -30,7 +30,7 @@ class PredicateAction(dectate.Action):
         'plugins': dict
     }
 
-    def __init__(self, **args):
+    def __init__(self, *args, **kwargs):
         super().__init__()
         self.predicates = {}
 
@@ -40,23 +40,23 @@ class PredicateAction(dectate.Action):
             for predicate in self.OPTIONAL_PREDICATES + \
                              self.REQUIRED_PREDICATES
         ]
-        for argument_name in args.keys():
+        for argument_name in kwargs.keys():
             if argument_name not in defined_predicate_keys:
                 m = UnknownArgument.fmt.format(name=argument_name)
                 raise UnknownArgument(m)
 
         for predicate_choice in self.REQUIRED_PREDICATES:
             key = predicate_choice.key
-            if key not in args:
+            if key not in kwargs:
                 m = MissingArgument.fmt.format(name=key)
                 raise MissingArgument(m)
-            predicate = predicate_choice(value=args[key])
+            predicate = predicate_choice(value=kwargs[key])
             self.predicates[key] = predicate
 
         for predicate_choice in self.OPTIONAL_PREDICATES:
             key = predicate_choice.key
-            if key in args:
-                predicate = predicate_choice(value=args[key])
+            if key in kwargs:
+                predicate = predicate_choice(value=kwargs[key])
                 self.predicates[key] = predicate
 
         predicate_values = self.predicates.values()

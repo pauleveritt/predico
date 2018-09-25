@@ -9,8 +9,6 @@ import dectate
 import pytest
 
 from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.config import ViewServiceConfig
 
 
 @dataclass
