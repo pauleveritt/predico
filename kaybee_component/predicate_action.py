@@ -50,13 +50,13 @@ class PredicateAction(dectate.Action):
             if key not in kwargs:
                 m = MissingArgument.fmt.format(name=key)
                 raise MissingArgument(m)
-            predicate = predicate_choice(value=kwargs[key])
+            predicate = predicate_choice(value=kwargs[key], action=self)
             self.predicates[key] = predicate
 
         for predicate_choice in self.OPTIONAL_PREDICATES:
             key = predicate_choice.key
             if key in kwargs:
-                predicate = predicate_choice(value=kwargs[key])
+                predicate = predicate_choice(value=kwargs[key], action=self)
                 self.predicates[key] = predicate
 
         predicate_values = self.predicates.values()

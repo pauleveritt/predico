@@ -45,3 +45,13 @@ def resource_view(registry, testindexview):
         logo: str = 'Logo XX'
 
     dectate.commit(registry)
+
+
+@pytest.fixture
+def parentself_view(registry, testindexview):
+    @registry.view(for_=testindexview, parentself=Resource)
+    @dataclass
+    class ResourceView:
+        logo: str = 'Logo XX'
+
+    dectate.commit(registry)

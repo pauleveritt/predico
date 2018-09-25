@@ -26,7 +26,7 @@ def first_action(actions):
 
 
 def test_construction(testindexview):
-    predicate = ForPredicate(value=testindexview)
+    predicate = ForPredicate(value=testindexview, action=None)
     assert 'for_' == predicate.key
     assert testindexview == predicate.value
     assert 10 == predicate.rank
