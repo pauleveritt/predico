@@ -23,11 +23,16 @@ class ResourceService(BaseService):
     config: ResourceServiceConfig
     resources: Dict[str, Resource] = field(default_factory=dict)
 
-    # NEXT
-    # Have a set_resource which finds the right class,
-    # etc.
-
     def get_resource(self, resourceid: str):
         resource = self.resources[resourceid]
 
+        return resource
+
+    def add_resource(self, **kwargs):
+        """ Pass in dict of values and let the service construct/store """
+
+        # Resources don't participate in DI so just construct them
+        resource = Resource(**kwargs)
+        resourceid = resource.id
+        self.resources[resourceid] = resource
         return resource

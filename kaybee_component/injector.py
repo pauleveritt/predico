@@ -2,6 +2,15 @@
 
 Use props and injectables to construct instance of a dataclass.
 
+Precedence
+1) Use a prop if provided
+
+2) Use a DI if type is provided and matches something in injectables
+
+3) Use the default value if provided
+
+4) Else, fail
+
 """
 from dataclasses import fields
 from typing import Dict, Any, TypeVar, Generic
@@ -58,7 +67,8 @@ def inject(
             value = getattr(type_, attr_)
             args[field_name] = value
 
-        else:
+        elif getattr(field.type, '__name__', False):
+
             # Not in the passed-in props, let's try via injectables
 
             # Get the type of this field. Sucks that we have to use
@@ -71,5 +81,9 @@ def inject(
             injected_value = injectables.get(field_type, False)
             if injected_value:
                 args[field_name] = injectables[field_type]
+        else:
+            # Need to hope there is a default value. We could consider
+            # checking that later and raising a nice, custom exception.
+            pass
 
     return target(**args)

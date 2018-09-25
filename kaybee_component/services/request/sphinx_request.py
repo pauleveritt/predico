@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from kaybee_component.registry import Registry
 from kaybee_component.service.manager import ServiceManager
+from kaybee_component.services.resource.service import ResourceService
 from kaybee_component.services.view.service import ViewService
 
 
@@ -10,6 +11,11 @@ class SphinxRequest:
     resourceid: str
     sm: ServiceManager
     app_registry: Registry
+
+    @property
+    def resource(self):
+        """ Given information in request, get the current resource """
+        return 9912
 
     @property
     def view(self):

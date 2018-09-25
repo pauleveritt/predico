@@ -1,8 +1,8 @@
 from kaybee_component.services.request.service import RequestService
-from tests.integration.request_views.conftest import ForView1
+from tests.integration.view.conftest import ForView1
 
 
-def test_request(initialized_sm):
+def test_view(initialized_sm):
 
     # Get the request service
     services = initialized_sm.services
@@ -13,6 +13,11 @@ def test_request(initialized_sm):
     # e.g. a SphinxRequest. Perhaps a callable is passed into
     # RequestServiceConfig, or an adapter is registered.
     request = request_service.make_request(resourceid='more/about')
+
+    # Request: Did the request get the correct one?
+    # assert 9919 == request.resource
+
+    # View: Did the request get the correct one?
     view: ForView1 = request.view
     assert 'ForView1' in view.__class__.__name__
     assert 99 == view.viewservice_config.flag

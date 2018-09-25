@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pytest
 
@@ -87,6 +87,48 @@ def test_injector_precedence():
 
     athlete = inject(props, injectables, Athlete)
     assert 55 == athlete.shoe.size
+
+
+def test_injector_defaultvalue():
+    # Field has a default value which should be used instead of
+    # injection
+    default_shoesize = Shoe(size=34523)
+
+    @dataclass
+    class DefaultValueAthlete:
+        shoe: Shoe = default_shoesize
+
+    props = dict()
+    injectables = dict()
+    athlete = inject(props, injectables, DefaultValueAthlete)
+    assert 34523 == athlete.shoe.size
+
+
+def test_injector_defaultfactory():
+    # Field has a default value which should be used instead of
+    # injection
+
+    @dataclass
+    class DefaultValueAthlete:
+        shoe: Shoe = field(default_factory=Shoe)
+
+    props = dict()
+    injectables = dict()
+    athlete = inject(props, injectables, DefaultValueAthlete)
+    assert 34523 == athlete.shoe.size
+
+
+def test_injector_defaultfactory():
+    # Field has a default value which should be used instead of
+    # injection
+    @dataclass
+    class DefaultFactoryAthlete:
+        shoe: Shoe = field(default_factory=Shoe)
+
+    props = dict()
+    injectables = dict()
+    athlete = inject(props, injectables, DefaultFactoryAthlete)
+    assert 77 == athlete.shoe.size
 
 
 def test_injector_failure():

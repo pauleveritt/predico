@@ -4,17 +4,14 @@ Assemble all the pieces into an app that makes
 requests and tests services, views, etc.
 
 """
-from dataclasses import dataclass
 
-import dectate
 import pytest
 
 from kaybee_component import registry
-from kaybee_component.service.action import ServiceAction
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
-from kaybee_component.services.view.base_view import IndexView
+from kaybee_component.services.resource.config import ResourceServiceConfig
 from kaybee_component.services.view.config import ViewServiceConfig
 
 
@@ -44,15 +41,26 @@ def requestservice_config() -> RequestServiceConfig:
 
 
 @pytest.fixture
+def resourceservice_config() -> ResourceServiceConfig:
+    """ Isolate the config of the ResourceService """
+
+    config = ResourceServiceConfig(flag=99)
+    return config
+
+
+@pytest.fixture
 def sm_config(
+        resourceservice_config,
+        requestservice_config,
         viewservice_config,
-        requestservice_config) -> ServiceManagerConfig:
+) -> ServiceManagerConfig:
     """ Gather each service's config into one for ServiceManager """
 
     config = ServiceManagerConfig(
         serviceconfigs=dict(
-            viewservice=viewservice_config,
+            resourceservice=resourceservice_config,
             requestservice=requestservice_config,
+            viewservice=viewservice_config,
         )
     )
     return config

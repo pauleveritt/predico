@@ -28,10 +28,13 @@ class InvalidInjectable(Exception):
     fmt = 'Invalid injectable type {type} requested from {klass}'
 
 
+Services = Dict[str, BaseService]
+
+
 class ServiceManager:
     config: ServiceManagerConfig
     registry: Registry
-    services: Dict[str, BaseService]
+    services: Services
 
     def __init__(self,
                  config: ServiceManagerConfig,
