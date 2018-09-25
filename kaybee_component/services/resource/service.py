@@ -26,7 +26,8 @@ class ResourceService(BaseService):
     def get_resourceclass(self, rtype: str):
         """ Given name a resource type was registered with, get class """
 
-        return Resource
+        resource_class = self.app_registry.config.resources[rtype]
+        return resource_class
 
     def get_resource(self, resourceid: str):
         resource = self.resources[resourceid]
@@ -39,7 +40,7 @@ class ResourceService(BaseService):
         # Resources don't participate in DI so just construct them
         rtype = kwargs['rtype']
         resourceclass = self.get_resourceclass(rtype)
-        resource = Resource(**kwargs)
+        resource = resourceclass(**kwargs)
         resourceid = resource.id
         self.resources[resourceid] = resource
         return resource

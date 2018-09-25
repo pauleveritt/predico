@@ -8,6 +8,7 @@ from kaybee_component.service.base_service import BaseService
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
+from kaybee_component.services.resource.config import ResourceServiceConfig
 from kaybee_component.services.view.config import ViewServiceConfig
 
 
@@ -37,15 +38,26 @@ def requestservice_config() -> RequestServiceConfig:
 
 
 @pytest.fixture
+def resourceservice_config() -> ResourceServiceConfig:
+    """ Isolate the config of the RequestService """
+
+    config = ResourceServiceConfig(flag=99)
+    return config
+
+
+@pytest.fixture
 def sm_config(
         viewservice_config,
-        requestservice_config) -> ServiceManagerConfig:
+        requestservice_config,
+        resourceservice_config,
+) -> ServiceManagerConfig:
     """ Gather each service's config into one for ServiceManager """
 
     config = ServiceManagerConfig(
         serviceconfigs=dict(
             viewservice=viewservice_config,
             requestservice=requestservice_config,
+            resourceservice=resourceservice_config,
         )
     )
     return config

@@ -4,6 +4,7 @@ Assemble all the pieces into an app that makes
 requests and tests services, views, etc.
 
 """
+from dataclasses import dataclass
 
 import pytest
 
@@ -11,7 +12,9 @@ from kaybee_component import registry
 from kaybee_component.service.configuration import ServiceManagerConfig
 from kaybee_component.service.manager import ServiceManager, Services
 from kaybee_component.services.request.config import RequestServiceConfig
+from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.resource.config import ResourceServiceConfig
+from kaybee_component.services.resource.service import ResourceService
 from kaybee_component.services.view.config import ViewServiceConfig
 
 
@@ -93,9 +96,8 @@ def sm(sm_config, test_registry) -> ServiceManager:
 # - etc.
 # -------------------------------------------
 
-
 @pytest.fixture
-def registrations(test_registry):
+def registrations():
     pass
 
 
@@ -105,8 +107,3 @@ def initialized_sm(registrations, sm):
     sm.initialize()
     return sm
 
-
-@pytest.fixture
-def services(initialized_sm) -> Services:
-    services: Services = initialized_sm.services
-    return services

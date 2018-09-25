@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from kaybee_component.registry import Registry
 from kaybee_component.service.manager import ServiceManager
+from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.service import ViewService
 
 
@@ -25,4 +26,8 @@ class SphinxRequest:
 
         services = self.sm.services
         view_service: ViewService = services['view']
-        return view_service.get_view(self.app_registry)
+        return view_service.get_view(
+            self.app_registry,
+            for_=IndexView,
+            resource=self.resource.__class__,
+        )

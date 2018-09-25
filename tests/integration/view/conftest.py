@@ -13,16 +13,33 @@ from kaybee_component.services.view.config import ViewServiceConfig
 
 
 @dataclass
-class ForView1:
+class TestResourceView:
     viewservice_config: ViewServiceConfig
-    name: str = 'For View One'
+    name: str = 'Generic Resource View'
+
+
+@dataclass
+class TestSectionView:
+    viewservice_config: ViewServiceConfig
+    name: str = 'Section View'
+
+@dataclass
+class TestResourceIdView:
+    viewservice_config: ViewServiceConfig
+    name: str = 'One Specific Resource ID'
 
 
 @pytest.fixture
-def for_view1(test_registry):
-    test_registry.view(for_=IndexView)(ForView1)
+def register_views(test_registry, testarticle_class):
+    test_registry.view(for_=IndexView)(TestResourceView)
+    test_registry.view(for_=IndexView, resource=testarticle_class)(
+        TestSectionView)
+    test_registry.view(for_=IndexView,
+                       resource=testarticle_class,
+                       resourceid='more/specificid'
+                       )(TestResourceIdView)
 
 
 @pytest.fixture
-def registrations(test_registry, for_view1):
+def registrations(test_registry, register_views, test_article, test_section):
     dectate.commit(test_registry)
