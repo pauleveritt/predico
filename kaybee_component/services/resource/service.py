@@ -26,7 +26,8 @@ class ResourceService(BaseService):
     def get_resourceclass(self, rtype: str):
         """ Given name a resource type was registered with, get class """
 
-        resource_class = self.app_registry.config.resources[rtype]
+        resource_classes = self.app_registry.config.resources
+        resource_class = resource_classes[rtype]
         return resource_class
 
     def get_resource(self, resourceid: str):

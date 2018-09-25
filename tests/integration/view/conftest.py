@@ -34,10 +34,10 @@ def register_views(test_registry, testarticle_class):
     test_registry.view(for_=IndexView)(TestResourceView)
     test_registry.view(for_=IndexView, resource=testarticle_class)(
         TestSectionView)
-    test_registry.view(for_=IndexView,
-                       resource=testarticle_class,
-                       resourceid='more/specificid'
-                       )(TestResourceIdView)
+    # test_registry.view(for_=IndexView,
+    #                    resource=testarticle_class,
+    #                    resourceid='more/specificid'
+    #                    )(TestResourceIdView)
 
 
 @pytest.fixture

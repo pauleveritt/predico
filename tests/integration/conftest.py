@@ -8,7 +8,7 @@ from kaybee_component.services.resource.service import ResourceService
 
 
 @pytest.fixture
-def registrations(test_article):
+def registrations(test_article, test_section):
     pass
 
 
