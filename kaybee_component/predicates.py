@@ -14,7 +14,10 @@ class Predicate:
     rank: int = 10
 
     def __str__(self):
-        return f'{self.key}-{self.value.__name__}'
+        value = getattr(self.value, '__name__', False)
+        if not value:
+            value = self.value  # Hope it's a string
+        return f'{self.key}-{value}'
 
 
 @dataclass

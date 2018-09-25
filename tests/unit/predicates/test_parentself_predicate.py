@@ -1,15 +1,12 @@
-from dataclasses import dataclass
-
 import dectate
 import pytest
 from dectate import ConflictError
 
 from kaybee_component.predicates import ParentSelfPredicate
-from kaybee_component.services.resource.base_resource import Resource
 
 
 @pytest.fixture
-def committed_registry(registry, parentself_view):
+def committed_registry(registry, resource_view):
     dectate.commit(registry)
     return registry
 
@@ -27,47 +24,42 @@ def first_action(actions):
 
 
 def test_construction():
-    predicate = ParentSelfPredicate(value=Resource, action=None)
+    predicate = ParentSelfPredicate(value='more/about', action=None)
     assert 'parentself' == predicate.key
-    assert Resource == predicate.value
+    assert 'more/about' == predicate.value
     assert 20 == predicate.rank
 
 
 def test_simple_registration(actions):
     assert 1 == len(actions)
     action, target = actions[0]
-    assert 'for_-TestIndexView--parentself-Resource' == action.name
-    parentself = action.predicates['parentself']
-    assert 'ParentSelfPredicate' == parentself.__class__.__name__
-    assert 30 == action.sort_order
+    assert 'for_-TestIndexView--resource-Resource' == action.name
+    resource = action.predicates['resource']
+    assert 'ResourcePredicate' == resource.__class__.__name__
+    assert 20 == action.sort_order
     assert target.__name__.endswith('ResourceView')
 
 
 def test_str(first_action):
-    parentself = first_action.predicates['parentself']
-    assert 'parentself-Resource' == str(parentself)
+    resource = first_action.predicates['resource']
+    assert 'resource-Resource' == str(resource)
 
 
 def test_matches(first_action):
-    parentself = first_action.predicates['parentself']
-    resource_class = parentself.value
-    assert parentself.matches(resource_class)
+    resource = first_action.predicates['resource']
+    resource_class = resource.value
+    assert resource.matches(resource_class)
 
 
 def test_not_matches(first_action):
-    parentself = first_action.predicates['parentself']
+    resource = first_action.predicates['resource']
 
     class OtherResource:
         pass
 
-    assert not parentself.matches(OtherResource)
+    assert not resource.matches(OtherResource)
 
 
-def test_conflict_error(committed_registry, testindexview):
-    @committed_registry.view(for_=testindexview, resource=Resource)
-    @dataclass
-    class ResourceView:
-        logo: str = 'Logo XX'
-
+def test_conflict_error(generate_conflict_resource):
     with pytest.raises(ConflictError):
-        dectate.commit(committed_registry)
+        generate_conflict_resource()

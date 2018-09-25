@@ -11,12 +11,24 @@ class TestIndexView:
     pass
 
 
-@pytest.fixture
-def testindexview():
-    # Use a fixture so that equality test works. pytest puts the
-    # import at a different place so it wrongly fails equality match.
+@dataclass
+class TestForView:
+    title: str = 'Test For View'
 
-    return TestIndexView
+
+@dataclass
+class TestResourceView:
+    title: str = 'Resource View'
+
+
+@dataclass
+class TestParentSelfView:
+    title: str = 'Test ParentSelf View'
+
+
+@dataclass
+class TestConflictView:
+    title: str = 'Conflicts with TestResourceView'
 
 
 @pytest.fixture
@@ -28,30 +40,42 @@ def registry():
 
 
 @pytest.fixture
-def for_view(registry, testindexview):
-    @registry.view(for_=testindexview)
-    @dataclass
-    class ForView:
-        logo: str = 'Logo XX'
+def for_view(registry):
+    registry.view(for_=TestIndexView)(TestForView)
 
     dectate.commit(registry)
 
 
 @pytest.fixture
-def resource_view(registry, testindexview):
-    @registry.view(for_=testindexview, resource=Resource)
-    @dataclass
-    class ResourceView:
-        logo: str = 'Logo XX'
+def resource_view(registry):
+    registry.view(for_=TestIndexView, resource=Resource)(TestResourceView)
 
     dectate.commit(registry)
 
 
 @pytest.fixture
-def parentself_view(registry, testindexview):
-    @registry.view(for_=testindexview, parentself=Resource)
-    @dataclass
-    class ResourceView:
-        logo: str = 'Logo XX'
+def parentself_view(registry):
+    registry.view(for_=TestIndexView, parentself='more/about')(
+        TestParentSelfView)
 
     dectate.commit(registry)
+
+
+@pytest.fixture
+def generate_conflict_for(registry, resource_view):
+    def conflict():
+        registry.view(for_=TestIndexView)(TestResourceView)
+        registry.view(for_=TestIndexView)(TestParentSelfView)
+        dectate.commit(registry)
+
+    return conflict
+
+
+@pytest.fixture
+def generate_conflict_resource(registry, resource_view):
+    def conflict():
+        registry.view(for_=TestIndexView, resource=Resource)(
+            TestParentSelfView)
+        dectate.commit(registry)
+
+    return conflict

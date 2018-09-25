@@ -5,6 +5,7 @@ import pytest
 from dectate import ConflictError
 
 from kaybee_component.predicates import ForPredicate
+from tests.unit.predicate_actions.conftest import TestIndexView
 
 
 @pytest.fixture
@@ -25,10 +26,10 @@ def first_action(actions):
     return actions[0][0]
 
 
-def test_construction(testindexview):
-    predicate = ForPredicate(value=testindexview, action=None)
+def test_construction():
+    predicate = ForPredicate(value=TestIndexView, action=None)
     assert 'for_' == predicate.key
-    assert testindexview == predicate.value
+    assert TestIndexView == predicate.value
     assert 10 == predicate.rank
 
 
@@ -62,11 +63,6 @@ def test_not_matches(first_action):
     assert not for_.matches(OtherView)
 
 
-def test_conflict_error(committed_registry, testindexview):
-    @committed_registry.view(for_=testindexview)
-    @dataclass
-    class ArticleView:
-        logo: str = 'Logo XX'
-
+def test_conflict_error_for(generate_conflict_for):
     with pytest.raises(ConflictError):
-        dectate.commit(committed_registry)
+        generate_conflict_for()

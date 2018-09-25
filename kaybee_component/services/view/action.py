@@ -16,4 +16,5 @@ class ViewAction(PredicateAction):
     action_name = 'view'
     REQUIRED_PREDICATES = (ViewForPredicate,)
     OPTIONAL_PREDICATES = (ResourcePredicate, ParentSelfPredicate)
-    predicates: Mapping[str, Union[ForPredicate, ResourcePredicate]]
+    predicates: Mapping[
+        str, Union[ForPredicate, ResourcePredicate, ParentSelfPredicate]]
