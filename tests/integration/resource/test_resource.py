@@ -1,6 +1,3 @@
-from kaybee_component.services.request.service import RequestService
-
-
 def test_resources_empty(rs):
     assert {} == rs.resources
 
@@ -14,7 +11,7 @@ def test_add_get_resource(rs):
 
 
 def test_request_resource(services, test_resources):
-    request_service: RequestService = services['request']
+    request_service = services['request']
 
     # The outside world (the system) initiates the making of a
     # request, passing in the data needed for that kind of request,

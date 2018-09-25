@@ -80,11 +80,10 @@ def test_registry():
 
 
 @pytest.fixture
-def sm(sm_config, test_registry) -> ServiceManager:
+def uninitialized_sm(sm_config, test_registry) -> ServiceManager:
     """ Make a ServiceManager """
 
     sm = ServiceManager(sm_config, test_registry)
-    sm.registry = test_registry
     return sm
 
 
@@ -102,8 +101,7 @@ def registrations():
 
 
 @pytest.fixture
-def initialized_sm(registrations, sm):
+def initialized_sm(registrations, uninitialized_sm):
     """ The equivalent of an app with commit """
-    sm.initialize()
-    return sm
-
+    uninitialized_sm.initialize()
+    return uninitialized_sm
