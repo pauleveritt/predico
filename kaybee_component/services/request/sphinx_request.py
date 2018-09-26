@@ -31,3 +31,7 @@ class SphinxRequest:
             for_=IndexView,
             resource=self.resource.__class__,
         )
+
+    @property
+    def parentids(self):
+        return [self.resource.parentid]
