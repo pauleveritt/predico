@@ -80,11 +80,20 @@ def generate_conflict_resource(registry, resource_view):
 
     return conflict
 
+
 @pytest.fixture
 def request(registry):
+    class Resource:
+        pass
+
     class Request:
         pass
 
     r = Request()
+    resource1 = Resource()
+    resource1.parentids = ['more/about']
+
+    r.resourceid = 'a/b/c/d/e'
     r.registry = registry
+    r.resource = resource1
     return r

@@ -54,20 +54,20 @@ def test_matches(first_action, parentself, request):
     assert parentself.matches(parentself_value, request)
 
 
-def test_match_self(first_action, parentself, request):
-    assert not parentself.matches('another/place', request)
-
-
-def test_match_parent(first_action, parentself, request):
-    assert not parentself.matches('another/place', request)
-
-
-def test_match_grandparent(first_action, parentself, request):
-    assert not parentself.matches('another/place', request)
-
-
-def test_no_match(first_action, parentself, request):
-    assert not parentself.matches('another/place', request)
+# def test_match_self(first_action, parentself, request):
+#     assert not parentself.matches('another/place', request)
+#
+#
+# def test_match_parent(first_action, parentself, request):
+#     assert not parentself.matches('another/place', request)
+#
+#
+# def test_match_grandparent(first_action, parentself, request):
+#     assert not parentself.matches('another/place', request)
+#
+#
+# def test_no_match(first_action, parentself, request):
+#     assert not parentself.matches('another/place', request)
 
 
 def test_conflict_error(generate_conflict_resource):

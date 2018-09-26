@@ -31,10 +31,10 @@ def test_resourceclass_view(initialized_sm, test_resources):
     services = initialized_sm.services
     request_service: RequestService = services['request']
 
-    request = request_service.make_request(resourceid='more/contact')
+    request = request_service.make_request(resourceid='news/first')
 
     # Request: Did the request get the correct one?
-    assert 'more/contact' == request.resource.id
+    assert 'news/first' == request.resource.id
 
     # View: Did the request get the correct one?
     view = request.view

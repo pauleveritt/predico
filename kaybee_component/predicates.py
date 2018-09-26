@@ -54,5 +54,11 @@ class ParentSelfPredicate(Predicate):
         # We are given an resourceid. Get the resource and look at
         # it's resource id, then up the parents.
 
+        # TODO This does not work right. When there is a valid registration
+        # for both a parent and a child, it will match whichever happens
+        # to sort first. Child should be more precise than parent.
+        # Unfortunately that could mean that self.rank has to be
+        # dynamic which messes up sorted_actions being precomputed.
+
 
         return target == self.value

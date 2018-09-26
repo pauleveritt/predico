@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import dectate
 import pytest
 
 from kaybee_component.service.manager import Services
@@ -14,11 +15,21 @@ from kaybee_component.services.view.config import ViewServiceConfig
 @dataclass
 class TestArticle(Resource):
     title: str
+    parentid: str
+
+    @property
+    def parentids(self):
+        return [self.parentid]
 
 
 @dataclass
 class TestSection(Resource):
     title: str
+    parentid: str
+
+    @property
+    def parentids(self):
+        return [self.parentid]
 
 
 # ---------------  Views
@@ -41,6 +52,12 @@ class TestResourceIdView:
     name: str = 'One Specific Resource ID'
 
 
+@dataclass
+class TestParentIdView:
+    viewservice_config: ViewServiceConfig
+    name: str = 'One Specific Parent ID'
+
+
 # ---------------  Registration of resources, views, etc.
 
 
@@ -59,6 +76,15 @@ def registrations(test_registry):
 
 
 @pytest.fixture
+def parent_registration(test_registry):
+    # parentself is a parent
+    test_registry.view(for_=IndexView, parentself='more/index',
+                       resource=TestArticle)(
+        TestParentIdView)
+    dectate.commit(test_registry)
+
+
+@pytest.fixture
 def services(initialized_sm) -> Services:
     services: Services = initialized_sm.services
     return services
@@ -73,7 +99,14 @@ def rs(services) -> ResourceService:
 @pytest.fixture
 def test_resources(rs):
     """ Add some fake content to the resource service """
-    rs.add_resource(rtype='testsection', id='more/index', title='More Section')
-    rs.add_resource(rtype='testarticle', id='more/contact', title='Contact')
+    rs.add_resource(rtype='testsection', id='more/index',
+                    title='More Section', parentid='more/index')
+
+    rs.add_resource(rtype='testarticle', id='news/first',
+                    title='Contact', parentid='news/index')
+
+    rs.add_resource(rtype='testarticle', id='more/contact',
+                    title='Contact', parentid='more/index')
+
     rs.add_resource(rtype='testarticle', id='more/specificid',
-                    title='Specific')
+                    title='Specific', parentid='more/index')
