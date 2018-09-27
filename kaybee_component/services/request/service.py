@@ -11,9 +11,9 @@ from kaybee_component.services.request.sphinx_request import SphinxRequest
 @registry.service(name='request')
 @dataclass(frozen=True)
 class RequestService(BaseService):
-    config: RequestServiceConfig
     sm: ServiceManager
     registry: Registry
+    config: RequestServiceConfig
 
     def make_request(self, resourceid: str):
         return SphinxRequest(
