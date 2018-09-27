@@ -73,7 +73,8 @@ def registrations(test_registry):
     test_registry.view(for_=IndexView, resourceid='more/specificid')(
         TestResourceIdView)
     test_registry.view(for_=IndexView, parentid='more/index',
-                       resource=TestArticle)(TestParentIdView)
+                       resource=TestArticle
+                       )(TestParentIdView)
 
 
 @pytest.fixture

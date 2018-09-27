@@ -130,7 +130,9 @@ class PredicateAction(dectate.Action):
         # up each time. Then refactor ViewService etc. tests to not
         # need a registry by mocking sorted_actions.
         q = dectate.Query(cls.action_name)
-        sorted_actions = sorted(q(registry), reverse=True)
+        actions = list(q(registry))
+        sorted_actions = sorted(actions, reverse=True,
+                                key=lambda x: x[0])
         return sorted_actions
 
     def all_predicates_match(self, request, **kwargs):
