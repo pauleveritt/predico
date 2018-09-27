@@ -5,7 +5,7 @@ def test_resources_empty(rs):
 def test_add_get_resource(rs):
     resourceid = 'more/contact'
     resource = rs.add_resource(rtype='testarticle', id=resourceid,
-                               title='More')
+                               parentid='index', title='More')
     assert resourceid == resource.id
     assert resource == rs.resources[resourceid]
 
