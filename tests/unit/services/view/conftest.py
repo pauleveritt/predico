@@ -5,14 +5,11 @@ import dectate
 import pytest
 
 from kaybee_component.servicemanager.action import ServiceAction
-from kaybee_component.servicemanager.configuration import ServiceManagerConfig
 from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.request.base_request import Request
-from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.view.action import ViewAction
 from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.config import ViewServiceConfig
 from kaybee_component.services.view.service import ViewService
 
 
@@ -65,32 +62,6 @@ def fake_blog1():
 @dataclass
 class FakeRequest(Request):
     resource: Resource
-
-
-@pytest.fixture
-def viewservice_config() -> ViewServiceConfig:
-    config = ViewServiceConfig(flag=99)
-    return config
-
-
-@pytest.fixture
-def requestservice_config() -> RequestServiceConfig:
-    config = RequestServiceConfig(flag=99)
-    return config
-
-
-@pytest.fixture
-def sm_config(viewservice_config,
-              requestservice_config) -> ServiceManagerConfig:
-    """ Gather service's config into one for ServiceManager """
-
-    config = ServiceManagerConfig(
-        serviceconfigs=dict(
-            viewservice=viewservice_config,
-            requestservice=requestservice_config,
-        )
-    )
-    return config
 
 
 @pytest.fixture
