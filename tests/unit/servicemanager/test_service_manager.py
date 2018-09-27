@@ -9,7 +9,8 @@ def test_unintialized(uninitialized_sm):
 
 def test_register_services(initialized_sm):
     services = initialized_sm.services
-    assert ['request', 'resource', 'view'] == sorted(tuple(services.keys()))
+    assert ['adapter', 'request', 'resource', 'view'] == sorted(
+        tuple(services.keys()))
 
 
 def test_valid_injected(initialized_sm):

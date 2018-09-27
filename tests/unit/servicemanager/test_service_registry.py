@@ -4,4 +4,4 @@ import dectate
 def test_construction(test_registry):
     dectate.commit(test_registry)
     s = test_registry.config.services
-    assert 3 == len(s)
+    assert 4 == len(s)

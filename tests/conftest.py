@@ -10,6 +10,7 @@ import pytest
 from kaybee_component import registry
 from kaybee_component.servicemanager.configuration import ServiceManagerConfig
 from kaybee_component.servicemanager.manager import ServiceManager
+from kaybee_component.services.adapter.config import AdapterServiceConfig
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.resource.config import ResourceServiceConfig
 from kaybee_component.services.view.config import ViewServiceConfig
@@ -49,7 +50,16 @@ def resourceservice_config() -> ResourceServiceConfig:
 
 
 @pytest.fixture
+def adapterservice_config() -> AdapterServiceConfig:
+    """ Isolate the config of the AdapterService """
+
+    config = AdapterServiceConfig(flag=99)
+    return config
+
+
+@pytest.fixture
 def sm_config(
+        adapterservice_config,
         resourceservice_config,
         requestservice_config,
         viewservice_config,
@@ -58,6 +68,7 @@ def sm_config(
 
     config = ServiceManagerConfig(
         serviceconfigs=dict(
+            adapterservice=adapterservice_config,
             resourceservice=resourceservice_config,
             requestservice=requestservice_config,
             viewservice=viewservice_config,

@@ -1,0 +1,6 @@
+"""
+
+The adapter service.
+
+"""
+
