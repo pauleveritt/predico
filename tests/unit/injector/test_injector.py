@@ -22,7 +22,8 @@ def test_injector_props():
     shoe = Shoe(size=55)
     props = dict(shoe=shoe)
     injectables = dict()
-    athlete = inject(props, injectables, Athlete)
+    adapters = dict()
+    athlete = inject(props, injectables, adapters, Athlete)
     assert 55 == athlete.shoe.size
 
 
@@ -32,7 +33,8 @@ def test_injector_injected():
     shoe = Shoe(size=66)
     props = dict()
     injectables = {Shoe.__name__: shoe}
-    athlete = inject(props, injectables, Athlete)
+    adapters = dict()
+    athlete = inject(props, injectables, adapters, Athlete)
     assert 66 == athlete.shoe.size
 
 
@@ -46,7 +48,8 @@ def test_injector_injectedattr():
     shoe = Shoe(size=88)
     props = dict()
     injectables = {Shoe.__name__: shoe}
-    athlete = inject(props, injectables, InjectedAttrAthlete)
+    adapters = dict()
+    athlete = inject(props, injectables, adapters, InjectedAttrAthlete)
     assert 88 == athlete.shoe_size
 
 
@@ -63,8 +66,9 @@ def test_injector_injectedattr_missing_class():
     shoe = Shoe(size=88)
     props = dict()
     injectables = {Shoe.__name__: shoe}
+    adapters = {}
     with pytest.raises(InvalidInjectable) as exc:
-        inject(props, injectables, InjectedAttrAthlete)
+        inject(props, injectables, adapters, InjectedAttrAthlete)
     expected = 'Invalid injectedattr type Jersey requested from type'
     assert expected == str(exc.value)
 
@@ -72,7 +76,7 @@ def test_injector_injectedattr_missing_class():
 def test_injector_fielddefault():
     props = dict()
     injectables = dict()
-    athlete = inject(props, injectables, Athlete)
+    athlete = inject(props, injectables, {}, Athlete)
     assert 77 == athlete.shoe.size
 
 
@@ -85,7 +89,7 @@ def test_injector_precedence():
     shoe = Shoe(size=66)
     injectables = {Shoe.__name__: shoe}
 
-    athlete = inject(props, injectables, Athlete)
+    athlete = inject(props, injectables, {}, Athlete)
     assert 55 == athlete.shoe.size
 
 
@@ -100,7 +104,8 @@ def test_injector_defaultvalue():
 
     props = dict()
     injectables = dict()
-    athlete = inject(props, injectables, DefaultValueAthlete)
+    adapters = dict()
+    athlete = inject(props, injectables, adapters, DefaultValueAthlete)
     assert 34523 == athlete.shoe.size
 
 
@@ -114,7 +119,8 @@ def test_injector_defaultfactory():
 
     props = dict()
     injectables = dict()
-    athlete = inject(props, injectables, DefaultValueAthlete)
+    adapters = dict()
+    athlete = inject(props, injectables, adapters, DefaultValueAthlete)
     assert 34523 == athlete.shoe.size
 
 
@@ -127,7 +133,8 @@ def test_injector_defaultfactory():
 
     props = dict()
     injectables = dict()
-    athlete = inject(props, injectables, DefaultFactoryAthlete)
+    adapters = dict()
+    athlete = inject(props, injectables, adapters, DefaultFactoryAthlete)
     assert 77 == athlete.shoe.size
 
 
@@ -140,5 +147,6 @@ def test_injector_failure():
 
     props = dict()
     injectables = dict()
+    adapters = dict()
     with pytest.raises(TypeError):
-        inject(props, injectables, AgeAthlete)
+        inject(props, injectables, adapters, AgeAthlete)
