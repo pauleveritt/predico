@@ -19,14 +19,14 @@ from kaybee_component.services.resource.config import ResourceServiceConfig
 @dataclass(frozen=True)
 class ResourceService(BaseService):
     sm: ServiceManager
-    app_registry: Registry
+    registry: Registry
     config: ResourceServiceConfig
     resources: Dict[str, Resource] = field(default_factory=dict)
 
     def get_resourceclass(self, rtype: str):
         """ Given name a resource type was registered with, get class """
 
-        resource_classes = self.app_registry.config.resources
+        resource_classes = self.registry.config.resources
         resource_class = resource_classes[rtype]
         return resource_class
 
