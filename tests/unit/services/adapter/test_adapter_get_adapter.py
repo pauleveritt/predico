@@ -1,6 +1,3 @@
-from tests.unit.services.adapter.conftest import FakeRequest
-
-
 def test_has_get_adapter(adapterservice):
     assert hasattr(adapterservice, 'get_adapter')
 
@@ -8,7 +5,8 @@ def test_has_get_adapter(adapterservice):
 def test_get_adapter_for(
         fakefor_adapter,
         adapterservice, fake_resource1,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -16,7 +14,7 @@ def test_get_adapter_for(
     # - resource is FakeResource
     # Expected:
     # - (a)
-    fake_request = FakeRequest(resource=fake_resource1)
+    fake_request = fake_request_class(resource=fake_resource1)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources)
     assert 'Fake Breadcrumbs Resources' == adapter.name
@@ -27,7 +25,8 @@ def test_get_adapter_for(
 def test_get_adapter_for_nomatch_resource(
         fakefor_adapter, fakearticle_adapter,
         adapterservice, fake_resource1,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -36,7 +35,7 @@ def test_get_adapter_for_nomatch_resource(
     # - resource is FakeResource
     # Expected:
     # - (a)
-    fake_request = FakeRequest(resource=fake_resource1)
+    fake_request = fake_request_class(resource=fake_resource1)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources)
     assert 'Fake Breadcrumbs Resources' == adapter.name
@@ -45,7 +44,8 @@ def test_get_adapter_for_nomatch_resource(
 def test_get_adapter_for_match_resource(
         fakefor_adapter, fakearticle_adapter,
         adapterservice, fake_article1,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -54,7 +54,7 @@ def test_get_adapter_for_match_resource(
     # - resource is FakeArticle
     # Expected:
     # - (b)
-    fake_request = FakeRequest(resource=fake_article1)
+    fake_request = fake_request_class(resource=fake_article1)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -66,7 +66,8 @@ def test_get_adapter_for_match_resource(
 def test_get_adapter_for_nomatch_resourceid(
         fakefor_adapter, fakeresourceid_adapter,
         adapterservice, fake_article1,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -75,7 +76,7 @@ def test_get_adapter_for_nomatch_resourceid(
     # - resource is 'more/article1'
     # Expected:
     # - (a)
-    fake_request = FakeRequest(resource=fake_article1)
+    fake_request = fake_request_class(resource=fake_article1)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -85,7 +86,8 @@ def test_get_adapter_for_nomatch_resourceid(
 def test_get_adapter_for_match_resourceid(
         fakefor_adapter, fakeresourceid_adapter,
         adapterservice, fake_article2,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -94,7 +96,7 @@ def test_get_adapter_for_match_resourceid(
     # - resource is 'more/article2'
     # Expected:
     # - (a)
-    fake_request = FakeRequest(resource=fake_article2)
+    fake_request = fake_request_class(resource=fake_article2)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -106,7 +108,8 @@ def test_get_adapter_for_match_resourceid(
 def test_get_adapter_for_nomatch_parentid(
         fakefor_adapter, fakeparentid_adapter,
         adapterservice, fake_blog1,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -115,7 +118,7 @@ def test_get_adapter_for_nomatch_parentid(
     # - resource is 'blog/blog1'
     # Expected:
     # - (a)
-    fake_request = FakeRequest(resource=fake_blog1)
+    fake_request = fake_request_class(resource=fake_blog1)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -125,7 +128,8 @@ def test_get_adapter_for_nomatch_parentid(
 def test_get_adapter_for_match_parentid(
         fakefor_adapter, fakeparentid_adapter,
         adapterservice, fake_article2,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -134,7 +138,7 @@ def test_get_adapter_for_match_parentid(
     # - resource is 'more/article2'
     # Expected:
     # - (b)
-    fake_request = FakeRequest(resource=fake_article2)
+    fake_request = fake_request_class(resource=fake_article2)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -146,7 +150,8 @@ def test_get_adapter_for_match_parentid(
 def test_get_adapter_for_parentid_match_resourceid(
         fakefor_adapter, fakeresourceid_adapter, fakeparentid_adapter,
         adapterservice, fake_article2,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -156,7 +161,7 @@ def test_get_adapter_for_parentid_match_resourceid(
     # - resource is 'more/article2'
     # Expected:
     # - (c)
-    fake_request = FakeRequest(resource=fake_article2)
+    fake_request = fake_request_class(resource=fake_article2)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -168,7 +173,8 @@ def test_get_adapter_for_parentid_match_resourceid(
 def test_get_adapter_for_resource_match_parentid(
         fakefor_adapter, fakeresource_adapter, fakeparentid_adapter,
         adapterservice, fake_article2,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -178,7 +184,7 @@ def test_get_adapter_for_resource_match_parentid(
     # - resource is 'more/article2'
     # Expected:
     # - (b)
-    fake_request = FakeRequest(resource=fake_article2)
+    fake_request = fake_request_class(resource=fake_article2)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources
                                          )
@@ -191,7 +197,8 @@ def test_get_adapter_for_resource_parentid_match_resourceid(
         fakefor_adapter, fakeresource_adapter, fakeparentid_adapter,
         fakeresourceid_adapter,
         adapterservice, fake_article2,
-        fake_breadcrumbs_resources
+        fake_breadcrumbs_resources,
+        fake_request_class
 ):
     # Registrations:
     # a. for_=FakeBreadcrumbsResources
@@ -202,7 +209,7 @@ def test_get_adapter_for_resource_parentid_match_resourceid(
     # - resource is 'more/article2'
     # Expected:
     # - (c)
-    fake_request = FakeRequest(resource=fake_article2)
+    fake_request = fake_request_class(resource=fake_article2)
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources)
     assert 'Fake ResourceId Adapter' == adapter.name

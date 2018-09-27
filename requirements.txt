@@ -1,7 +1,8 @@
 -e .
+-e git+https://github.com/Gaunt/pydantic#egg=pydantic
 pytest
 pytest-mock
-pydantic
 dectate
 coverage
 sphinx
+mypy

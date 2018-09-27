@@ -64,6 +64,11 @@ class FakeRequest(Request):
 
 
 @pytest.fixture
+def fake_request_class():
+    return FakeRequest
+
+
+@pytest.fixture
 def sm_registry():
     """ Provide test isolation for builtin service registry """
 

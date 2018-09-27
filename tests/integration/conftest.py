@@ -80,6 +80,7 @@ class TestInjectedDefaultAdapterView:
     viewservice_config: ViewServiceConfig
     name: str = 'Use a Default Injected Adapter'
 
+
 @dataclass
 class TestInjectedResourceIdAdapterView:
     breadcrumbs_resources: FakeBreadcrumbsResources
@@ -207,3 +208,6 @@ def test_resources(rs):
     rs.add_resource(rtype='testarticle', id='injected/resourceidadapter',
                     title='Injected ResourceId Adapter Article',
                     parentid='injected/index')
+
+    rs.add_resource(rtype='testsection', id='pydantic/about',
+                    title='Pydantic Section', parentid='pydantic/index')
