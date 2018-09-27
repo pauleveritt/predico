@@ -31,7 +31,7 @@ class ViewService(BaseService):
                 # that view class
                 view_instance = inject(
                     dict(),  # props
-                    self.sm.injectables,
+                    self.get_injectables(request),
                     view_class
                 )
                 return view_instance

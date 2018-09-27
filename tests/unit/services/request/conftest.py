@@ -6,6 +6,8 @@ import pytest
 
 from kaybee_component.servicemanager.action import ServiceAction
 from kaybee_component.servicemanager.manager import ServiceManager
+from kaybee_component.services.adapter.action import AdapterAction
+from kaybee_component.services.adapter.service import AdapterService
 from kaybee_component.services.request.action import RequestAction
 from kaybee_component.services.request.service import RequestService
 from kaybee_component.services.resource.action import ResourceAction
@@ -34,11 +36,28 @@ class FakeArticleView:
     name: str = 'Fake Article View'
 
 
+@dataclass
+class FakeBreadcrumbsResources:
+    resource: Resource
+    name: str = 'Fake Breadcrumbs Resources'
+
+
+@pytest.fixture
+def fake_breadcrumbs_resources():
+    return FakeBreadcrumbsResources
+
+
+@dataclass
+class FakeArticleAdapter:
+    name: str = 'Fake Article Adapter'
+
+
 @pytest.fixture
 def sm_registry():
     """ Provide test isolation for builtin service registry """
 
     class FakeServiceRegistry(dectate.App):
+        adapter = dectate.directive(AdapterAction)
         service = dectate.directive(ServiceAction)
         request = dectate.directive(RequestAction)
         resource = dectate.directive(ResourceAction)
@@ -58,6 +77,7 @@ def uninitialized_sm(sm_config, sm_registry) -> ServiceManager:
 
 @pytest.fixture
 def register_service(sm_registry):
+    sm_registry.service(name='adapter')(AdapterService)
     sm_registry.service(name='request')(RequestService)
     sm_registry.service(name='resource')(ResourceService)
     sm_registry.service(name='view')(ViewService)
@@ -94,3 +114,9 @@ def viewservice(services) -> ViewService:
 def fakearticle_view(sm_registry):
     sm_registry.view(for_=IndexView, resource=FakeArticle)(
         FakeArticleView)
+
+
+@pytest.fixture
+def fakearticle_adapter(sm_registry):
+    sm_registry.adapter(for_=FakeBreadcrumbsResources,
+                        resource=FakeArticle)(FakeBreadcrumbsResources)
