@@ -3,9 +3,9 @@ from dataclasses import dataclass
 import dectate
 import pytest
 
-from kaybee_component.service.action import ServiceAction
-from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.service.manager import ServiceManager
+from kaybee_component.servicemanager.action import ServiceAction
+from kaybee_component.servicemanager.configuration import ServiceManagerConfig
+from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.request.action import RequestAction
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.request.service import RequestService

@@ -3,9 +3,8 @@ from dataclasses import dataclass
 from kaybee_component import registry
 from kaybee_component.injector import inject
 from kaybee_component.registry import Registry
-from kaybee_component.service.base_service import BaseService
-from kaybee_component.service.manager import ServiceManager
-from kaybee_component.services.resource.base_resource import Resource
+from kaybee_component.servicemanager.base_service import BaseService
+from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.view.action import ViewAction
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.config import ViewServiceConfig

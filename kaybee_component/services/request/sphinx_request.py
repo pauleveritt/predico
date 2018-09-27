@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from kaybee_component.registry import Registry
-from kaybee_component.service.manager import ServiceManager
+from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.service import ViewService
 

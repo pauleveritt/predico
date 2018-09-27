@@ -1,6 +1,6 @@
 import dectate
 
-from kaybee_component.service.action import ServiceAction
+from kaybee_component.servicemanager.action import ServiceAction
 from kaybee_component.services.request.action import RequestAction
 from kaybee_component.services.resource.action import ResourceAction
 from kaybee_component.services.view.action import ViewAction

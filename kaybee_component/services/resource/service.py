@@ -9,8 +9,8 @@ from typing import Dict
 
 from kaybee_component import registry
 from kaybee_component.registry import Registry
-from kaybee_component.service.base_service import BaseService
-from kaybee_component.service.manager import ServiceManager
+from kaybee_component.servicemanager.base_service import BaseService
+from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.resource.config import ResourceServiceConfig
 

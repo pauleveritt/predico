@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from kaybee_component.service.manager import Services
+from kaybee_component.servicemanager.manager import Services
 from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.resource.service import ResourceService
 from kaybee_component.services.view.base_view import IndexView

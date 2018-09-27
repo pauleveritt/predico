@@ -1,10 +1,10 @@
 import pytest
 
 
-def test_construction(sm):
-    assert True is sm.config.debug
-    assert 'TestServiceRegistry' == sm.registry.__name__
-    assert {} == sm.services
+def test_unintialized(uninitialized_sm):
+    assert True is uninitialized_sm.config.debug
+    assert 'TestServiceRegistry' == uninitialized_sm.registry.__name__
+    assert {} == uninitialized_sm.services
 
 
 def test_register_services(initialized_sm):
@@ -35,6 +35,6 @@ def test_valid_injectedattr(initialized_sm):
     assert viewservice_config == view.config
 
 
-def test_invalid_injectable(invalid_injectable_type, sm):
+def test_invalid_injectable(invalid_injectable_type, uninitialized_sm):
     with pytest.raises(TypeError) as exc:
-        sm.initialize()
+        uninitialized_sm.initialize()

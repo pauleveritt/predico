@@ -4,9 +4,9 @@ from typing import Type
 import pytest
 
 from kaybee_component.registry import Registry
-from kaybee_component.service.base_service import BaseService
-from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.service.manager import ServiceManager
+from kaybee_component.servicemanager.base_service import BaseService
+from kaybee_component.servicemanager.configuration import ServiceManagerConfig
+from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
 from kaybee_component.services.resource.config import ResourceServiceConfig
 from kaybee_component.services.view.config import ViewServiceConfig
@@ -74,7 +74,7 @@ def test_registry():
 
 
 @pytest.fixture
-def sm(sm_config, test_registry) -> ServiceManager:
+def uninitialized_sm(sm_config, test_registry) -> ServiceManager:
     """ Make a ServiceManager """
 
     sm = ServiceManager(sm_config, test_registry)
@@ -82,9 +82,9 @@ def sm(sm_config, test_registry) -> ServiceManager:
 
 
 @pytest.fixture
-def initialized_sm(sm):
-    sm.initialize()
-    return sm
+def initialized_sm(uninitialized_sm):
+    uninitialized_sm.initialize()
+    return uninitialized_sm
 
 
 @pytest.fixture

@@ -4,17 +4,14 @@ Assemble all the pieces into an app that makes
 requests and tests services, views, etc.
 
 """
-from dataclasses import dataclass
 
 import pytest
 
 from kaybee_component import registry
-from kaybee_component.service.configuration import ServiceManagerConfig
-from kaybee_component.service.manager import ServiceManager, Services
+from kaybee_component.servicemanager.configuration import ServiceManagerConfig
+from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
-from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.resource.config import ResourceServiceConfig
-from kaybee_component.services.resource.service import ResourceService
 from kaybee_component.services.view.config import ViewServiceConfig
 
 

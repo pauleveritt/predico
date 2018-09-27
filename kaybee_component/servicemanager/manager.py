@@ -20,8 +20,8 @@ import dectate
 
 from kaybee_component.injector import inject
 from kaybee_component.registry import Registry
-from kaybee_component.service.base_service import BaseService
-from kaybee_component.service.configuration import ServiceManagerConfig
+from kaybee_component.servicemanager.base_service import BaseService
+from kaybee_component.servicemanager.configuration import ServiceManagerConfig
 
 
 class InvalidInjectable(Exception):
