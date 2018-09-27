@@ -25,6 +25,7 @@ class InvalidInjectable(Exception):
 def inject(
         props: Dict[str, Any],
         injectables: Dict[str, Any],
+        adapters: Dict[str, Any],
         target: Generic[T]
 ) -> T:
     """ Construct instance of target dataclass by providing its fields """
@@ -76,11 +77,18 @@ def inject(
             # frozen/unsafe_hash/eq dance
             field_type = field.type.__name__
 
-            # If we don't have this value in the injectables,
-            # raise a custom exception
+            # First see if this is in the injectables
             injected_value = injectables.get(field_type, False)
             if injected_value:
                 args[field_name] = injectables[field_type]
+            else:
+                # Maybe it is in the adapters
+                adapted_class = adapters.get(field_type, False)
+                if adapted_class:
+                    adapted_value = inject(props, injectables, {},
+                                           adapted_class)
+                    args[field_name] = adapted_value
+
         else:
             # Need to hope there is a default value. We could consider
             # checking that later and raising a nice, custom exception.

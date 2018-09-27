@@ -156,25 +156,6 @@ class PredicateAction(dectate.Action):
 
         return True
 
-    # @classmethod
-    # def xxxget_class(cls, request, **args):
-    #     """ Look through all the actions, return best
-    #
-    #     The actions get sorted based on the best score. Then we
-    #     walk through each, finding the first that matches the args.
-    #
-    #     """
-    #
-    #     action_name = cls.action_name
-    #     sorted_actions = cls.sorted_actions(action_name, request.registry)
-    #
-    #     # Find the first action which matches the args
-    #     for action, target in sorted_actions:
-    #         if action.all_predicates_match(request, **args):
-    #             return target
-    #
-    #     return None
-
     def __lt__(self, other):
         return self.sort_order < other.sort_order
 
