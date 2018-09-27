@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-import dectate
 import pytest
 
 from kaybee_component.service.manager import Services
@@ -71,17 +70,10 @@ def registrations(test_registry):
     test_registry.view(for_=IndexView)(TestResourceView)
     test_registry.view(for_=IndexView, resource=TestArticle)(
         TestSectionView)
-    test_registry.view(for_=IndexView, parentself='more/specificid')(
+    test_registry.view(for_=IndexView, resourceid='more/specificid')(
         TestResourceIdView)
-
-
-@pytest.fixture
-def parent_registration(test_registry):
-    # parentself is a parent
-    test_registry.view(for_=IndexView, parentself='more/index',
-                       resource=TestArticle)(
-        TestParentIdView)
-    dectate.commit(test_registry)
+    test_registry.view(for_=IndexView, parentid='more/index',
+                       resource=TestArticle)(TestParentIdView)
 
 
 @pytest.fixture

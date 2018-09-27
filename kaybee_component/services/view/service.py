@@ -18,13 +18,9 @@ class ViewService(BaseService):
     app_registry: Registry
     config: ViewServiceConfig
 
-    def get_view(self, request, for_, resource: Resource):
-        # Use the predicate registry to find the right view class
-        view_class = ViewAction.get_class(
-            request,
-            for_=IndexView,
-            resource=resource
-        )
+    def get_view(self, request, for_=IndexView):
+        """ Use the predicate registry to find the right view class """
+        view_class = ViewAction.get_class(request, for_)
 
         # Use dependency injection to make an instance of that view class
         view_instance = inject(

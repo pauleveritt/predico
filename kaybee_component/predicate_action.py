@@ -1,6 +1,9 @@
-from typing import Sequence
+from typing import Sequence, List, Any
 
 import dectate
+
+from kaybee_component.predicates import Predicate
+from kaybee_component.services.request.base_request import Request
 
 
 class UnknownArgument(Exception):
@@ -19,10 +22,51 @@ class UnknownLookup(Exception):
     fmt = 'Lookup supplied unknown predicate argument: {name}'
 
 
-def _predicate_matches_lookup(request, predicate, lookup_args) -> bool:
-    # Make sure the lookup args actually have this predicate's key
-    lookup_value = lookup_args.get(predicate.key, False)
-    return lookup_value and predicate.matches(lookup_value, request)
+def reject_predicates(
+        required: List[Predicate],
+        optional: List[Predicate],
+        **kwargs
+):
+    """ Given requried and optional predicates, do a sanity check """
+
+    # Let's do this in phases, eliminating the least-cost things first.
+    # We start by making some sets for keys
+    required_keys = {p.key for p in required}
+    optional_keys = {p.key for p in optional}
+    all_keys = required_keys | optional_keys
+    arg_keys = set(kwargs.keys())
+
+    # Phase 1: Missing required arguments
+    # You can't do a lookup without a 'for_', for example, this
+    # should fail with a custom exception.
+    # >>> get_view(resource=Article)
+    missing_required = required_keys - arg_keys
+    if missing_required:
+        mr = ', '.join(missing_required)
+        m = LookupMissingRequired.fmt.format(name=mr)
+        raise LookupMissingRequired(m)
+
+    # Phase 2: Argument not in predicate
+    # If the lookup asks for a predicate that isn't known to
+    # ViewAction, raise an error
+    unknown_predicate = arg_keys - all_keys
+    if unknown_predicate:
+        mr = ', '.join(unknown_predicate)
+        m = UnknownLookup.fmt.format(name=mr)
+        raise UnknownLookup(m)
+
+
+def predicates_match(
+        request: Request,
+        predicate_values: List[Any],
+        **kwargs):
+    """ Given a group of predicates, return False if any don't match """
+    for predicate in predicate_values:
+        is_match = predicate.matches(request, **kwargs)
+        if not is_match:
+            # Bail out immediately
+            return False
+    return True
 
 
 class PredicateAction(dectate.Action):
@@ -37,8 +81,8 @@ class PredicateAction(dectate.Action):
         # Fail if we are supplied a predicate that we don't define
         defined_predicate_keys = [
             predicate.key
-            for predicate in self.OPTIONAL_PREDICATES + \
-                             self.REQUIRED_PREDICATES
+            for predicate in
+            self.OPTIONAL_PREDICATES + self.REQUIRED_PREDICATES
         ]
         for argument_name in kwargs.keys():
             if argument_name not in defined_predicate_keys:
@@ -50,13 +94,13 @@ class PredicateAction(dectate.Action):
             if key not in kwargs:
                 m = MissingArgument.fmt.format(name=key)
                 raise MissingArgument(m)
-            predicate = predicate_choice(value=kwargs[key], action=self)
+            predicate = predicate_choice(value=kwargs[key])
             self.predicates[key] = predicate
 
         for predicate_choice in self.OPTIONAL_PREDICATES:
             key = predicate_choice.key
             if key in kwargs:
-                predicate = predicate_choice(value=kwargs[key], action=self)
+                predicate = predicate_choice(value=kwargs[key])
                 self.predicates[key] = predicate
 
         predicate_values = self.predicates.values()
@@ -79,46 +123,28 @@ class PredicateAction(dectate.Action):
         plugins[self.name] = obj
 
     @classmethod
-    def sorted_actions(cls, action_name, app: dectate.App) -> Sequence[
-        dectate.Action]:
-        q = dectate.Query(action_name)
-        sorted_actions = sorted(q(app), reverse=True)
+    def sorted_actions(cls,
+                       registry: dectate.App
+                       ) -> Sequence[dectate.Action]:
+        q = dectate.Query(cls.action_name)
+        sorted_actions = sorted(q(registry), reverse=True)
         return sorted_actions
 
     def all_predicates_match(self, request, **kwargs):
         """ See if match on all this registered action's predicates"""
 
-        # Let's do this in phases, eliminating the least-cost things first.
-        # We start by making some sets for keys
-        required_keys = {p.key for p in self.REQUIRED_PREDICATES}
-        optional_keys = {p.key for p in self.OPTIONAL_PREDICATES}
-        all_keys = required_keys | optional_keys
-        arg_keys = set(kwargs.keys())
+        # For performance and sanity check, raise some exceptions
+        # if stuff is missing, undefined, etc.
+        reject_predicates(
+            self.REQUIRED_PREDICATES,
+            self.OPTIONAL_PREDICATES,
+            **kwargs
+        )
 
-        # Phase 1: Missing required arguments
-        # You can't do a lookup without a 'for_', for example, this
-        # should fail with a custom exception:
-        # >>> get_view(resource=Article)
-        # TODO: Later find a way to let the ViewAction subclass say
-        # that for_ defaults to IndexView.
-        missing_required = required_keys - arg_keys
-        if missing_required:
-            mr = ', '.join(missing_required)
-            m = LookupMissingRequired.fmt.format(name=mr)
-            raise LookupMissingRequired(m)
-
-        # Phase 2: Argument not in predicate
-        # If the lookup asks for a predicate that isn't known to
-        # ViewAction, raise an error
-        unknown_predicate = arg_keys - all_keys
-        if unknown_predicate:
-            mr = ', '.join(unknown_predicate)
-            m = UnknownLookup.fmt.format(name=mr)
-            raise UnknownLookup(m)
-
-        # TODO do less computation at runtime, move some to instance
+        # Go through each predicate on this action instance/registration
+        # and see if the incoming data "matches"
         for predicate in self.predicates.values():
-            is_match = _predicate_matches_lookup(request, predicate, kwargs)
+            is_match = predicate.matches(request, kwargs)
             if not is_match:
                 # Bail out immediately
                 return False

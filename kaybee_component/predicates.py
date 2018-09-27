@@ -51,7 +51,7 @@ class ResourceIdPredicate(Predicate):
     rank: int = 30
 
     def matches(self, request: Request, **args) -> bool:
-        return self.value == request.resource.resourceid
+        return self.value == request.resource.id
 
 
 @dataclass
@@ -62,4 +62,5 @@ class ParentIdPredicate(Predicate):
     key: str = 'parentid'
     rank: int = 20
 
-        return target == self.value
+    def matches(self, request: Request, **args) -> bool:
+        return self.value in request.resource.parentids
