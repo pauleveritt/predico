@@ -14,17 +14,27 @@ from kaybee_component.services.view.config import ViewServiceConfig
 @dataclass(frozen=True)
 class ViewService(BaseService):
     sm: ServiceManager
-    app_registry: Registry
+    registry: Registry
     config: ViewServiceConfig
 
     def get_view(self, request, for_=IndexView):
         """ Use the predicate registry to find the right view class """
-        view_class = ViewAction.get_class(request, for_)
 
-        # Use dependency injection to make an instance of that view class
-        view_instance = inject(
-            dict(),  # props
-            self.sm.injectables,
-            view_class
-        )
-        return view_instance
+        # Grab ViewAction and use sorted_actions to find first match
+        sorted_actions = ViewAction.sorted_actions(self.registry)
+
+        # Find the first action which matches the args
+        for action, view_class in sorted_actions:
+            if action.all_predicates_match(request, for_=for_):
+
+                # Use dependency injection to make an instance of
+                # that view class
+                view_instance = inject(
+                    dict(),  # props
+                    self.sm.injectables,
+                    view_class
+                )
+                return view_instance
+
+        # No matches, return None
+        return None
