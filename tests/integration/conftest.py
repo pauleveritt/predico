@@ -63,6 +63,7 @@ class TestParentIdView:
 
 @dataclass
 class FakeBreadcrumbsResources:
+    # Should wind up on TestInjectedDefaultAdapterView
     request: Request
     resource: Resource
     name: str = 'Fake Breadcrumbs Resources'
@@ -73,7 +74,8 @@ class FakeBreadcrumbsResources:
 
 
 # These views are in the adapters section because it needs the
-# adapter class name defined first.
+# adapter class name defined first. This first view winds up getting
+# the more-general adapter FakeBreadcrumbsResources.
 @dataclass
 class TestInjectedDefaultAdapterView:
     breadcrumbs_resources: FakeBreadcrumbsResources
@@ -82,14 +84,8 @@ class TestInjectedDefaultAdapterView:
 
 
 @dataclass
-class TestInjectedResourceIdAdapterView:
-    breadcrumbs_resources: FakeBreadcrumbsResources
-    viewservice_config: ViewServiceConfig
-    name: str = 'Use a ResourceId Injected Adapter'
-
-
-@dataclass
 class FakeArticleBreadcrumbsResources:
+    # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
     request: Request
     resource: Resource
     name: str = 'Fake Article Breadcrumbs Resources'
@@ -99,8 +95,18 @@ class FakeArticleBreadcrumbsResources:
         return self.resource.title
 
 
+# This view gets the more-specific injected adapter
+# FakeArticleBreadcrumbsResources.
+@dataclass
+class TestInjectedResourceIdAdapterView:
+    breadcrumbs_resources: FakeBreadcrumbsResources
+    viewservice_config: ViewServiceConfig
+    name: str = 'Use a ResourceId Injected Adapter'
+
+
 @dataclass
 class FakeResourceIdBreadcrumbsResources:
+    # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
     request: Request
     resource: Resource
     name: str = 'Fake ResourceId Breadcrumbs Resources'

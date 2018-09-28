@@ -135,5 +135,11 @@ def test_specificadapter_view(initialized_sm, test_resources,
     assert 'Use a ResourceId Injected Adapter' == view.name
 
     # Now the fun part...did we get the adapter
-    assert 'Injected ResourceId Adapter Article' == \
-           view.breadcrumbs_resources.resource_title
+    bcr = view.breadcrumbs_resources
+    assert 'Injected ResourceId Adapter Article' == bcr.resource_title
+
+    # Adapter: Did the request get the correct one?
+    adapter = request.adapters[fake_breadcrumbs_resources]
+    assert 'FakeResourceIdBreadcrumbsResources' in adapter.__class__.__name__
+    assert 'Fake ResourceId Breadcrumbs Resources' == adapter.name
+    assert 'Specific' == adapter.resource_title
