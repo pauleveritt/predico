@@ -1,12 +1,10 @@
 # Now
 
-- Renderer
+- Rename to Predico
 
 # Next
 
-- Change SphinxRequest to something not-sphinx
-
-- Rename to Predico
+- Renderer
 
 # Soon
 
@@ -16,7 +14,7 @@
 
 - Publish
 
-- Bring in components
+- Bring in jinja2_component
 
 # Later
 
@@ -29,7 +27,7 @@
   and have a default=True registration that can be overridden by a 
   customization
   
-- Schema
+- Schema service
 
 - Look for TODO and fix
 
