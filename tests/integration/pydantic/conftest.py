@@ -2,8 +2,6 @@ import pydantic
 import pytest
 
 from kaybee_component.field_types import injectedattr
-from kaybee_component.registry import Registry
-from kaybee_component.services.request.base_request import Request
 from kaybee_component.services.resource.base_resource import Resource
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.config import ViewServiceConfig
