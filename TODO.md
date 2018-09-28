@@ -1,7 +1,5 @@
 # Now
 
-- Rename to Predico
-
 # Next
 
 - Renderer
