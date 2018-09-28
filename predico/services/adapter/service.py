@@ -31,8 +31,8 @@ class AdapterService(BaseService):
                 adapter_instance = inject(
                     dict(),  # props
                     self.get_injectables(request),
-                    self.sm.adapters,
-                    adapter_class
+                    adapter_class,
+                    request=request
                 )
                 return adapter_instance
 

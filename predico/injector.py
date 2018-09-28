@@ -15,6 +15,8 @@ Precedence
 from dataclasses import fields
 from typing import Dict, Any, TypeVar, Generic
 
+from predico.services.request.base_request import Request
+
 T = TypeVar('T')
 
 
@@ -25,8 +27,8 @@ class InvalidInjectable(Exception):
 def inject(
         props: Dict[str, Any],
         injectables: Dict[str, Any],
-        adapters: Dict[str, Any],
-        target: Generic[T]
+        target: Generic[T],
+        request: Request =None
 ) -> T:
     """ Construct instance of target dataclass by providing its fields """
 
@@ -83,10 +85,8 @@ def inject(
                 args[field_name] = injectables[field_type]
             else:
                 # Maybe it is in the adapters
-                adapted_class = adapters.get(field_type, False)
-                if adapted_class:
-                    adapted_value = inject(props, injectables, {},
-                                           adapted_class)
+                adapted_value = request.adapters[field.type]
+                if adapted_value:
                     args[field_name] = adapted_value
 
         else:
@@ -94,4 +94,6 @@ def inject(
             # checking that later and raising a nice, custom exception.
             pass
 
-    return target(**args)
+    # Now that we have the args for the dataclass, construct it
+    t = target(**args)
+    return t

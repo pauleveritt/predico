@@ -77,7 +77,7 @@ class ServiceManager:
 
             # Use injector to make our target class
             props = dict()
-            service = inject(props, injectables, {}, target)
+            service = inject(props, injectables, target)
 
             # Store this in our dict of services
             name = action.name

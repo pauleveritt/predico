@@ -63,7 +63,7 @@ class TestParentIdView:
 
 @dataclass
 class FakeBreadcrumbsResources:
-    # Should wind up on TestInjectedDefaultAdapterView
+    # Adapter: Should wind up on TestInjectedDefaultAdapterView
     request: Request
     resource: Resource
     name: str = 'Fake Breadcrumbs Resources'
@@ -169,11 +169,11 @@ def registrations(test_registry):
     )(FakeArticleBreadcrumbsResources)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
-        resourceid='more/specificid'
+        resourceid='injected/resourceidadapter'
     )(FakeResourceIdBreadcrumbsResources)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
-        parentid='more/index'
+        parentid='pydantic/index'
     )(FakeParentIdBreadcrumbsResources)
 
 

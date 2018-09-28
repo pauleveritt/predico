@@ -52,16 +52,16 @@ def test_resourceid_adapter(initialized_sm, test_resources,
     request_service: RequestService = services['request']
 
     # Make a request for an Article
-    request = request_service.make_request(resourceid='more/specificid')
+    request = request_service.make_request(resourceid='injected/resourceidadapter')
 
     # Request: Did the request get the correct one?
-    assert 'more/specificid' == request.resource.id
+    assert 'injected/resourceidadapter' == request.resource.id
 
     # Adapter: Did the request get the correct one?
     adapter = request.adapters[fake_breadcrumbs_resources]
     assert 'FakeResourceIdBreadcrumbsResources' in adapter.__class__.__name__
     assert 'Fake ResourceId Breadcrumbs Resources' == adapter.name
-    assert 'Specific' == adapter.resource_title
+    assert 'Injected ResourceId Adapter Article' == adapter.resource_title
 
 
 def test_parentid_adapter(initialized_sm, test_resources,
@@ -73,16 +73,16 @@ def test_parentid_adapter(initialized_sm, test_resources,
     request_service: RequestService = services['request']
 
     # Make a request for an Article
-    request = request_service.make_request(resourceid='more/contact')
+    request = request_service.make_request(resourceid='pydantic/about')
 
     # Request: Did the request get the correct one?
-    assert 'more/contact' == request.resource.id
+    assert 'pydantic/about' == request.resource.id
 
     # Adapter: Did the request get the correct one?
     adapter = request.adapters[fake_breadcrumbs_resources]
     assert 'FakeParentIdBreadcrumbsResources' in adapter.__class__.__name__
     assert 'Fake ParentId Breadcrumbs Resources' == adapter.name
-    assert 'Contact' == adapter.resource_title
+    assert 'Pydantic Section' == adapter.resource_title
 
 
 def test_defaultadapter_view(initialized_sm, test_resources,
@@ -142,4 +142,4 @@ def test_specificadapter_view(initialized_sm, test_resources,
     adapter = request.adapters[fake_breadcrumbs_resources]
     assert 'FakeResourceIdBreadcrumbsResources' in adapter.__class__.__name__
     assert 'Fake ResourceId Breadcrumbs Resources' == adapter.name
-    assert 'Specific' == adapter.resource_title
+    assert 'Injected ResourceId Adapter Article' == adapter.resource_title
