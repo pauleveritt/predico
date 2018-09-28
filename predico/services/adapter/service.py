@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
-from kaybee_component import registry
-from kaybee_component.injector import inject
-from kaybee_component.registry import Registry
-from kaybee_component.servicemanager.base_service import BaseService
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.adapter.action import AdapterAction
-from kaybee_component.services.adapter.base_adapter import BaseAdapter
-from kaybee_component.services.adapter.config import AdapterServiceConfig
+from predico import registry
+from predico.injector import inject
+from predico.registry import Registry
+from predico.servicemanager.base_service import BaseService
+from predico.servicemanager.manager import ServiceManager
+from predico.services.adapter.action import AdapterAction
+from predico.services.adapter.base_adapter import BaseAdapter
+from predico.services.adapter.config import AdapterServiceConfig
 
 
 @registry.service(name='adapter')

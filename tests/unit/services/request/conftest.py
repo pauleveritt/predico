@@ -4,18 +4,18 @@ from typing import List
 import dectate
 import pytest
 
-from kaybee_component.servicemanager.action import ServiceAction
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.adapter.action import AdapterAction
-from kaybee_component.services.adapter.service import AdapterService
-from kaybee_component.services.request.action import RequestAction
-from kaybee_component.services.request.service import RequestService
-from kaybee_component.services.resource.action import ResourceAction
-from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.resource.service import ResourceService
-from kaybee_component.services.view.action import ViewAction
-from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.service import ViewService
+from predico.servicemanager.action import ServiceAction
+from predico.servicemanager.manager import ServiceManager
+from predico.services.adapter.action import AdapterAction
+from predico.services.adapter.service import AdapterService
+from predico.services.request.action import RequestAction
+from predico.services.request.service import RequestService
+from predico.services.resource.action import ResourceAction
+from predico.services.resource.base_resource import Resource
+from predico.services.resource.service import ResourceService
+from predico.services.view.action import ViewAction
+from predico.services.view.base_view import IndexView
+from predico.services.view.service import ViewService
 
 
 @dataclass

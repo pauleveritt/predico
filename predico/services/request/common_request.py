@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 from typing import Any, Type
 
-from kaybee_component.registry import Registry
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.adapter.service import AdapterService
-from kaybee_component.services.request.base_request import Request
-from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.service import ViewService
+from predico.registry import Registry
+from predico.servicemanager.manager import ServiceManager
+from predico.services.adapter.service import AdapterService
+from predico.services.request.base_request import Request
+from predico.services.view.base_view import IndexView
+from predico.services.view.service import ViewService
 
 
 @dataclass(frozen=True)

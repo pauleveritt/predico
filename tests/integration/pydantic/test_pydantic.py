@@ -1,4 +1,4 @@
-from kaybee_component.services.request.service import RequestService
+from predico.services.request.service import RequestService
 
 
 def test_pydantic_resourceid_view(initialized_sm, test_resources):

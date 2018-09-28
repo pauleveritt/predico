@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Type, Any
 
-from kaybee_component.services.request.base_request import Request
-from kaybee_component.services.resource.base_resource import Resource
+from predico.services.request.base_request import Request
+from predico.services.resource.base_resource import Resource
 
 
 @dataclass

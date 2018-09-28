@@ -3,9 +3,9 @@ from typing import Type
 
 import pytest
 
-from kaybee_component.registry import Registry
-from kaybee_component.servicemanager.base_service import BaseService
-from kaybee_component.servicemanager.manager import ServiceManager
+from predico.registry import Registry
+from predico.servicemanager.base_service import BaseService
+from predico.servicemanager.manager import ServiceManager
 
 
 @pytest.fixture

@@ -1,4 +1,4 @@
-from kaybee_component.field_types import injectedattr
+from predico.field_types import injectedattr
 
 
 class BogusResource:

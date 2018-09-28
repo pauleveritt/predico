@@ -1,7 +1,7 @@
 import pytest
 
-from kaybee_component.predicates import ForPredicate
-from kaybee_component.services.request.base_request import Request
+from predico.predicates import ForPredicate
+from predico.services.request.base_request import Request
 
 
 class FakeRequest(Request):

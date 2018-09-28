@@ -3,12 +3,12 @@ from typing import List
 
 import pytest
 
-from kaybee_component.predicate_action import (
+from predico.predicate_action import (
     reject_predicates, UnknownLookup,
     LookupMissingRequired
 )
-from kaybee_component.predicates import ForPredicate, ResourcePredicate
-from kaybee_component.services.resource.base_resource import Resource
+from predico.predicates import ForPredicate, ResourcePredicate
+from predico.services.resource.base_resource import Resource
 
 
 class FakeGoodView:

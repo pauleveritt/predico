@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 
-from kaybee_component.predicates import ResourceIdPredicate
+from predico.predicates import ResourceIdPredicate
 
 
 @dataclass

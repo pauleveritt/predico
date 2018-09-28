@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
-from kaybee_component import registry
-from kaybee_component.injector import inject
-from kaybee_component.registry import Registry
-from kaybee_component.servicemanager.base_service import BaseService
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.view.action import ViewAction
-from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.config import ViewServiceConfig
+from predico import registry
+from predico.injector import inject
+from predico.registry import Registry
+from predico.servicemanager.base_service import BaseService
+from predico.servicemanager.manager import ServiceManager
+from predico.services.view.action import ViewAction
+from predico.services.view.base_view import IndexView
+from predico.services.view.config import ViewServiceConfig
 
 
 @registry.service(name='view')

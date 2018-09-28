@@ -1,4 +1,4 @@
-from kaybee_component.services.view.base_view import IndexView
+from predico.services.view.base_view import IndexView
 
 
 def test_has_make_request(requestservice):

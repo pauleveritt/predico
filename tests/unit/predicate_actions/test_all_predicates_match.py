@@ -15,14 +15,14 @@ from typing import List
 
 import pytest
 
-from kaybee_component.predicate_action import predicates_match
-from kaybee_component.predicates import (
+from predico.predicate_action import predicates_match
+from predico.predicates import (
     ForPredicate, ResourcePredicate,
     ResourceIdPredicate,
     ParentIdPredicate
 )
-from kaybee_component.services.request.base_request import Request
-from kaybee_component.services.resource.base_resource import Resource
+from predico.services.request.base_request import Request
+from predico.services.resource.base_resource import Resource
 
 
 @dataclass

@@ -43,7 +43,7 @@ The concept of view is very familiar in the world of Django, Flask, and
 Pyramid. Predico has a built-in "action" that lets your register and locate
 views in rich ways. Let's make a registry that understands views:
 
->>> from kaybee_component.services.view.action import ViewAction
+>>> from predico.services.view.action import ViewAction
 >>> class MySimpleApp(dectate.App):
 ...     view = dectate.directive(ViewAction)
 
@@ -53,7 +53,7 @@ We now have a registry which does stuff. For example, in some
 ``views.py`` file, I can register a view:
 
 >>> from dataclasses import dataclass
->>> from kaybee_component.services.view.base_view import IndexView
+>>> from predico.services.view.base_view import IndexView
 >>> @MySimpleApp.view(for_=IndexView)
 ... @dataclass
 ... class ForView:

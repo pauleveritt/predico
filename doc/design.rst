@@ -66,3 +66,4 @@ Service Manager
 
 - Custom vocabulary for an action
 
+- Based on dectate

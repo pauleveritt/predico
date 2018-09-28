@@ -1,12 +1,12 @@
 from typing import Type, Mapping, Union
 
-from kaybee_component.predicate_action import PredicateAction
-from kaybee_component.predicates import (
+from predico.predicate_action import PredicateAction
+from predico.predicates import (
     ForPredicate, ResourcePredicate,
     ResourceIdPredicate,
     ParentIdPredicate
 )
-from kaybee_component.services.adapter.base_adapter import BaseAdapter
+from predico.services.adapter.base_adapter import BaseAdapter
 
 
 class AdapterForPredicate(ForPredicate):

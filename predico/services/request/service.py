@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from kaybee_component import registry
-from kaybee_component.registry import Registry
-from kaybee_component.servicemanager.base_service import BaseService
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.request.config import RequestServiceConfig
-from kaybee_component.services.request.common_request import CommonRequest
+from predico import registry
+from predico.registry import Registry
+from predico.servicemanager.base_service import BaseService
+from predico.servicemanager.manager import ServiceManager
+from predico.services.request.config import RequestServiceConfig
+from predico.services.request.common_request import CommonRequest
 
 
 @registry.service(name='request')

@@ -7,13 +7,13 @@ requests and tests services, views, etc.
 
 import pytest
 
-from kaybee_component import registry
-from kaybee_component.servicemanager.configuration import ServiceManagerConfig
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.adapter.config import AdapterServiceConfig
-from kaybee_component.services.request.config import RequestServiceConfig
-from kaybee_component.services.resource.config import ResourceServiceConfig
-from kaybee_component.services.view.config import ViewServiceConfig
+from predico import registry
+from predico.servicemanager.configuration import ServiceManagerConfig
+from predico.servicemanager.manager import ServiceManager
+from predico.services.adapter.config import AdapterServiceConfig
+from predico.services.request.config import RequestServiceConfig
+from predico.services.resource.config import ResourceServiceConfig
+from predico.services.view.config import ViewServiceConfig
 
 
 # -------------------------------------------

@@ -4,8 +4,8 @@ from typing import Mapping, Union
 import dectate
 import pytest
 
-from kaybee_component.predicate_action import PredicateAction
-from kaybee_component.predicates import ForPredicate, ResourcePredicate
+from predico.predicate_action import PredicateAction
+from predico.predicates import ForPredicate, ResourcePredicate
 
 
 class FakeResource:

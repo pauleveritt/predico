@@ -7,12 +7,12 @@ The ResourceService. Stores, retrieves, and updates resources.
 from dataclasses import dataclass, field
 from typing import Dict
 
-from kaybee_component import registry
-from kaybee_component.registry import Registry
-from kaybee_component.servicemanager.base_service import BaseService
-from kaybee_component.servicemanager.manager import ServiceManager
-from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.resource.config import ResourceServiceConfig
+from predico import registry
+from predico.registry import Registry
+from predico.servicemanager.base_service import BaseService
+from predico.servicemanager.manager import ServiceManager
+from predico.services.resource.base_resource import Resource
+from predico.services.resource.config import ResourceServiceConfig
 
 
 @registry.service(name='resource')

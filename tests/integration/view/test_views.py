@@ -1,4 +1,4 @@
-from kaybee_component.services.request.service import RequestService
+from predico.services.request.service import RequestService
 
 
 # Make a custom view for 'more/contact' and register it

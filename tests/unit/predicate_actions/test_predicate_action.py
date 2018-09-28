@@ -2,11 +2,11 @@ from typing import Mapping, Union
 
 import pytest
 
-from kaybee_component.predicate_action import (
+from predico.predicate_action import (
     PredicateAction, UnknownArgument,
     MissingArgument
 )
-from kaybee_component.predicates import ForPredicate, ResourcePredicate
+from predico.predicates import ForPredicate, ResourcePredicate
 
 
 class FakeIndexView:

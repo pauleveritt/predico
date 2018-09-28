@@ -1,10 +1,10 @@
 import pydantic
 import pytest
 
-from kaybee_component.field_types import injectedattr
-from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.config import ViewServiceConfig
+from predico.field_types import injectedattr
+from predico.services.resource.base_resource import Resource
+from predico.services.view.base_view import IndexView
+from predico.services.view.config import ViewServiceConfig
 
 
 @pydantic.dataclasses.dataclass

@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 
 import pytest
 
-from kaybee_component.field_types import injectedattr
-from kaybee_component.injector import inject, InvalidInjectable
+from predico.field_types import injectedattr
+from predico.injector import inject, InvalidInjectable
 
 
 @dataclass

@@ -5,7 +5,7 @@ Test some of the custom exceptions.
 """
 import pytest
 
-from kaybee_component.predicate_action import (
+from predico.predicate_action import (
     UnknownArgument,
     MissingArgument,
     LookupMissingRequired,

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 import pytest
 
-from kaybee_component.predicates import ResourcePredicate
-from kaybee_component.services.resource.base_resource import Resource
+from predico.predicates import ResourcePredicate
+from predico.services.resource.base_resource import Resource
 
 
 @dataclass

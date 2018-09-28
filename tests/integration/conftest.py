@@ -2,12 +2,12 @@ from dataclasses import dataclass
 
 import pytest
 
-from kaybee_component.servicemanager.manager import Services
-from kaybee_component.services.request.base_request import Request
-from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.resource.service import ResourceService
-from kaybee_component.services.view.base_view import IndexView
-from kaybee_component.services.view.config import ViewServiceConfig
+from predico.servicemanager.manager import Services
+from predico.services.request.base_request import Request
+from predico.services.resource.base_resource import Resource
+from predico.services.resource.service import ResourceService
+from predico.services.view.base_view import IndexView
+from predico.services.view.config import ViewServiceConfig
 
 
 # ---------------  Resources

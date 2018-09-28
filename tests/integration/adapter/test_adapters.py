@@ -1,4 +1,4 @@
-from kaybee_component.services.request.service import RequestService
+from predico.services.request.service import RequestService
 
 
 def test_default_breadcrumbs_adapter(initialized_sm, test_resources,

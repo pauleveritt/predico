@@ -3,10 +3,10 @@ from dataclasses import dataclass
 import dectate
 import pytest
 
-from kaybee_component.servicemanager.action import ServiceAction
-from kaybee_component.services.resource.action import ResourceAction
-from kaybee_component.services.resource.base_resource import Resource
-from kaybee_component.services.resource.service import ResourceService
+from predico.servicemanager.action import ServiceAction
+from predico.services.resource.action import ResourceAction
+from predico.services.resource.base_resource import Resource
+from predico.services.resource.service import ResourceService
 
 
 @pytest.fixture

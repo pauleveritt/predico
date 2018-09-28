@@ -2,8 +2,8 @@ from typing import Sequence, List, Any
 
 import dectate
 
-from kaybee_component.predicates import Predicate
-from kaybee_component.services.request.base_request import Request
+from predico.predicates import Predicate
+from predico.services.request.base_request import Request
 
 
 class UnknownArgument(Exception):
