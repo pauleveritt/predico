@@ -5,7 +5,7 @@ from kaybee_component.registry import Registry
 from kaybee_component.servicemanager.base_service import BaseService
 from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.request.config import RequestServiceConfig
-from kaybee_component.services.request.sphinx_request import SphinxRequest
+from kaybee_component.services.request.common_request import CommonRequest
 
 
 @registry.service(name='request')
@@ -16,7 +16,7 @@ class RequestService(BaseService):
     config: RequestServiceConfig
 
     def make_request(self, resourceid: str):
-        return SphinxRequest(
+        return CommonRequest(
             sm=self.sm,
             registry=self.registry,
             resourceid=resourceid

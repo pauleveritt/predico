@@ -4,12 +4,13 @@ from typing import Any, Type
 from kaybee_component.registry import Registry
 from kaybee_component.servicemanager.manager import ServiceManager
 from kaybee_component.services.adapter.service import AdapterService
+from kaybee_component.services.request.base_request import Request
 from kaybee_component.services.view.base_view import IndexView
 from kaybee_component.services.view.service import ViewService
 
 
 @dataclass(frozen=True)
-class SphinxRequest:
+class CommonRequest(Request):
     resourceid: str
     sm: ServiceManager
     registry: Registry
@@ -42,7 +43,7 @@ class SphinxRequest:
         # has access to the view service and the request.
         class ViewsGetter:
             def __init__(self, viewservice: ViewService,
-                         request: SphinxRequest):
+                         request: CommonRequest):
                 self.viewservice = viewservice
                 self.request = request
 
@@ -65,7 +66,7 @@ class SphinxRequest:
         # has access to the adapter service and the request.
         class AdaptersGetter:
             def __init__(self, adapterservice: AdapterService,
-                         request: SphinxRequest):
+                         request: CommonRequest):
                 self.adapterservice = adapterservice
                 self.request = request
 
