@@ -85,9 +85,10 @@ def inject(
                 args[field_name] = injectables[field_type]
             else:
                 # Maybe it is in the adapters
-                adapted_value = request.adapters[field.type]
-                if adapted_value:
-                    args[field_name] = adapted_value
+                if request and hasattr(request, 'adapters'):
+                    adapted_value = request.adapters[field.type]
+                    if adapted_value:
+                        args[field_name] = adapted_value
 
         else:
             # Need to hope there is a default value. We could consider
