@@ -33,8 +33,25 @@ class FakePydanticAdapter:
 
 
 @pydantic.dataclasses.dataclass
+class FakePydanticCallableAdapter:
+    name: str = 'Fake Pydantic Adapter'
+
+    def __call__(self):
+        return 'Result from __call__'
+
+    @classmethod
+    def validate(cls, v):
+        return v
+
+    @classmethod
+    def get_validators(cls):
+        yield cls.validate
+
+
+@pydantic.dataclasses.dataclass
 class TestPydanticView:
     breadcrumbs_resources: str = injectedattr(FakePydanticAdapter, 'name')
+    callable: FakePydanticCallableAdapter
     injected_resource_title: str = injectedattr(Resource, 'title')
 
     viewservice_config: ViewServiceConfig
@@ -55,3 +72,6 @@ def registrations(test_registry):
     test_registry.adapter(
         for_=FakePydanticAdapter,
     )(FakePydanticAdapter)
+    test_registry.adapter(
+        for_=FakePydanticCallableAdapter,
+    )(FakePydanticCallableAdapter)

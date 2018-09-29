@@ -18,3 +18,11 @@ def test_pydantic_resourceid_view(initialized_sm, test_resources):
     assert 99 == view.viewservice_config.flag
     assert 'One Pydantic View' == view.name
     assert 'Pydantic Section' == view.injected_resource_title
+
+    # Did the injectedattr get the right value off the adapter?
+    breadcrumbs_resource = view.breadcrumbs_resources
+    assert 'Fake Pydantic Adapter' == breadcrumbs_resource
+
+    # Did the injected adapter perform the call?
+    callable = view.callable
+    assert 'Result from __call__' == callable

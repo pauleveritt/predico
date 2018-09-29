@@ -1,8 +1,5 @@
 # Now
 
-- If adapter has a __call__ method, return its invocation instead of 
-  just the dataclass
-
 # Next
 
 - Renderer

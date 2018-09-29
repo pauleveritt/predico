@@ -27,7 +27,15 @@ class InvalidInjectable(Exception):
 def get_adapted_value(request: Request,
                       field_type: Type[Any]) -> Optional[Type[Any]]:
     if request and hasattr(request, 'adapters'):
-        return request.adapters[field_type]
+        adapter_instance = request.adapters[field_type]
+
+        # If the adapter has a __call__, return its result instead
+        # of the adapter itself
+        __call__ = hasattr(adapter_instance, '__call__')
+        if __call__:
+            return adapter_instance.__call__()
+        else:
+            return adapter_instance
 
     return None
 
@@ -65,6 +73,7 @@ def inject(
             # we'll get an adapter instance.
             source = injectables.get(field_type, None)
             if not source:
+                # Try to get from the adapter
                 source = get_adapted_value(request,
                                            injectedattr['type_'])
 
@@ -74,26 +83,6 @@ def inject(
                 # Raise exception if not getattr
                 value = getattr(source, attr_)
                 args[field_name] = value
-
-            #
-            #
-            # injected_value = injectables.get(field_type, None)
-            # if injected_value:
-            #     type_ = injectables[field_type]
-            #     attr_ = injectedattr['attr']
-            #     value = getattr(type_, attr_)
-            #     args[field_name] = value
-            #     continue
-            #
-            # # Next try...we might getting a value off an adapter, like
-            # # injectedattr(SiteConfig, 'logo')
-            # if injected_value is None:
-            #     adapted_value = get_adapted_value(request,
-            #                                       injectedattr['type_'])
-            #     attr_ = injectedattr['attr']
-            #     value = getattr(adapted_value, attr_)
-            #     args[field_name] = value
-            #     continue
 
             # If we don't have this value in the injectables,
             # raise a custom exception
