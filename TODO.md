@@ -37,3 +37,7 @@
     
     - Do pydantic.etc.dataclass(TargetClass) without the decorator 
       to validate, then discard
+
+- Allow per-request injectables, to let parent components decorate for 
+  their children, like context stuff in React
+  
