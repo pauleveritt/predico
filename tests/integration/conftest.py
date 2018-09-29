@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
+from predico.field_types import injectedattr
 from predico.servicemanager.manager import Services
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
@@ -67,6 +68,7 @@ class FakeBreadcrumbsResources:
     request: Request
     resource: Resource
     name: str = 'Fake Breadcrumbs Resources'
+    injected_flag: str = 'Got the attr off injected adapter'
 
     @property
     def resource_title(self):
@@ -104,6 +106,15 @@ class TestInjectedResourceIdAdapterView:
     name: str = 'Use a ResourceId Injected Adapter'
 
 
+# This view tries to get the attribute off an adapter
+@dataclass
+class TestInjectedattrResourceIdAdapterView:
+    breadcrumbs_resources: FakeBreadcrumbsResources
+    viewservice_config: ViewServiceConfig
+    adapter_flag: str = injectedattr(FakeBreadcrumbsResources, 'injected_flag')
+    name: str = 'Use a ResourceId Injectedattr Adapter'
+
+
 @dataclass
 class FakeResourceIdBreadcrumbsResources:
     # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
@@ -121,6 +132,7 @@ class FakeParentIdBreadcrumbsResources:
     request: Request
     resource: Resource
     name: str = 'Fake ParentId Breadcrumbs Resources'
+    injected_flag: int = 99
 
     @property
     def resource_title(self):
@@ -158,6 +170,8 @@ def registrations(test_registry):
     test_registry.view(for_=IndexView, resourceid='injected/resourceidadapter',
                        resource=TestArticle
                        )(TestInjectedResourceIdAdapterView)
+    test_registry.view(for_=IndexView, resourceid='pydantic/injectedattr',
+                       )(TestInjectedattrResourceIdAdapterView)
 
     # Adapters
     test_registry.adapter(
@@ -217,3 +231,7 @@ def test_resources(rs):
 
     rs.add_resource(rtype='testsection', id='pydantic/about',
                     title='Pydantic Section', parentid='pydantic/index')
+
+    rs.add_resource(rtype='testsection', id='pydantic/injectedattr',
+                    title='Pydantic Injectedattr Section',
+                    parentid='pydantic/index')

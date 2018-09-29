@@ -28,8 +28,15 @@ class TestPydanticSection(Resource):
 
 
 @pydantic.dataclasses.dataclass
+class FakePydanticAdapter:
+    name: str = 'Fake Pydantic Adapter'
+
+
+@pydantic.dataclasses.dataclass
 class TestPydanticView:
-    resource_title: str = injectedattr(Resource, 'title')
+    breadcrumbs_resources: str = injectedattr(FakePydanticAdapter, 'name')
+    injected_resource_title: str = injectedattr(Resource, 'title')
+
     viewservice_config: ViewServiceConfig
     name: str = 'One Pydantic View'
 
@@ -39,5 +46,12 @@ def registrations(test_registry):
     # Resources
     test_registry.resource('testarticle')(TestPydanticArticle)
     test_registry.resource('testsection')(TestPydanticSection)
+
+    # Views
     test_registry.view(for_=IndexView, resourceid='pydantic/about')(
         TestPydanticView)
+
+    # Adapters
+    test_registry.adapter(
+        for_=FakePydanticAdapter,
+    )(FakePydanticAdapter)

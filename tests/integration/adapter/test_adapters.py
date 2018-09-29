@@ -52,7 +52,8 @@ def test_resourceid_adapter(initialized_sm, test_resources,
     request_service: RequestService = services['request']
 
     # Make a request for an Article
-    request = request_service.make_request(resourceid='injected/resourceidadapter')
+    request = request_service.make_request(
+        resourceid='injected/resourceidadapter')
 
     # Request: Did the request get the correct one?
     assert 'injected/resourceidadapter' == request.resource.id
@@ -99,7 +100,8 @@ def test_defaultadapter_view(initialized_sm, test_resources,
     services = initialized_sm.services
     request_service: RequestService = services['request']
 
-    request = request_service.make_request(resourceid='injected/defaultadapter')
+    request = request_service.make_request(
+        resourceid='injected/defaultadapter')
 
     # Request: Did the request get the correct one?
     assert 'injected/defaultadapter' == request.resource.id
@@ -123,7 +125,8 @@ def test_specificadapter_view(initialized_sm, test_resources,
     services = initialized_sm.services
     request_service: RequestService = services['request']
 
-    request = request_service.make_request(resourceid='injected/resourceidadapter')
+    request = request_service.make_request(
+        resourceid='injected/resourceidadapter')
 
     # Request: Did the request get the correct one?
     assert 'injected/resourceidadapter' == request.resource.id
@@ -143,3 +146,28 @@ def test_specificadapter_view(initialized_sm, test_resources,
     assert 'FakeResourceIdBreadcrumbsResources' in adapter.__class__.__name__
     assert 'Fake ResourceId Breadcrumbs Resources' == adapter.name
     assert 'Injected ResourceId Adapter Article' == adapter.resource_title
+
+
+def test_injectedattr_adapter_view(initialized_sm, test_resources,
+                                   fake_breadcrumbs_resources):
+    """ View uses the attribute of an adapter """
+
+    # Get the request service
+    services = initialized_sm.services
+    request_service: RequestService = services['request']
+
+    request = request_service.make_request(
+        resourceid='pydantic/injectedattr')
+
+    # Request: Did the request get the correct one?
+    assert 'pydantic/injectedattr' == request.resource.id
+
+    # View: Did the request get the correct one?
+    view = request.view
+    assert 'TestInjectedattrResourceIdAdapterView' == view.__class__.__name__
+    assert 99 == view.viewservice_config.flag
+    assert 'Use a ResourceId Injectedattr Adapter' == view.name
+
+    # Now the fun part...did we get the adapter
+    bcr = view.breadcrumbs_resources
+    assert 'Pydantic Injectedattr Section' == bcr.resource_title
