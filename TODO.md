@@ -1,6 +1,23 @@
 # Now
 
+- Formalize the API to add an injectable
+
+- Make base classes (later, maybe protocols) for View, Adapter, Request, 
+  etc. to make it easy to jump around in the system and also to issue 
+  blanket registrations
+  
+- Change make_request to have it look first for an adapter
+
 # Next
+
+- Formalize the System/Request concepts
+
+    - System represents Sphinx, is instantiated once during the lifetime 
+      of the process, an adapter provides SphinxSystem to 
+      implement/extend the contract
+      
+    - Request is created/destroyed on every request, SphinxRequest adapter to 
+      implement/extend etc.  
 
 - Renderer
 
