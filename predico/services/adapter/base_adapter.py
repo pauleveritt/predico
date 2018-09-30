@@ -6,5 +6,6 @@ subclasses.
 """
 
 
-class BaseAdapter:
+class Adapter:
+    """ Marker adapter all adapters are expected to subclass from """
     pass

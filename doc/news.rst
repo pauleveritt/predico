@@ -2,6 +2,10 @@
 News
 ====
 
+- Make base classes (later, maybe protocols) for View, Adapter, Request,
+  etc. to make it easy to jump around in the system and also to issue
+  blanket registrations
+
 - Added a ``ServiceManager.add_injectable`` method to formalize
   the API, instead of working with the dict directly.
 

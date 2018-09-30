@@ -4,6 +4,7 @@ import pytest
 
 from predico.field_types import injectedattr
 from predico.servicemanager.manager import Services
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
@@ -61,9 +62,14 @@ class TestParentIdView:
 
 # ---------------  Adapters
 
-
 @dataclass
 class FakeBreadcrumbsResources:
+    """ The target result of an adapter """
+    pass
+
+
+@dataclass
+class FakeBreadcrumbsResourcesAdapter(Adapter):
     # Adapter: Should wind up on TestInjectedDefaultAdapterView
     request: Request
     resource: Resource
@@ -86,7 +92,7 @@ class TestInjectedDefaultAdapterView:
 
 
 @dataclass
-class FakeArticleBreadcrumbsResources:
+class FakeArticleBreadcrumbsResourcesAdapter(Adapter):
     # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
     request: Request
     resource: Resource
@@ -116,7 +122,7 @@ class TestInjectedattrResourceIdAdapterView:
 
 
 @dataclass
-class FakeResourceIdBreadcrumbsResources:
+class FakeResourceIdBreadcrumbsResourcesAdapter(Adapter):
     # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
     request: Request
     resource: Resource
@@ -128,7 +134,7 @@ class FakeResourceIdBreadcrumbsResources:
 
 
 @dataclass
-class FakeParentIdBreadcrumbsResources:
+class FakeParentIdBreadcrumbsResourcesAdapter(Adapter):
     request: Request
     resource: Resource
     name: str = 'Fake ParentId Breadcrumbs Resources'
@@ -176,19 +182,19 @@ def registrations(test_registry):
     # Adapters
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
-    )(FakeBreadcrumbsResources)
+    )(FakeBreadcrumbsResourcesAdapter)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
         resource=TestArticle
-    )(FakeArticleBreadcrumbsResources)
+    )(FakeArticleBreadcrumbsResourcesAdapter)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
         resourceid='injected/resourceidadapter'
-    )(FakeResourceIdBreadcrumbsResources)
+    )(FakeResourceIdBreadcrumbsResourcesAdapter)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
         parentid='pydantic/index'
-    )(FakeParentIdBreadcrumbsResources)
+    )(FakeParentIdBreadcrumbsResourcesAdapter)
 
 
 @pytest.fixture

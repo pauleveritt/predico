@@ -7,6 +7,7 @@ import pytest
 from predico.servicemanager.action import ServiceAction
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.action import AdapterAction
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.adapter.service import AdapterService
 from predico.services.request.action import RequestAction
 from predico.services.request.service import RequestService
@@ -38,8 +39,16 @@ class FakeArticleView:
 
 @dataclass
 class FakeBreadcrumbsResources:
+    """ Something we want as the result of adaptation """
+
+
+@dataclass
+class FakeBreadcrumbsResourcesAdapter(Adapter):
     resource: Resource
     name: str = 'Fake Breadcrumbs Resources'
+
+    def __call__(self):
+        return self
 
 
 @pytest.fixture
@@ -118,5 +127,6 @@ def fakearticle_view(sm_registry):
 
 @pytest.fixture
 def fakearticle_adapter(sm_registry):
-    sm_registry.adapter(for_=FakeBreadcrumbsResources,
-                        resource=FakeArticle)(FakeBreadcrumbsResources)
+    sm_registry.adapter(
+        for_=FakeBreadcrumbsResources,
+        resource=FakeArticle)(FakeBreadcrumbsResourcesAdapter)

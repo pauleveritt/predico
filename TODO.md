@@ -1,12 +1,12 @@
 # Now
 
-- Make base classes (later, maybe protocols) for View, Adapter, Request, 
-  etc. to make it easy to jump around in the system and also to issue 
-  blanket registrations
-  
 - Change make_request to have it look first for an adapter
 
 # Next
+
+- The idea of ``callable: SomeCallableAdapter`` is flawed, because
+  ``SomeCallableAdapter`` isn't the type of ``callable``. Probably 
+  need an `injectedcallable`` field type
 
 - Formalize the System/Request concepts
 

@@ -7,6 +7,7 @@ import pytest
 from predico.servicemanager.action import ServiceAction
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.action import AdapterAction
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.adapter.service import AdapterService
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
@@ -104,8 +105,17 @@ def register_service(sm_registry):
 
 @dataclass
 class FakeBreadcrumbsResources:
+    """ The result of an adapter for getting breadcrumbs """
+    pass
+
+
+@dataclass
+class FakeBreadcrumbsResourcesAdapter(Adapter):
     """ The kind of adapter we're interested in """
     name: str = 'Fake Breadcrumbs Resources'
+
+    def __call__(self):
+        return self.name
 
 
 @pytest.fixture
@@ -117,34 +127,42 @@ def fake_breadcrumbs_resources():
 @pytest.fixture
 def fakefor_adapter(sm_registry):
     sm_registry.adapter(for_=FakeBreadcrumbsResources)(
-        FakeBreadcrumbsResources)
+        FakeBreadcrumbsResourcesAdapter)
 
 
 @dataclass
-class FakeResourceAdapter:
+class FakeResourceAdapter(Adapter):
     name: str = 'Fake Resource Adapter'
 
 
 @pytest.fixture
 def fakeresource_adapter(sm_registry):
-    sm_registry.adapter(for_=FakeBreadcrumbsResources, resource=FakeResource)(
+    sm_registry.adapter(for_=FakeBreadcrumbsResources,
+                        resource=FakeResource)(
         FakeResourceAdapter)
 
 
 @dataclass
-class FakeArticleAdapter:
+class FakeArticleAdapter(Adapter):
     name: str = 'Fake Article Adapter'
+
+    def __call__(self):
+        return self.name
 
 
 @pytest.fixture
 def fakearticle_adapter(sm_registry):
-    sm_registry.adapter(for_=FakeBreadcrumbsResources, resource=FakeArticle)(
+    sm_registry.adapter(for_=FakeBreadcrumbsResources,
+                        resource=FakeArticle)(
         FakeArticleAdapter)
 
 
 @dataclass
-class FakeResourceIdAdapter:
+class FakeResourceIdAdapter(Adapter):
     name: str = 'Fake ResourceId Adapter'
+
+    def __call__(self):
+        return self.name
 
 
 @pytest.fixture
@@ -155,13 +173,14 @@ def fakeresourceid_adapter(sm_registry):
 
 
 @dataclass
-class FakeParentIdAdapter:
+class FakeParentIdAdapter(Adapter):
     name: str = 'Fake ParentId Adapter'
 
 
 @pytest.fixture
 def fakeparentid_adapter(sm_registry):
-    sm_registry.adapter(for_=FakeBreadcrumbsResources, parentid='more/index')(
+    sm_registry.adapter(for_=FakeBreadcrumbsResources,
+                        parentid='more/index')(
         FakeParentIdAdapter)
 
 
