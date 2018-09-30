@@ -36,6 +36,16 @@ def test_valid_injectedattr(initialized_sm):
     assert viewservice_config == view.config
 
 
+def test_add_good_injectable(initialized_sm):
+    class ValidInjectable:
+        pass
+
+    vi = ValidInjectable()
+    assert ValidInjectable.__name__ not in initialized_sm.injectables
+    initialized_sm.add_injectable(vi)
+    assert ValidInjectable.__name__ in initialized_sm.injectables
+
+
 def test_invalid_injectable(invalid_injectable_type, uninitialized_sm):
     with pytest.raises(TypeError) as exc:
         uninitialized_sm.initialize()

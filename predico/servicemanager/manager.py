@@ -55,15 +55,17 @@ class ServiceManager:
         injectables = self.injectables
 
         # Stash ServiceManager stuff in injectables
-        injectables[ServiceManagerConfig.__name__] = self.config,
-        injectables[ServiceManager.__name__] = self
+        self.add_injectable(self.config)
+        self.add_injectable(self)
+        # injectables[ServiceManagerConfig.__name__] = self.config,
+        # injectables[ServiceManager.__name__] = self
 
-        # Make the Registry injectable
+        # Make the Registry injectable using a well-known name
         injectables['Registry'] = self.registry
 
         # Make each service config available as injectable
         for serviceconfig in self.config.serviceconfigs.values():
-            injectables[serviceconfig.__class__.__name__] = serviceconfig
+            self.add_injectable(serviceconfig)
 
         # Get a list of services
         q = dectate.Query('service')
@@ -84,7 +86,7 @@ class ServiceManager:
             self.services[name] = service
 
             # Add this service, and its config, as injectable
-            injectables[service.__class__.__name__] = service
+            self.add_injectable(service)
 
         # Now the adapters in services['adapter']. Each adapter
         # can be dependency-injected...albeit carefully. Add the
@@ -97,3 +99,8 @@ class ServiceManager:
             # Likely a unit test that doesn't include adapters in
             # the registry
             pass
+
+    def add_injectable(self, injectable):
+        """ Register a class instance as injectable """
+
+        self.injectables[injectable.__class__.__name__] = injectable

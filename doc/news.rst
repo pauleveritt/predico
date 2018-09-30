@@ -2,6 +2,9 @@
 News
 ====
 
+- Added a ``ServiceManager.add_injectable`` method to formalize
+  the API, instead of working with the dict directly.
+
 - Callable adapters. Should have been like this in the first place. If
   an adapter has a ``.__call__``, return the call value instead of the
   adapter instance

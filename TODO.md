@@ -1,7 +1,5 @@
 # Now
 
-- Formalize the API to add an injectable
-
 - Make base classes (later, maybe protocols) for View, Adapter, Request, 
   etc. to make it easy to jump around in the system and also to issue 
   blanket registrations
