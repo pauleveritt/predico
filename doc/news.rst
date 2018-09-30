@@ -2,6 +2,12 @@
 News
 ====
 
+- The idea of ``callable: SomeCallableAdapter`` is flawed, because
+  ``SomeCallableAdapter`` isn't the type of ``callable``. Change to
+  get make it happen as part of ``injectedattr`` which will change to
+  ``injected`` and can handle attr vs. keys and implicitly looks
+  for ``__call__`` there.
+
 - Make base classes (later, maybe protocols) for View, Adapter, Request,
   etc. to make it easy to jump around in the system and also to issue
   blanket registrations

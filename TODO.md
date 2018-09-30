@@ -4,10 +4,6 @@
 
 # Next
 
-- The idea of ``callable: SomeCallableAdapter`` is flawed, because
-  ``SomeCallableAdapter`` isn't the type of ``callable``. Probably 
-  need an `injectedcallable`` field type
-
 - Formalize the System/Request concepts
 
     - System represents Sphinx, is instantiated once during the lifetime 

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 import pytest
 
-from predico.field_types import injectedattr
+from predico.field_types import injected
 from predico.injector import inject, InvalidInjectable
 
 
@@ -36,17 +36,17 @@ def test_injector_injected():
     assert 66 == athlete.shoe.size
 
 
-def test_injector_injectedattr():
+def test_injector_injected():
     """ Tell the injector to hand attribute of another injectable """
 
     @dataclass
-    class InjectedAttrAthlete:
-        shoe_size: int = injectedattr(Shoe, 'size')
+    class InjectedAthlete:
+        shoe_size: int = injected(Shoe, 'size')
 
     shoe = Shoe(size=88)
     props = dict()
     injectables = {Shoe.__name__: shoe}
-    athlete = inject(props, injectables, InjectedAttrAthlete)
+    athlete = inject(props, injectables, InjectedAthlete)
     assert 88 == athlete.shoe_size
 
 
@@ -57,15 +57,15 @@ def test_injector_injectedattr_missing_class():
         pass
 
     @dataclass
-    class InjectedAttrAthlete:
-        shoe_size: int = injectedattr(Jersey, 'size')
+    class InjectedAthlete:
+        shoe_size: int = injected(Jersey, 'size')
 
     shoe = Shoe(size=88)
     props = dict()
     injectables = {Shoe.__name__: shoe}
     with pytest.raises(InvalidInjectable) as exc:
-        inject(props, injectables, InjectedAttrAthlete)
-    expected = 'Invalid injectedattr type Jersey requested from type'
+        inject(props, injectables, InjectedAthlete)
+    expected = 'Invalid injected type Jersey requested from type'
     assert expected == str(exc.value)
 
 

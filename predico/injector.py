@@ -21,13 +21,14 @@ T = TypeVar('T')
 
 
 class InvalidInjectable(Exception):
-    fmt = 'Invalid injectedattr type {type} requested from {klass}'
+    fmt = 'Invalid injected type {type} requested from {klass}'
 
 
 def get_adapted_value(request: Request,
                       field_type: Type[Any]) -> Optional[Type[Any]]:
     if request and hasattr(request, 'adapters'):
         adapter_instance = request.adapters[field_type]
+        return adapter_instance
 
         # If the adapter has a __call__, return its result instead
         # of the adapter itself
