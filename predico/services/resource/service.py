@@ -30,12 +30,12 @@ class ResourceService(BaseService):
         resource_class = resource_classes[rtype]
         return resource_class
 
-    def get_resource(self, resourceid: str):
+    def get_resource(self, resourceid: str) -> Resource:
         resource = self.resources[resourceid]
 
         return resource
 
-    def add_resource(self, **kwargs):
+    def add_resource(self, **kwargs) -> Resource:
         """ Pass in dict of values and let the service construct/store """
 
         # Resources don't participate in DI so just construct them

@@ -8,7 +8,7 @@ from predico.services.adapter.base_adapter import Adapter
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import IndexView, View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -37,25 +37,25 @@ class TestSection(Resource):
 # ---------------  Views
 
 @dataclass
-class TestResourceView:
+class TestResourceView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'Generic Resource View'
 
 
 @dataclass
-class TestSectionView:
+class TestSectionView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'Section View'
 
 
 @dataclass
-class TestResourceIdView:
+class TestResourceIdView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'One Specific Resource ID'
 
 
 @dataclass
-class TestParentIdView:
+class TestParentIdView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'One Specific Parent ID'
 
@@ -85,7 +85,7 @@ class FakeBreadcrumbsResourcesAdapter(Adapter):
 # adapter class name defined first. This first view winds up getting
 # the more-general adapter FakeBreadcrumbsResources.
 @dataclass
-class TestInjectedDefaultAdapterView:
+class TestInjectedDefaultAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
     name: str = 'Use a Default Injected Adapter'
@@ -106,7 +106,7 @@ class FakeArticleBreadcrumbsResourcesAdapter(Adapter):
 # This view gets the more-specific injected adapter
 # FakeArticleBreadcrumbsResources.
 @dataclass
-class TestInjectedResourceIdAdapterView:
+class TestInjectedResourceIdAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
     name: str = 'Use a ResourceId Injected Adapter'
@@ -114,7 +114,7 @@ class TestInjectedResourceIdAdapterView:
 
 # This view tries to get the attribute off an adapter
 @dataclass
-class TestInjectedattrResourceIdAdapterView:
+class TestInjectedattrResourceIdAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
     adapter_flag: str = injectedattr(FakeBreadcrumbsResources, 'injected_flag')

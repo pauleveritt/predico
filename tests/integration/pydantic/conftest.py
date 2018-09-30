@@ -2,8 +2,9 @@ import pydantic
 import pytest
 
 from predico.field_types import injectedattr
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.resource.base_resource import Resource
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import IndexView, View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -28,12 +29,12 @@ class TestPydanticSection(Resource):
 
 
 @pydantic.dataclasses.dataclass
-class FakePydanticAdapter:
+class FakePydanticAdapter(Adapter):
     name: str = 'Fake Pydantic Adapter'
 
 
 @pydantic.dataclasses.dataclass
-class FakePydanticCallableAdapter:
+class FakePydanticCallableAdapter(Adapter):
     name: str = 'Fake Pydantic Adapter'
 
     def __call__(self):
@@ -49,7 +50,7 @@ class FakePydanticCallableAdapter:
 
 
 @pydantic.dataclasses.dataclass
-class TestPydanticView:
+class TestPydanticView(View):
     breadcrumbs_resources: str = injectedattr(FakePydanticAdapter, 'name')
     callable: FakePydanticCallableAdapter
     injected_resource_title: str = injectedattr(Resource, 'title')

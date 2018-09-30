@@ -15,7 +15,7 @@ from predico.services.resource.action import ResourceAction
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import IndexView, View
 from predico.services.view.service import ViewService
 
 
@@ -33,13 +33,15 @@ def fake_article1():
 
 
 @dataclass
-class FakeArticleView:
+class FakeArticleView(View):
     name: str = 'Fake Article View'
 
 
 @dataclass
 class FakeBreadcrumbsResources:
     """ Something we want as the result of adaptation """
+
+    pass
 
 
 @dataclass
@@ -57,7 +59,7 @@ def fake_breadcrumbs_resources():
 
 
 @dataclass
-class FakeArticleAdapter:
+class FakeArticleAdapter(Adapter):
     name: str = 'Fake Article Adapter'
 
 

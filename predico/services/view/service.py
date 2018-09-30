@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from predico import registry
 from predico.injector import inject
@@ -6,7 +7,7 @@ from predico.registry import Registry
 from predico.servicemanager.base_service import BaseService
 from predico.servicemanager.manager import ServiceManager
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import IndexView, View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -17,7 +18,7 @@ class ViewService(BaseService):
     registry: Registry
     config: ViewServiceConfig
 
-    def get_view(self, request, for_=IndexView):
+    def get_view(self, request, for_=IndexView) -> Optional[View]:
         """ Use the predicate registry to find the right view class """
 
         # Grab ViewAction and use sorted_actions to find first match

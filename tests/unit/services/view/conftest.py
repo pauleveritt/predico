@@ -9,7 +9,7 @@ from predico.servicemanager.manager import ServiceManager
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import IndexView, View
 from predico.services.view.service import ViewService
 
 
@@ -105,7 +105,7 @@ def register_service(sm_registry):
 
 
 @dataclass
-class FakeForView1:
+class FakeForView1(View):
     name: str = 'Fake For View'
 
 
@@ -115,7 +115,7 @@ def fakefor_view(sm_registry):
 
 
 @dataclass
-class FakeResourceView:
+class FakeResourceView(View):
     name: str = 'Fake Resource View'
 
 
@@ -126,7 +126,7 @@ def fakeresource_view(sm_registry):
 
 
 @dataclass
-class FakeArticleView:
+class FakeArticleView(View):
     name: str = 'Fake Article View'
 
 
@@ -137,7 +137,7 @@ def fakearticle_view(sm_registry):
 
 
 @dataclass
-class FakeResourceIdView:
+class FakeResourceIdView(View):
     name: str = 'Fake ResourceId View'
 
 
@@ -148,7 +148,7 @@ def fakeresourceid_view(sm_registry):
 
 
 @dataclass
-class FakeParentIdView:
+class FakeParentIdView(View):
     name: str = 'Fake ParentId View'
 
 
