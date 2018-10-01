@@ -9,7 +9,7 @@ from predico.servicemanager.manager import ServiceManager
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView, View
+from predico.services.view.base_view import View
 from predico.services.view.service import ViewService
 
 
@@ -110,8 +110,8 @@ class FakeForView1(View):
 
 
 @pytest.fixture
-def fakefor_view(sm_registry):
-    sm_registry.view(for_=IndexView)(FakeForView1)
+def fake_view(sm_registry):
+    sm_registry.view()(FakeForView1)
 
 
 @dataclass
@@ -121,8 +121,7 @@ class FakeResourceView(View):
 
 @pytest.fixture
 def fakeresource_view(sm_registry):
-    sm_registry.view(for_=IndexView, resource=FakeResource)(
-        FakeResourceView)
+    sm_registry.view(resource=FakeResource)(FakeResourceView)
 
 
 @dataclass
@@ -132,8 +131,7 @@ class FakeArticleView(View):
 
 @pytest.fixture
 def fakearticle_view(sm_registry):
-    sm_registry.view(for_=IndexView, resource=FakeArticle)(
-        FakeArticleView)
+    sm_registry.view(resource=FakeArticle)(FakeArticleView)
 
 
 @dataclass
@@ -143,8 +141,7 @@ class FakeResourceIdView(View):
 
 @pytest.fixture
 def fakeresourceid_view(sm_registry):
-    sm_registry.view(for_=IndexView, resourceid='more/article2')(
-        FakeResourceIdView)
+    sm_registry.view(resourceid='more/article2')(FakeResourceIdView)
 
 
 @dataclass
@@ -154,8 +151,7 @@ class FakeParentIdView(View):
 
 @pytest.fixture
 def fakeparentid_view(sm_registry):
-    sm_registry.view(for_=IndexView, parentid='more/index')(
-        FakeParentIdView)
+    sm_registry.view(parentid='more/index')(FakeParentIdView)
 
 
 @pytest.fixture

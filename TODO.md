@@ -28,8 +28,6 @@
 - Is-a predicate matching based on isinstance with priority given to 
   most-specific class
 
-- Allow `for_` to default to some stated default (`IndexView`)
-
 - Have the base class just be like a marker interface (e.g. Request) 
   and have a default=True registration that can be overridden by a 
   customization

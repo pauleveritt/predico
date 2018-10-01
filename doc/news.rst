@@ -2,6 +2,12 @@
 News
 ====
 
+- Initial implementation of rendering. Add an option to the ``view``
+  decorator that allows providing some rendering information via an
+  adapter. Then add ``request.render`` to make it transparent.
+
+- Get rid of ``for_`` on views.
+
 - ``make_request`` can now use a factory (i.e. a class) specified in
   ``ResourceServiceConfig.factory`` for making the request. Defaults to
   ``CommonRequest``.  This lets systems like Sphinx implement and register

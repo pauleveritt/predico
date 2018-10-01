@@ -1,23 +1,17 @@
-from typing import Type, Mapping, Union
+from typing import Mapping, Union
 
 from predico.predicate_action import PredicateAction
 from predico.predicates import (
-    ForPredicate, ResourcePredicate,
+    ResourcePredicate,
     ResourceIdPredicate,
     ParentIdPredicate
 )
-from predico.services.view.base_view import IndexView
-
-
-class ViewForPredicate(ForPredicate):
-    value: Type[IndexView]
 
 
 class ViewAction(PredicateAction):
     action_name = 'view'
-    REQUIRED_PREDICATES = (ViewForPredicate,)
+    REQUIRED_PREDICATES = ()
     OPTIONAL_PREDICATES = (
-    ResourcePredicate, ResourceIdPredicate, ParentIdPredicate)
+        ResourcePredicate, ResourceIdPredicate, ParentIdPredicate)
     predicates: Mapping[
-        str, Union[
-            ForPredicate, ResourcePredicate, ResourceIdPredicate, ParentIdPredicate]]
+        str, Union[ResourcePredicate, ResourceIdPredicate, ParentIdPredicate]]

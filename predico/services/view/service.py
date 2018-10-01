@@ -7,7 +7,7 @@ from predico.registry import Registry
 from predico.servicemanager.base_service import BaseService
 from predico.servicemanager.manager import ServiceManager
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView, View
+from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -18,7 +18,7 @@ class ViewService(BaseService):
     registry: Registry
     config: ViewServiceConfig
 
-    def get_view(self, request, for_=IndexView) -> Optional[View]:
+    def get_view(self, request) -> Optional[View]:
         """ Use the predicate registry to find the right view class """
 
         # Grab ViewAction and use sorted_actions to find first match
@@ -26,8 +26,7 @@ class ViewService(BaseService):
 
         # Find the first action which matches the args
         for action, view_class in sorted_actions:
-            if action.all_predicates_match(request, for_=for_):
-
+            if action.all_predicates_match(request):
                 # Use dependency injection to make an instance of
                 # that view class
                 view_instance = inject(

@@ -15,7 +15,7 @@ from predico.services.resource.action import ResourceAction
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView, View
+from predico.services.view.base_view import View
 from predico.services.view.service import ViewService
 
 
@@ -123,8 +123,7 @@ def viewservice(services) -> ViewService:
 
 @pytest.fixture
 def fakearticle_view(sm_registry):
-    sm_registry.view(for_=IndexView, resource=FakeArticle)(
-        FakeArticleView)
+    sm_registry.view(resource=FakeArticle)(FakeArticleView)
 
 
 @pytest.fixture

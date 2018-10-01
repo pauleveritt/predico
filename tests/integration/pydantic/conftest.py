@@ -4,7 +4,7 @@ import pytest
 from predico.field_types import injected
 from predico.services.adapter.base_adapter import Adapter
 from predico.services.resource.base_resource import Resource
-from predico.services.view.base_view import IndexView, View
+from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -66,8 +66,7 @@ def registrations(test_registry):
     test_registry.resource('testsection')(TestPydanticSection)
 
     # Views
-    test_registry.view(for_=IndexView, resourceid='pydantic/about')(
-        TestPydanticView)
+    test_registry.view(resourceid='pydantic/about')(TestPydanticView)
 
     # Adapters
     test_registry.adapter(

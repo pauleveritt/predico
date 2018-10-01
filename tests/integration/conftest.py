@@ -8,7 +8,7 @@ from predico.services.adapter.base_adapter import Adapter
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
-from predico.services.view.base_view import IndexView, View
+from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -162,22 +162,22 @@ def registrations(test_registry):
     test_registry.resource('testsection')(TestSection)
 
     # Views
-    test_registry.view(for_=IndexView)(TestResourceView)
-    test_registry.view(for_=IndexView, resource=TestArticle)(
+    test_registry.view()(TestResourceView)
+    test_registry.view(resource=TestArticle)(
         TestSectionView)
-    test_registry.view(for_=IndexView, resourceid='more/specificid')(
+    test_registry.view(resourceid='more/specificid')(
         TestResourceIdView)
-    test_registry.view(for_=IndexView, parentid='more/index',
+    test_registry.view(parentid='more/index',
                        resource=TestArticle
                        )(TestParentIdView)
     # Adapter-related views
-    test_registry.view(for_=IndexView, resourceid='injected/defaultadapter',
+    test_registry.view(resourceid='injected/defaultadapter',
                        resource=TestArticle
                        )(TestInjectedDefaultAdapterView)
-    test_registry.view(for_=IndexView, resourceid='injected/resourceidadapter',
+    test_registry.view(resourceid='injected/resourceidadapter',
                        resource=TestArticle
                        )(TestInjectedResourceIdAdapterView)
-    test_registry.view(for_=IndexView, resourceid='pydantic/injectedattr',
+    test_registry.view(resourceid='pydantic/injectedattr',
                        )(TestInjectedResourceIdAdapterView)
 
     # Adapters
