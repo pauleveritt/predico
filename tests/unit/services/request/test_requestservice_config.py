@@ -1,2 +1,5 @@
+from predico.services.request.common_request import CommonRequest
+
+
 def test_construction(requestservice_config):
-    assert 99 == requestservice_config.flag
+    assert CommonRequest == requestservice_config.factory

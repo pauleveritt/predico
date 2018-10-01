@@ -7,6 +7,9 @@ request service.
 
 from pydantic import BaseModel
 
+from predico.services.request.base_request import Request
+from predico.services.request.common_request import CommonRequest
+
 
 class RequestServiceConfig(BaseModel):
-    flag: int
+    factory: Request = CommonRequest

@@ -1,6 +1,8 @@
 # Now
 
-- Change make_request to have it look first for an adapter
+- Example app
+
+- Docs
 
 # Next
 
@@ -16,10 +18,6 @@
 - Renderer
 
 # Soon
-
-- Docs
-
-- Example app
 
 - Publish
 

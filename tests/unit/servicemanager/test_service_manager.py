@@ -1,5 +1,7 @@
 import pytest
 
+from predico.services.request.common_request import CommonRequest
+
 
 def test_unintialized(uninitialized_sm):
     assert True is uninitialized_sm.config.debug
@@ -25,7 +27,7 @@ def test_valid_injected(initialized_sm):
     # Test the request service
     requestservice = services['request']
     requestservice_config = sm_config.serviceconfigs['requestservice']
-    assert requestservice_config.flag == requestservice.config.flag
+    assert CommonRequest == requestservice.config.factory
 
 
 def test_valid_injectedattr(initialized_sm):
