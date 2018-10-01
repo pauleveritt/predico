@@ -4,18 +4,18 @@ from predico.predicates import RendererPredicate
 from predico.services.request.base_request import Request
 
 
-class StringFormatRenderer:
+class FakeStringFormatRenderer:
     pass
 
 
 @pytest.fixture
 def renderer_predicate():
-    rp = RendererPredicate(StringFormatRenderer)
+    rp = RendererPredicate(FakeStringFormatRenderer)
     return rp
 
 
 def test_construction(renderer_predicate):
-    assert StringFormatRenderer == renderer_predicate.value
+    assert FakeStringFormatRenderer == renderer_predicate.value
     assert 'renderer' == renderer_predicate.key
 
 

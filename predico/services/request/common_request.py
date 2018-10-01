@@ -6,6 +6,7 @@ from predico.registry import Registry
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.service import AdapterService
 from predico.services.request.base_request import Request
+from predico.services.view.renderers import StringFormatRenderer
 from predico.services.view.service import ViewService
 
 
@@ -66,12 +67,21 @@ class CommonRequest(Request):
 
         # Get the view *action* to find out renderer/template information
         viewaction = viewservice.get_viewaction(self)
+
+        # Find the renderer, if none, use StringFormatRenderer
         nlp = viewaction.nonlookup_predicates
+        renderer_adapter_class = nlp.get('renderer', StringFormatRenderer)
+        renderer_adapter = self.adapters[renderer_adapter_class]
+        if renderer_adapter is None:
+            # No adapter, just use the default implementation
+            renderer_adapter = renderer_adapter_class
+
         template_string_predicate = nlp.get('template_string', None)
         if template_string_predicate:
             template_string = template_string_predicate.value
+            renderer = renderer_adapter(template_string=template_string,
+                                        view=viewinstance)
 
             # Render in the context of the view
-            context = dataclasses.asdict(viewinstance)
-            output = template_string.format(**context)
+            output = renderer()
             return output
