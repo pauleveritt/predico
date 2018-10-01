@@ -5,7 +5,8 @@ from predico.predicates import (
     ResourcePredicate,
     ResourceIdPredicate,
     ParentIdPredicate,
-    TemplateStringPredicate
+    TemplateStringPredicate,
+    RendererPredicate
 )
 
 
@@ -15,10 +16,10 @@ class ViewAction(PredicateAction):
     OPTIONAL_PREDICATES = (
         ResourcePredicate, ResourceIdPredicate, ParentIdPredicate)
     NONLOOKUP_PREDICATES = (
-        TemplateStringPredicate,
+        TemplateStringPredicate, RendererPredicate
     )
     predicates: Mapping[
         str, Union[
             ResourcePredicate, ResourceIdPredicate, ParentIdPredicate,
-            TemplateStringPredicate
+            TemplateStringPredicate, RendererPredicate
         ]]
