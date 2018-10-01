@@ -6,6 +6,7 @@ from predico.registry import Registry
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.service import AdapterService
 from predico.services.request.base_request import Request
+from predico.services.resource.service import ResourceService
 from predico.services.view.renderers import StringFormatRenderer
 from predico.services.view.service import ViewService
 
@@ -23,6 +24,14 @@ class CommonRequest(Request):
         rs = services['resource']
         resource = rs.get_resource(self.resourceid)
         return resource
+
+    @property
+    def resources(self):
+        """ Return the resource service's resources """
+        services = self.sm.services
+        rs: ResourceService = services['resource']
+        resources = rs.resources
+        return resources
 
     @property
     def view(self):

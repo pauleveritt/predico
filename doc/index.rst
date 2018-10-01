@@ -18,6 +18,16 @@ bring three major pieces together:
 - ``co`` means components, or small, reusable bits of
   presentation/logic/policy
 
+.. note::
+
+    The "co" in Predico -- components -- isn't yet included. It
+    mostly works in a side project, but an edge case isn't yet
+    supported. It will be described here but clearly marked as "Future".
+
+Predico is built atop Martijn Faassen's
+`Dectate <http://dectate.readthedocs.io>`_, a config-oriented registry
+system.
+
 Scenario
 ========
 
@@ -43,8 +53,9 @@ that can be augmented or replaced in rich, reliable ways.
 .. toctree::
     :maxdepth: 2
 
+    tour
     features
-    using
+    using/index
     developing
     design
     news

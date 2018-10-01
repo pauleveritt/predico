@@ -104,3 +104,11 @@ class ServiceManager:
         """ Register a class instance as injectable """
 
         self.injectables[injectable.__class__.__name__] = injectable
+
+    def render(self, resourceid: str):
+        """ Convenience method """
+
+        request_service = self.services['request']
+        request = request_service.make_request(resourceid)
+        output = request.render()
+        return output
