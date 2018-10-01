@@ -126,9 +126,6 @@ class PredicateAction(dectate.Action):
     def sorted_actions(cls,
                        registry: dectate.App
                        ) -> Sequence[dectate.Action]:
-        # TODO Move this to BaseService constructor to avoid calculating
-        # up each time. Then refactor ViewService etc. tests to not
-        # need a registry by mocking sorted_actions.
         q = dectate.Query(cls.action_name)
         actions = list(q(registry))
         sorted_actions = sorted(actions, reverse=True,
