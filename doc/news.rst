@@ -6,7 +6,8 @@ News
   ``SomeCallableAdapter`` isn't the type of ``callable``. Change to
   get make it happen as part of ``injectedattr`` which will change to
   ``injected`` and can handle attr vs. keys and implicitly looks
-  for ``__call__`` there.
+  for ``__call__`` there. Also, make call=True or call=False arguments
+  you can pass to ``injected()``.
 
 - Make base classes (later, maybe protocols) for View, Adapter, Request,
   etc. to make it easy to jump around in the system and also to issue

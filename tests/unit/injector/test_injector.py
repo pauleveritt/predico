@@ -36,18 +36,39 @@ def test_injector_injected():
     assert 66 == athlete.shoe.size
 
 
-def test_injector_injected():
+def test_injector_injected_double():
     """ Tell the injector to hand attribute of another injectable """
 
     @dataclass
     class InjectedAthlete:
-        shoe_size: int = injected(Shoe, 'size')
+        shoe_size: int = injected(Shoe, attr='size')
 
     shoe = Shoe(size=88)
     props = dict()
     injectables = {Shoe.__name__: shoe}
     athlete = inject(props, injectables, InjectedAthlete)
     assert 88 == athlete.shoe_size
+
+
+def test_injector_injected_callable():
+    """ Tell the injector to hand call result of another injectable """
+
+    @dataclass
+    class CallableShoe:
+        size: int
+
+        def __call__(self):
+            return self.size + 5
+
+    @dataclass
+    class InjectedAthlete:
+        shoe_size: int = injected(CallableShoe)
+
+    shoe = CallableShoe(size=70)
+    props = dict()
+    injectables = {CallableShoe.__name__: shoe}
+    athlete = inject(props, injectables, InjectedAthlete)
+    assert 75 == athlete.shoe_size
 
 
 def test_injector_injectedattr_missing_class():
@@ -58,7 +79,7 @@ def test_injector_injectedattr_missing_class():
 
     @dataclass
     class InjectedAthlete:
-        shoe_size: int = injected(Jersey, 'size')
+        shoe_size: int = injected(Jersey, attr='size')
 
     shoe = Shoe(size=88)
     props = dict()
@@ -115,19 +136,6 @@ def test_injector_defaultfactory():
     props = dict()
     injectables = dict()
     athlete = inject(props, injectables, DefaultValueAthlete)
-    assert 34523 == athlete.shoe.size
-
-
-def test_injector_defaultfactory():
-    # Field has a default value which should be used instead of
-    # injection
-    @dataclass
-    class DefaultFactoryAthlete:
-        shoe: Shoe = field(default_factory=Shoe)
-
-    props = dict()
-    injectables = dict()
-    athlete = inject(props, injectables, DefaultFactoryAthlete)
     assert 77 == athlete.shoe.size
 
 

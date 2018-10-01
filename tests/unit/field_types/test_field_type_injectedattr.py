@@ -26,6 +26,18 @@ def test_key():
     assert 'title' == i.metadata['injected']['key']
 
 
+def test_call():
+    i = injected(BogusResource, call=False)
+    assert BogusResource == i.metadata['injected']['type_']
+    assert False is i.metadata['injected']['call']
+
+
+def test_default():
+    i = injected(BogusResource)
+    assert BogusResource == i.metadata['injected']['type_']
+    assert True is i.metadata['injected']['call']
+
+
 def test_other_data():
     # Ensure the field can have other stuff in it
     i = injected(BogusResource, attr='title', metadata=dict(a=1), init=False)

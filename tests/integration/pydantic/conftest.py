@@ -1,7 +1,7 @@
 import pydantic
 import pytest
 
-from predico.field_types import injectedattr
+from predico.field_types import injected
 from predico.services.adapter.base_adapter import Adapter
 from predico.services.resource.base_resource import Resource
 from predico.services.view.base_view import IndexView, View
@@ -51,9 +51,9 @@ class FakePydanticCallableAdapter(Adapter):
 
 @pydantic.dataclasses.dataclass
 class TestPydanticView(View):
-    breadcrumbs_resources: str = injectedattr(FakePydanticAdapter, 'name')
+    breadcrumbs_resources: str = injected(FakePydanticAdapter, attr='name')
     callable: FakePydanticCallableAdapter
-    injected_resource_title: str = injectedattr(Resource, 'title')
+    injected_resource_title: str = injected(Resource, attr='title')
 
     viewservice_config: ViewServiceConfig
     name: str = 'One Pydantic View'

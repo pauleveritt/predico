@@ -69,18 +69,18 @@ def injected(type_, **kwargs) -> Field:
             key=kwargs['key']
         )
         del kwargs['key']
+    elif 'call' in kwargs:
+        # We'll presume that it is call=True
+        kwargs['metadata']['injected'] = dict(
+            type_=type_,
+            call=kwargs['call']
+        )
+        del kwargs['call']
+    else:
+        # Default is to treat call=True if nothing else provided
+        kwargs['metadata']['injected'] = dict(
+            type_=type_,
+            call=True
+        )
 
     return field(**kwargs)
-
-
-"""
-    if 'metadata' not in args:
-        args['metadata'] = {}
-    args['metadata']['injectedattr'] = dict(
-        type_=type_,
-        attr=attr
-    )
-    return field(**args)
-
-
-"""

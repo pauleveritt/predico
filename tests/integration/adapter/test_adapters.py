@@ -164,9 +164,9 @@ def test_injectedattr_adapter_view(initialized_sm, test_resources,
 
     # View: Did the request get the correct one?
     view = request.view
-    assert 'TestInjectedattrResourceIdAdapterView' == view.__class__.__name__
+    assert 'TestInjectedResourceIdAdapterView' == view.__class__.__name__
     assert 99 == view.viewservice_config.flag
-    assert 'Use a ResourceId Injectedattr Adapter' == view.name
+    assert 'Use a ResourceId Injected Adapter' == view.name
 
     # Now the fun part...did we get the adapter
     bcr = view.breadcrumbs_resources

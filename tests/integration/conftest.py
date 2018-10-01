@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from predico.field_types import injectedattr
+from predico.field_types import injected
 from predico.servicemanager.manager import Services
 from predico.services.adapter.base_adapter import Adapter
 from predico.services.request.base_request import Request
@@ -114,11 +114,11 @@ class TestInjectedResourceIdAdapterView(View):
 
 # This view tries to get the attribute off an adapter
 @dataclass
-class TestInjectedattrResourceIdAdapterView(View):
+class TestInjectedResourceIdAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
-    adapter_flag: str = injectedattr(FakeBreadcrumbsResources, 'injected_flag')
-    name: str = 'Use a ResourceId Injectedattr Adapter'
+    adapter_flag: str = injected(FakeBreadcrumbsResources, attr='injected_flag')
+    name: str = 'Use a ResourceId Injected Adapter'
 
 
 @dataclass
@@ -127,6 +127,7 @@ class FakeResourceIdBreadcrumbsResourcesAdapter(Adapter):
     request: Request
     resource: Resource
     name: str = 'Fake ResourceId Breadcrumbs Resources'
+    injected_flag: int = 99
 
     @property
     def resource_title(self):
@@ -177,7 +178,7 @@ def registrations(test_registry):
                        resource=TestArticle
                        )(TestInjectedResourceIdAdapterView)
     test_registry.view(for_=IndexView, resourceid='pydantic/injectedattr',
-                       )(TestInjectedattrResourceIdAdapterView)
+                       )(TestInjectedResourceIdAdapterView)
 
     # Adapters
     test_registry.adapter(
