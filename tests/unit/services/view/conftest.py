@@ -105,13 +105,13 @@ def register_service(sm_registry):
 
 
 @dataclass
-class FakeForView1(View):
-    name: str = 'Fake For View'
+class FakeView(View):
+    name: str = 'Fake View'
 
 
 @pytest.fixture
 def fake_view(sm_registry):
-    sm_registry.view()(FakeForView1)
+    sm_registry.view()(FakeView)
 
 
 @dataclass

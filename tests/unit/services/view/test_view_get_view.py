@@ -15,7 +15,7 @@ def test_get_view_for(
     # - (a)
     fake_request = fake_request_class(resource=fake_resource1)
     result = viewservice.get_view(fake_request)
-    assert 'Fake For View' in result.name
+    assert 'Fake View' in result.name
 
 
 #  ---- resource: non-matching and matching
@@ -34,7 +34,7 @@ def test_get_view_nomatch_resource(
     # - (a)
     fake_request = fake_request_class(resource=fake_resource1)
     result = viewservice.get_view(fake_request)
-    assert 'Fake For View' in result.name
+    assert 'Fake View' in result.name
 
 
 def test_get_view_match_resource(
@@ -70,7 +70,7 @@ def test_get_view_nomatch_resourceid(
     # - (a)
     fake_request = fake_request_class(resource=fake_article1)
     result = viewservice.get_view(fake_request)
-    assert 'Fake For View' in result.name
+    assert 'Fake View' in result.name
 
 
 def test_get_view_match_resourceid(
@@ -106,7 +106,7 @@ def test_get_view_nomatch_parentid(
     # - (a)
     fake_request = fake_request_class(resource=fake_blog1)
     result = viewservice.get_view(fake_request)
-    assert 'Fake For View' in result.name
+    assert 'Fake View' in result.name
 
 
 def test_get_view_match_parentid(

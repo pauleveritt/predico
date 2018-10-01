@@ -1,3 +1,4 @@
+import dataclasses
 from dataclasses import dataclass
 from typing import Any, Type
 
@@ -53,3 +54,24 @@ class CommonRequest(Request):
         adapterservice: AdapterService = self.sm.services['adapter']
         adaptersgetter = AdaptersGetter(adapterservice, self)
         return adaptersgetter
+
+    def render(self) -> str:
+        """ Use the view and the render/template """
+
+        services = self.sm.services
+        viewservice: ViewService = services['view']
+
+        # Get the current view instance
+        viewinstance = viewservice.get_view(self)
+
+        # Get the view *action* to find out renderer/template information
+        viewaction = viewservice.get_viewaction(self)
+        nlp = viewaction.nonlookup_predicates
+        template_string_predicate = nlp.get('template_string', None)
+        if template_string_predicate:
+            template_string = template_string_predicate.value
+
+            # Render in the context of the view
+            context = dataclasses.asdict(viewinstance)
+            output = template_string.format(**context)
+            return output

@@ -3,6 +3,7 @@ from typing import Optional
 
 from predico import registry
 from predico.injector import inject
+from predico.predicate_action import PredicateAction
 from predico.registry import Registry
 from predico.servicemanager.base_service import BaseService
 from predico.servicemanager.manager import ServiceManager
@@ -36,6 +37,25 @@ class ViewService(BaseService):
                     request=request
                 )
                 return view_instance
+
+        # No matches, return None
+        return None
+
+    def get_viewaction(self, request) -> Optional[PredicateAction]:
+        """ Use the predicate registry to find the right view action """
+
+        # This is used for nonlookup predicates such as stuff related
+        # to rendering and templates. Need the registration information,
+        # not just the target.
+
+        # Grab ViewAction and use sorted_actions to find first match
+        sorted_actions = ViewAction.sorted_actions(self.registry)
+
+        # Find the first action which matches the args
+        for action, view_class in sorted_actions:
+            if action.all_predicates_match(request):
+                # Use dependency injection to return the view action
+                return action
 
         # No matches, return None
         return None

@@ -12,10 +12,14 @@ class Predicate:
     rank: int = 10
 
     def __str__(self):
-        value = getattr(self.value, '__name__', False)
-        if not value:
-            value = self.value  # Hope it's a string
-        return f'{self.key}-{value}'
+        if self.rank:
+            value = getattr(self.value, '__name__', False)
+            if not value:
+                value = self.value  # Hope it's a string
+            return f'{self.key}-{value}'
+        else:
+            # Not a lookup predicate, ignore value in str rep
+            return f'{self.key}'
 
     def matches(self, request: Request, **args) -> bool:
         raise NotImplementedError
@@ -72,6 +76,7 @@ class TemplateStringPredicate(Predicate):
 
     value: str
     key: str = 'template_string'
+    rank: Optional = None
 
     def matches(self, request: Request, **args) -> bool:
         raise NotImplementedError

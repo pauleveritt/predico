@@ -38,6 +38,11 @@ class FakeArticleView(View):
 
 
 @dataclass
+class FakeTemplateStringView(View):
+    name: str = 'Fake Template String View'
+
+
+@dataclass
 class FakeBreadcrumbsResources:
     """ Something we want as the result of adaptation """
 
@@ -124,6 +129,13 @@ def viewservice(services) -> ViewService:
 @pytest.fixture
 def fakearticle_view(sm_registry):
     sm_registry.view(resource=FakeArticle)(FakeArticleView)
+
+
+@pytest.fixture
+def fake_templatestring_view(sm_registry):
+    sm_registry.view(
+        resourceid='more/article1',
+        template_string='<p>View Name: {name}</p>')(FakeTemplateStringView)
 
 
 @pytest.fixture
