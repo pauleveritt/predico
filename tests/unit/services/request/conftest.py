@@ -135,7 +135,7 @@ def fakearticle_view(sm_registry):
 def fake_templatestring_view(sm_registry):
     sm_registry.view(
         resourceid='more/article1',
-        template_string='<p>View Name: {name}</p>')(FakeTemplateStringView)
+        template_string='<p>View Name: {v.name}</p>')(FakeTemplateStringView)
 
 
 @pytest.fixture

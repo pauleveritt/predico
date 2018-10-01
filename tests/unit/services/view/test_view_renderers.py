@@ -12,14 +12,14 @@ class FakeView:
 
 @pytest.fixture
 def string_format_renderer():
-    template_string = '<h1>Hello {name}</h1>'
+    template_string = '<h1>Hello {v.name}</h1>'
     view = FakeView()
     sfr = StringFormatRenderer(template_string=template_string, view=view)
     return sfr
 
 
 def test_construction(string_format_renderer):
-    assert '<h1>Hello {name}</h1>' == string_format_renderer.template_string
+    assert '<h1>Hello {v.name}</h1>' == string_format_renderer.template_string
 
 
 def test_render(string_format_renderer):

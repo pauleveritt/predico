@@ -16,6 +16,7 @@ class StringFormatRenderer(Adapter):
     template_string: str
 
     def __call__(self):
-        context = dataclasses.asdict(self.view)
-        output = self.template_string.format(**context)
+        """ The format strings get the view as ``v`` to allow
+         properties and methods. """
+        output = self.template_string.format(v=self.view)
         return output
