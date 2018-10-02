@@ -4,15 +4,14 @@ from predico import registry
 from predico.field_types import injected
 from predico.sample import servicemanager, setup, Article
 from predico.services.resource.base_resource import Resource
-from predico.services.view.base_view import View
 
 
 @registry.view(
     resource=Article,
-    template_string='<h1>{name}: {resource_title}</h1>'
+    template_string='<h1>{v.name}: {v.resource_title}</h1>'
 )
 @dataclass
-class ArticleView(View):
+class ArticleView:
     resource_title: str = injected(Resource, attr='title')
     name: str = 'Article View'
 

@@ -3,15 +3,14 @@ from dataclasses import dataclass
 from predico import registry
 from predico.sample import servicemanager, setup, Article
 from predico.services.resource.base_resource import Resource
-from predico.services.view.base_view import View
 
 
 @registry.view(
     resource=Article,
-    template_string='<h1>{name}: {resource.title}</h1>'
+    template_string='<h1>{v.name}: {v.resource.title}</h1>'
 )
 @dataclass
-class ArticleView(View):
+class ArticleView:
     resource: Resource
     name: str = 'Article View'
 

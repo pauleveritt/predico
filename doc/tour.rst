@@ -49,7 +49,7 @@ The sample application has some resource types (Article, Section) and
 one generic view for all resource types.
 
 We previously saw the rendered view for ``more/index``, which the sample
-application creates as a *Section*resource. Let's register a custom view,
+application creates as a *Section* resource. Let's register a custom view,
 just for Article, and check the output:
 
 .. literalinclude:: ../predico/sample/tour/first_customization.py
@@ -80,6 +80,7 @@ class is ``Article``, this view is used.
 
 That is the first big idea about Predico. Let's see another example of
 predicate matching.
+
 
 Specific Article
 ================
@@ -180,4 +181,79 @@ current resource.
 
 .. literalinclude:: ../predico/sample/tour/breadcrumbs.py
 
-- resources off the request
+It's a little busier, but it's doing a lot. The view now has its own
+logic in the ``breadcrumbs`` property. It walks up the parents to the
+root, collecting resources via their ``id``. The visual representation is in
+the ``breadcrumb_titles`` property, used in the template string.
+
+But this is bringing a lot into the view. We'd prefer to have lots of little,
+reusable pieces. Let's move ``breadcrumbs`` to an "adapter", then show a
+follow-on that explains the big idea on breadcrumbs.
+
+First Adapter
+=============
+
+We can make our view dumber by make a *adapter* which collects the data for
+the breadcrumbs on a particular resource.
+
+.. literalinclude:: ../predico/sample/tour/first_adapter.py
+
+We start by defining a "kind of thing" called Breadcrumbs that we want
+to work with. Views can then say: "Give me a Breadcrumbs instance" and
+Predico will go off and find the best fit.
+
+In this case we've just registered one *adapter* that can make a Breadcrumbs.
+All the logic about what is needed for Breadcrumbs is moved off of the view,
+onto this class. Like views, adapters participate in DI and can ask the system
+to hand them stuff.
+
+This is important. It decouples the caller (the view) from the callee (the
+adapter.) If you have lots of potential callers -- a system, an
+application built on the system, a theme, some components, some views -- it
+will be hard to keep them all coordinated on what to pass into Breadcrumbs.
+
+The ``BreadcrumbsAdapter`` class defines a ``__call__`` which does its work.
+
+Then, the view can simply say ``breadcrumbs: Breadcrumbs`` and the system
+will (a) find the best class, (b) use DI to instantiate it, and (c) use DI
+again to add it to the constructor for the view.
+
+Pretty sweet. But what if we we say Section resources shouldn't have
+breadcrumbs? Or this particular artical at this ID should have a prefix put
+on the last title?
+
+Adapters are part of predicates. So let's make a more specific adapter.
+
+Specific Adapter
+================
+
+Let's make a policy that Section resources don't show the root home page
+in the list of breadcrumbs. We'll make a ``SectionBreadcrumbsAdapter``.
+
+.. literalinclude:: ../predico/sample/tour/specific_adapter.py
+
+When we change the ``resourceid`` at the bottom to render a Section
+resource instead of some other resource type, we see the new behavior.
+``Home Page`` isn't listed in the breadcrumbs.
+
+(Future) Components
+===================
+
+The last syllable of Predico is missing. As explained in
+:doc:`../using/index`, the work on components isn't finished. But
+briefly:
+
+- Components are like in React (or even moreso, Angular): standalone
+  units of data, templating, and rendering
+
+- They manifest themselves as Jinja2 extensions, so the components
+  you write an be used in your Jinja2 view templates
+
+- For example ``{% Breadcrumbs %}`` would map to a dataclass registered
+  to a component
+
+- The Breadcrumbs component can use passed in props for its data, e.g.
+  ``{% Breadcrumbs root=True, resources=resources %}``
+
+- But the component can also use DI to get data such as resources, without
+  the caller needing to pass it in

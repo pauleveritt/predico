@@ -17,7 +17,6 @@ from predico.services.request.config import RequestServiceConfig
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.config import ResourceServiceConfig
 from predico.services.resource.service import ResourceService
-from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -40,9 +39,9 @@ class Section(SampleResource):
     rtype: str = 'section'
 
 
-@registry.view(template_string='<h1>{name}: {resource_title}</h1>')
+@registry.view(template_string='<h1>{v.name}: {v.resource_title}</h1>')
 @dataclass
-class ResourceView(View):
+class ResourceView:
     resource_title: str = injected(Resource, attr='title')
     name: str = 'Resource View'
 
@@ -64,7 +63,7 @@ def setup():
     rs: ResourceService = servicemanager.services['resource']
     rs.add_resource(rtype='section', id='index', title='Home Page')
     rs.add_resource(rtype='section', id='more/index',
-                    title='More Section', parentid='more/index')
+                    title='More Section', parentid='index')
     rs.add_resource(rtype='article', id='more/contact',
                     title='Contact', parentid='more/index')
     rs.add_resource(rtype='article', id='more/specificid',

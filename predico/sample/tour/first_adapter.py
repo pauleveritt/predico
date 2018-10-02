@@ -8,25 +8,17 @@ from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 
 
-@registry.view(
-    resource=Article,
-    template_string='''\
-<span>{v.breadcrumb_titles}</span>
-<h1>{v.name}: {v.resource_title}</h1>'''
-)
+class Breadcrumbs:
+    pass
+
+
+@registry.adapter(for_=Breadcrumbs)
 @dataclass
-class ArticleView:
+class BreadcrumbsAdapter:
     resources: Dict[str, SampleResource] = injected(Request, attr='resources')
     resourceid: str = injected(Resource, attr='id')
-    resource_title: str = injected(Resource, attr='title')
-    name: str = 'Article View'
 
-    @property
-    def breadcrumb_titles(self):
-        return ' >> '.join([r.title for r in self.breadcrumbs])
-
-    @property
-    def breadcrumbs(self) -> List[SampleResource]:
+    def __call__(self) -> List[SampleResource]:
         resources = []
         targetid = self.resourceid
         while targetid is not None:
@@ -35,6 +27,23 @@ class ArticleView:
             targetid = resource.parentid
 
         return resources
+
+
+@registry.view(
+    resource=Article,
+    template_string='''\
+<span>{v.breadcrumb_titles}</span>
+<h1>{v.name}: {v.resource_title}</h1>'''
+)
+@dataclass
+class ArticleView:
+    breadcrumbs: Breadcrumbs
+    resource_title: str = injected(Resource, attr='title')
+    name: str = 'Article View'
+
+    @property
+    def breadcrumb_titles(self):
+        return ' >> '.join([r.title for r in self.breadcrumbs])
 
 
 if __name__ == '__main__':
