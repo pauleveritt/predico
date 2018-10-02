@@ -5,11 +5,13 @@ request service.
 
 """
 
-from pydantic import BaseModel
+import pydantic
 
 from predico.services.request.base_request import Request
 from predico.services.request.common_request import CommonRequest
 
 
-class RequestServiceConfig(BaseModel):
+@pydantic.dataclasses.dataclass
+class RequestServiceConfig:
+    flag: int
     factory: Request = CommonRequest
