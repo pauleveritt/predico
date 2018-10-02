@@ -2,6 +2,12 @@
 News
 ====
 
+- Allow ``make_request`` to pass in props from the outside, e.g.
+  Sphinx pagename, body, prev, next from the page context
+
+- Forgot to hook up requestservice.config.factory to actually be used in
+  ``make_request``
+
 - Initial implementation of rendering. Add an option to the ``view``
   decorator that allows providing some rendering information via an
   adapter. Then add ``request.render`` to make it transparent.

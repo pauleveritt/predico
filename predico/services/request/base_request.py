@@ -9,4 +9,10 @@ in this role.
 
 
 class Request:
-    pass
+    @classmethod
+    def validate(cls, v):
+        return v
+
+    @classmethod
+    def get_validators(cls):
+        yield cls.validate
