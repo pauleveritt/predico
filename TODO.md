@@ -36,6 +36,11 @@
 
 - Look for TODO and fix
 
+- Mimic Pyramid request methods by allowing adapters to say if they want 
+  to hang off the request at some well-known-name. Then add a 
+  Request.__getattr__ which looked for the well-known things (view, resource, 
+  etc.) then if no match, try to make an adapter
+
 - Configurable development-only pydantic validation
 
     - Look for the knob

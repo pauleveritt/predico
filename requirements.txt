@@ -6,3 +6,4 @@ dectate
 coverage
 sphinx
 mypy
+sphinx_rtd_theme
