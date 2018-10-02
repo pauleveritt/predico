@@ -8,8 +8,9 @@ from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 
 
+@dataclass
 class Breadcrumbs:
-    pass
+    resources: List[SampleResource]
 
 
 @registry.adapter(for_=Breadcrumbs)
@@ -18,7 +19,7 @@ class BreadcrumbsAdapter:
     resources: Dict[str, SampleResource] = injected(Request, attr='resources')
     resourceid: str = injected(Resource, attr='id')
 
-    def __call__(self) -> List[SampleResource]:
+    def __call__(self):
         resources = []
         targetid = self.resourceid
         while targetid is not None:
@@ -26,7 +27,7 @@ class BreadcrumbsAdapter:
             resources.insert(0, resource)
             targetid = resource.parentid
 
-        return resources
+        return Breadcrumbs(resources=resources)
 
 
 @registry.view(
@@ -43,7 +44,7 @@ class ArticleView:
 
     @property
     def breadcrumb_titles(self):
-        return ' >> '.join([r.title for r in self.breadcrumbs])
+        return ' >> '.join([r.title for r in self.breadcrumbs.resources])
 
 
 if __name__ == '__main__':

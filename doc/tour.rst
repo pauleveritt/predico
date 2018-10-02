@@ -200,7 +200,8 @@ the breadcrumbs on a particular resource.
 
 We start by defining a "kind of thing" called Breadcrumbs that we want
 to work with. Views can then say: "Give me a Breadcrumbs instance" and
-Predico will go off and find the best fit.
+Predico will go off and find the best fit. We use a dataclass for the
+Breadcrumbs.
 
 In this case we've just registered one *adapter* that can make a Breadcrumbs.
 All the logic about what is needed for Breadcrumbs is moved off of the view,
@@ -215,8 +216,9 @@ will be hard to keep them all coordinated on what to pass into Breadcrumbs.
 The ``BreadcrumbsAdapter`` class defines a ``__call__`` which does its work.
 
 Then, the view can simply say ``breadcrumbs: Breadcrumbs`` and the system
-will (a) find the best class, (b) use DI to instantiate it, and (c) use DI
-again to add it to the constructor for the view.
+will (a) find the best adapter, (b) use DI to instantiate it, (c) use DI
+again to add it to the constructor for the view, and (d) return something
+that conforms to spec *we* manage (the ``Breadcrumbs`` dataclass.)
 
 Pretty sweet. But what if we we say Section resources shouldn't have
 breadcrumbs? Or this particular artical at this ID should have a prefix put

@@ -28,31 +28,11 @@ Predico is built atop Martijn Faassen's
 `Dectate <http://dectate.readthedocs.io>`_, a config-oriented registry
 system.
 
-Scenario
-========
-
-Imagine we're building a big system atop Sphinx. This system imagines:
-
-- Sphinx itself as the base driving everything
-
-- A ready-to-go "app"
-
-- Multiple themes that can easily and reliably be plugged in
-
-- Components to add things like a sidebar panel
-
-- Customizers at a particular installation who integrate various pieces and
-  want to make targeted changes
-
-All these actors are at arm's length from each other, but their stuff needs
-to work together.
-
-With Predico, the big picture is decomposed into lots of small surface areas
-that can be augmented or replaced in rich, reliable ways.
 
 .. toctree::
     :maxdepth: 2
 
+    scenario
     tour
     features
     using/index
