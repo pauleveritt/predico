@@ -1,14 +1,23 @@
 # Now
 
+- Example app
+
+- Docs
+
 # Next
+
+- Formalize the System/Request concepts
+
+    - System represents Sphinx, is instantiated once during the lifetime 
+      of the process, an adapter provides SphinxSystem to 
+      implement/extend the contract
+      
+    - Request is created/destroyed on every request, SphinxRequest adapter to 
+      implement/extend etc.  
 
 - Renderer
 
 # Soon
-
-- Docs
-
-- Example app
 
 - Publish
 
@@ -19,8 +28,6 @@
 - Is-a predicate matching based on isinstance with priority given to 
   most-specific class
 
-- Allow `for_` to default to some stated default (`IndexView`)
-
 - Have the base class just be like a marker interface (e.g. Request) 
   and have a default=True registration that can be overridden by a 
   customization
@@ -28,6 +35,11 @@
 - Schema service
 
 - Look for TODO and fix
+
+- Mimic Pyramid request methods by allowing adapters to say if they want 
+  to hang off the request at some well-known-name. Then add a 
+  Request.__getattr__ which looked for the well-known things (view, resource, 
+  etc.) then if no match, try to make an adapter
 
 - Configurable development-only pydantic validation
 

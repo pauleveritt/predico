@@ -9,7 +9,7 @@ from predico.servicemanager.manager import ServiceManager
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import View
 from predico.services.view.service import ViewService
 
 
@@ -105,57 +105,53 @@ def register_service(sm_registry):
 
 
 @dataclass
-class FakeForView1:
-    name: str = 'Fake For View'
+class FakeView(View):
+    name: str = 'Fake View'
 
 
 @pytest.fixture
-def fakefor_view(sm_registry):
-    sm_registry.view(for_=IndexView)(FakeForView1)
+def fake_view(sm_registry):
+    sm_registry.view()(FakeView)
 
 
 @dataclass
-class FakeResourceView:
+class FakeResourceView(View):
     name: str = 'Fake Resource View'
 
 
 @pytest.fixture
 def fakeresource_view(sm_registry):
-    sm_registry.view(for_=IndexView, resource=FakeResource)(
-        FakeResourceView)
+    sm_registry.view(resource=FakeResource)(FakeResourceView)
 
 
 @dataclass
-class FakeArticleView:
+class FakeArticleView(View):
     name: str = 'Fake Article View'
 
 
 @pytest.fixture
 def fakearticle_view(sm_registry):
-    sm_registry.view(for_=IndexView, resource=FakeArticle)(
-        FakeArticleView)
+    sm_registry.view(resource=FakeArticle)(FakeArticleView)
 
 
 @dataclass
-class FakeResourceIdView:
+class FakeResourceIdView(View):
     name: str = 'Fake ResourceId View'
 
 
 @pytest.fixture
 def fakeresourceid_view(sm_registry):
-    sm_registry.view(for_=IndexView, resourceid='more/article2')(
-        FakeResourceIdView)
+    sm_registry.view(resourceid='more/article2')(FakeResourceIdView)
 
 
 @dataclass
-class FakeParentIdView:
+class FakeParentIdView(View):
     name: str = 'Fake ParentId View'
 
 
 @pytest.fixture
 def fakeparentid_view(sm_registry):
-    sm_registry.view(for_=IndexView, parentid='more/index')(
-        FakeParentIdView)
+    sm_registry.view(parentid='more/index')(FakeParentIdView)
 
 
 @pytest.fixture

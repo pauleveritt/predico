@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Type, Any
+from typing import Type, Any, Optional
 
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
@@ -64,3 +64,32 @@ class ParentIdPredicate(Predicate):
 
     def matches(self, request: Request, **args) -> bool:
         return self.value in request.resource.parentids
+
+
+@dataclass
+class TemplateStringPredicate(Predicate):
+    """ Non-matching predicate to provide rendering info """
+
+    value: str
+    key: str = 'template_string'
+
+    def __str__(self):
+        return f'{self.key}'
+
+    def matches(self, request: Request, **args) -> bool:
+        raise NotImplementedError
+
+
+@dataclass
+class RendererPredicate(Predicate):
+    """ Non-matching predicate for the renderer adapter """
+
+    value: Type[Any]
+    key: str = 'renderer'
+
+    def __str__(self):
+        return f'{self.key}'
+
+    def matches(self, request: Request, **args) -> bool:
+        raise NotImplementedError
+

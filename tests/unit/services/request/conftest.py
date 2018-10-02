@@ -7,6 +7,7 @@ import pytest
 from predico.servicemanager.action import ServiceAction
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.action import AdapterAction
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.adapter.service import AdapterService
 from predico.services.request.action import RequestAction
 from predico.services.request.service import RequestService
@@ -14,7 +15,7 @@ from predico.services.resource.action import ResourceAction
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
 from predico.services.view.action import ViewAction
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import View
 from predico.services.view.service import ViewService
 
 
@@ -32,14 +33,29 @@ def fake_article1():
 
 
 @dataclass
-class FakeArticleView:
+class FakeArticleView(View):
     name: str = 'Fake Article View'
 
 
 @dataclass
+class FakeTemplateStringView(View):
+    name: str = 'Fake Template String View'
+
+
+@dataclass
 class FakeBreadcrumbsResources:
+    """ Something we want as the result of adaptation """
+
+    pass
+
+
+@dataclass
+class FakeBreadcrumbsResourcesAdapter(Adapter):
     resource: Resource
     name: str = 'Fake Breadcrumbs Resources'
+
+    def __call__(self):
+        return self
 
 
 @pytest.fixture
@@ -48,7 +64,7 @@ def fake_breadcrumbs_resources():
 
 
 @dataclass
-class FakeArticleAdapter:
+class FakeArticleAdapter(Adapter):
     name: str = 'Fake Article Adapter'
 
 
@@ -112,11 +128,18 @@ def viewservice(services) -> ViewService:
 
 @pytest.fixture
 def fakearticle_view(sm_registry):
-    sm_registry.view(for_=IndexView, resource=FakeArticle)(
-        FakeArticleView)
+    sm_registry.view(resource=FakeArticle)(FakeArticleView)
+
+
+@pytest.fixture
+def fake_templatestring_view(sm_registry):
+    sm_registry.view(
+        resourceid='more/article1',
+        template_string='<p>View Name: {v.name}</p>')(FakeTemplateStringView)
 
 
 @pytest.fixture
 def fakearticle_adapter(sm_registry):
-    sm_registry.adapter(for_=FakeBreadcrumbsResources,
-                        resource=FakeArticle)(FakeBreadcrumbsResources)
+    sm_registry.adapter(
+        for_=FakeBreadcrumbsResources,
+        resource=FakeArticle)(FakeBreadcrumbsResourcesAdapter)

@@ -6,11 +6,11 @@ from predico.predicates import (
     ResourceIdPredicate,
     ParentIdPredicate
 )
-from predico.services.adapter.base_adapter import BaseAdapter
+from predico.services.adapter.base_adapter import Adapter
 
 
 class AdapterForPredicate(ForPredicate):
-    value: Type[BaseAdapter]
+    value: Type[Adapter]
 
 
 class AdapterAction(PredicateAction):

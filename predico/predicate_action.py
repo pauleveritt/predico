@@ -77,12 +77,15 @@ class PredicateAction(dectate.Action):
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.predicates = {}
+        self.nonlookup_predicates = {}
 
         # Fail if we are supplied a predicate that we don't define
+        nonlookup_predicates = getattr(self, 'NONLOOKUP_PREDICATES', [])
         defined_predicate_keys = [
             predicate.key
             for predicate in
-            self.OPTIONAL_PREDICATES + self.REQUIRED_PREDICATES
+            self.OPTIONAL_PREDICATES + self.REQUIRED_PREDICATES +
+            tuple(nonlookup_predicates)
         ]
         for argument_name in kwargs.keys():
             if argument_name not in defined_predicate_keys:
@@ -102,6 +105,15 @@ class PredicateAction(dectate.Action):
             if key in kwargs:
                 predicate = predicate_choice(value=kwargs[key])
                 self.predicates[key] = predicate
+
+        # If this action has nonlookup predicates, e.g. views have
+        # template_string etc., record them
+        if nonlookup_predicates:
+            for predicate_choice in nonlookup_predicates:
+                key = predicate_choice.key
+                if key in kwargs:
+                    predicate = predicate_choice(value=kwargs[key])
+                    self.nonlookup_predicates[key] = predicate
 
         predicate_values = self.predicates.values()
         self.name = '--'.join(
@@ -126,9 +138,6 @@ class PredicateAction(dectate.Action):
     def sorted_actions(cls,
                        registry: dectate.App
                        ) -> Sequence[dectate.Action]:
-        # TODO Move this to BaseService constructor to avoid calculating
-        # up each time. Then refactor ViewService etc. tests to not
-        # need a registry by mocking sorted_actions.
         q = dectate.Query(cls.action_name)
         actions = list(q(registry))
         sorted_actions = sorted(actions, reverse=True,

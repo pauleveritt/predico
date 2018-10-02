@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Type, Any, Optional
 
 from predico import registry
 from predico.injector import inject
@@ -6,7 +7,7 @@ from predico.registry import Registry
 from predico.servicemanager.base_service import BaseService
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.action import AdapterAction
-from predico.services.adapter.base_adapter import BaseAdapter
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.adapter.config import AdapterServiceConfig
 
 
@@ -17,7 +18,7 @@ class AdapterService(BaseService):
     registry: Registry
     config: AdapterServiceConfig
 
-    def get_adapter(self, request, for_: BaseAdapter):
+    def get_adapter(self, request, for_: Type[Any]) -> Optional[Adapter]:
         """ Use the predicate registry to find the right adapter class """
 
         # Grab AdapterAction and use sorted_actions to find first match

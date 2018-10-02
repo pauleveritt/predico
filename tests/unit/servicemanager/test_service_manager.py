@@ -1,5 +1,7 @@
 import pytest
 
+from predico.services.request.common_request import CommonRequest
+
 
 def test_unintialized(uninitialized_sm):
     assert True is uninitialized_sm.config.debug
@@ -25,7 +27,7 @@ def test_valid_injected(initialized_sm):
     # Test the request service
     requestservice = services['request']
     requestservice_config = sm_config.serviceconfigs['requestservice']
-    assert requestservice_config.flag == requestservice.config.flag
+    assert CommonRequest == requestservice.config.factory
 
 
 def test_valid_injectedattr(initialized_sm):
@@ -34,6 +36,16 @@ def test_valid_injectedattr(initialized_sm):
     view = services['view']
     viewservice_config = sm_config.serviceconfigs['viewservice']
     assert viewservice_config == view.config
+
+
+def test_add_good_injectable(initialized_sm):
+    class ValidInjectable:
+        pass
+
+    vi = ValidInjectable()
+    assert ValidInjectable.__name__ not in initialized_sm.injectables
+    initialized_sm.add_injectable(vi)
+    assert ValidInjectable.__name__ in initialized_sm.injectables
 
 
 def test_invalid_injectable(invalid_injectable_type, uninitialized_sm):

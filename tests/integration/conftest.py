@@ -2,12 +2,13 @@ from dataclasses import dataclass
 
 import pytest
 
-from predico.field_types import injectedattr
+from predico.field_types import injected
 from predico.servicemanager.manager import Services
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.request.base_request import Request
 from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -36,34 +37,39 @@ class TestSection(Resource):
 # ---------------  Views
 
 @dataclass
-class TestResourceView:
+class TestResourceView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'Generic Resource View'
 
 
 @dataclass
-class TestSectionView:
+class TestSectionView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'Section View'
 
 
 @dataclass
-class TestResourceIdView:
+class TestResourceIdView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'One Specific Resource ID'
 
 
 @dataclass
-class TestParentIdView:
+class TestParentIdView(View):
     viewservice_config: ViewServiceConfig
     name: str = 'One Specific Parent ID'
 
 
 # ---------------  Adapters
 
-
 @dataclass
 class FakeBreadcrumbsResources:
+    """ The target result of an adapter """
+    pass
+
+
+@dataclass
+class FakeBreadcrumbsResourcesAdapter(Adapter):
     # Adapter: Should wind up on TestInjectedDefaultAdapterView
     request: Request
     resource: Resource
@@ -79,14 +85,14 @@ class FakeBreadcrumbsResources:
 # adapter class name defined first. This first view winds up getting
 # the more-general adapter FakeBreadcrumbsResources.
 @dataclass
-class TestInjectedDefaultAdapterView:
+class TestInjectedDefaultAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
     name: str = 'Use a Default Injected Adapter'
 
 
 @dataclass
-class FakeArticleBreadcrumbsResources:
+class FakeArticleBreadcrumbsResourcesAdapter(Adapter):
     # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
     request: Request
     resource: Resource
@@ -100,7 +106,7 @@ class FakeArticleBreadcrumbsResources:
 # This view gets the more-specific injected adapter
 # FakeArticleBreadcrumbsResources.
 @dataclass
-class TestInjectedResourceIdAdapterView:
+class TestInjectedResourceIdAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
     name: str = 'Use a ResourceId Injected Adapter'
@@ -108,19 +114,20 @@ class TestInjectedResourceIdAdapterView:
 
 # This view tries to get the attribute off an adapter
 @dataclass
-class TestInjectedattrResourceIdAdapterView:
+class TestInjectedResourceIdAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
-    adapter_flag: str = injectedattr(FakeBreadcrumbsResources, 'injected_flag')
-    name: str = 'Use a ResourceId Injectedattr Adapter'
+    adapter_flag: str = injected(FakeBreadcrumbsResources, attr='injected_flag')
+    name: str = 'Use a ResourceId Injected Adapter'
 
 
 @dataclass
-class FakeResourceIdBreadcrumbsResources:
+class FakeResourceIdBreadcrumbsResourcesAdapter(Adapter):
     # ADAPTER: Should wind up on TestInjectedResourceIdAdapterView
     request: Request
     resource: Resource
     name: str = 'Fake ResourceId Breadcrumbs Resources'
+    injected_flag: int = 99
 
     @property
     def resource_title(self):
@@ -128,7 +135,7 @@ class FakeResourceIdBreadcrumbsResources:
 
 
 @dataclass
-class FakeParentIdBreadcrumbsResources:
+class FakeParentIdBreadcrumbsResourcesAdapter(Adapter):
     request: Request
     resource: Resource
     name: str = 'Fake ParentId Breadcrumbs Resources'
@@ -155,40 +162,40 @@ def registrations(test_registry):
     test_registry.resource('testsection')(TestSection)
 
     # Views
-    test_registry.view(for_=IndexView)(TestResourceView)
-    test_registry.view(for_=IndexView, resource=TestArticle)(
+    test_registry.view()(TestResourceView)
+    test_registry.view(resource=TestArticle)(
         TestSectionView)
-    test_registry.view(for_=IndexView, resourceid='more/specificid')(
+    test_registry.view(resourceid='more/specificid')(
         TestResourceIdView)
-    test_registry.view(for_=IndexView, parentid='more/index',
+    test_registry.view(parentid='more/index',
                        resource=TestArticle
                        )(TestParentIdView)
     # Adapter-related views
-    test_registry.view(for_=IndexView, resourceid='injected/defaultadapter',
+    test_registry.view(resourceid='injected/defaultadapter',
                        resource=TestArticle
                        )(TestInjectedDefaultAdapterView)
-    test_registry.view(for_=IndexView, resourceid='injected/resourceidadapter',
+    test_registry.view(resourceid='injected/resourceidadapter',
                        resource=TestArticle
                        )(TestInjectedResourceIdAdapterView)
-    test_registry.view(for_=IndexView, resourceid='pydantic/injectedattr',
-                       )(TestInjectedattrResourceIdAdapterView)
+    test_registry.view(resourceid='pydantic/injectedattr',
+                       )(TestInjectedResourceIdAdapterView)
 
     # Adapters
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
-    )(FakeBreadcrumbsResources)
+    )(FakeBreadcrumbsResourcesAdapter)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
         resource=TestArticle
-    )(FakeArticleBreadcrumbsResources)
+    )(FakeArticleBreadcrumbsResourcesAdapter)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
         resourceid='injected/resourceidadapter'
-    )(FakeResourceIdBreadcrumbsResources)
+    )(FakeResourceIdBreadcrumbsResourcesAdapter)
     test_registry.adapter(
         for_=FakeBreadcrumbsResources,
         parentid='pydantic/index'
-    )(FakeParentIdBreadcrumbsResources)
+    )(FakeParentIdBreadcrumbsResourcesAdapter)
 
 
 @pytest.fixture

@@ -1,9 +1,10 @@
 import pydantic
 import pytest
 
-from predico.field_types import injectedattr
+from predico.field_types import injected
+from predico.services.adapter.base_adapter import Adapter
 from predico.services.resource.base_resource import Resource
-from predico.services.view.base_view import IndexView
+from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
 
 
@@ -28,12 +29,12 @@ class TestPydanticSection(Resource):
 
 
 @pydantic.dataclasses.dataclass
-class FakePydanticAdapter:
+class FakePydanticAdapter(Adapter):
     name: str = 'Fake Pydantic Adapter'
 
 
 @pydantic.dataclasses.dataclass
-class FakePydanticCallableAdapter:
+class FakePydanticCallableAdapter(Adapter):
     name: str = 'Fake Pydantic Adapter'
 
     def __call__(self):
@@ -49,10 +50,10 @@ class FakePydanticCallableAdapter:
 
 
 @pydantic.dataclasses.dataclass
-class TestPydanticView:
-    breadcrumbs_resources: str = injectedattr(FakePydanticAdapter, 'name')
+class TestPydanticView(View):
+    breadcrumbs_resources: str = injected(FakePydanticAdapter, attr='name')
     callable: FakePydanticCallableAdapter
-    injected_resource_title: str = injectedattr(Resource, 'title')
+    injected_resource_title: str = injected(Resource, attr='title')
 
     viewservice_config: ViewServiceConfig
     name: str = 'One Pydantic View'
@@ -65,8 +66,7 @@ def registrations(test_registry):
     test_registry.resource('testsection')(TestPydanticSection)
 
     # Views
-    test_registry.view(for_=IndexView, resourceid='pydantic/about')(
-        TestPydanticView)
+    test_registry.view(resourceid='pydantic/about')(TestPydanticView)
 
     # Adapters
     test_registry.adapter(

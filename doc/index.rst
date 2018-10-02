@@ -18,33 +18,24 @@ bring three major pieces together:
 - ``co`` means components, or small, reusable bits of
   presentation/logic/policy
 
-Scenario
-========
+.. note::
 
-Imagine we're building a big system atop Sphinx. This system imagines:
+    The "co" in Predico -- components -- isn't yet included. It
+    mostly works in a side project, but an edge case isn't yet
+    supported. It will be described here but clearly marked as "Future".
 
-- Sphinx itself as the base driving everything
+Predico is built atop Martijn Faassen's
+`Dectate <http://dectate.readthedocs.io>`_, a config-oriented registry
+system.
 
-- A ready-to-go "app"
-
-- Multiple themes that can easily and reliably be plugged in
-
-- Components to add things like a sidebar panel
-
-- Customizers at a particular installation who integrate various pieces and
-  want to make targeted changes
-
-All these actors are at arm's length from each other, but their stuff needs
-to work together.
-
-With Predico, the big picture is decomposed into lots of small surface areas
-that can be augmented or replaced in rich, reliable ways.
 
 .. toctree::
     :maxdepth: 2
 
+    scenario
+    tour
     features
-    using
+    using/index
     developing
     design
     news
