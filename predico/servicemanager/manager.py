@@ -57,8 +57,6 @@ class ServiceManager:
         # Stash ServiceManager stuff in injectables
         self.add_injectable(self.config)
         self.add_injectable(self)
-        # injectables[ServiceManagerConfig.__name__] = self.config,
-        # injectables[ServiceManager.__name__] = self
 
         # Make the Registry injectable using a well-known name
         injectables['Registry'] = self.registry
@@ -74,9 +72,6 @@ class ServiceManager:
         # Go through each service, initialize it, then
         # put an instance in the service manager
         for action, target in services:
-            # Place to build up the args passed into the dataclass
-            args = {}
-
             # Use injector to make our target class
             props = dict()
             service = inject(props, injectables, target)
@@ -87,6 +82,12 @@ class ServiceManager:
 
             # Add this service, and its config, as injectable
             self.add_injectable(service)
+
+        # TODO Should move more of this to a setup() function in each
+        # service, to let them provide injectables
+        if 'resource' in self.services:
+            resources = self.services['resource'].resources
+            self.add_injectable(resources)
 
         # Now the adapters in services['adapter']. Each adapter
         # can be dependency-injected...albeit carefully. Add the

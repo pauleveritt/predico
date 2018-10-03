@@ -1,8 +1,7 @@
 # Now
 
-- Example app
-
-- Docs
+- Resources as an injectable (and thus, a custom Resources class for 
+  the dict)
 
 # Next
 
@@ -52,4 +51,6 @@
 
 - Allow per-request injectables, to let parent components decorate for 
   their children, like context stuff in React
-  
+
+- Let each service configure the injectables via Service.post_initialize 
+  phase done after all the services are "registered"

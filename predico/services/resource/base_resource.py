@@ -16,3 +16,17 @@ class Resource:
     @classmethod
     def get_validators(cls):
         yield cls.validate
+
+
+class Resources(dict):
+    """
+
+    Custom dictionary container for storing resources.
+
+    This was first created because we needed a marker to make
+    Resources an injectable. Later we might do some things like
+    caching.
+
+    """
+
+    pass

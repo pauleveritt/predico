@@ -6,7 +6,7 @@ from predico.field_types import injected
 from predico.servicemanager.manager import Services
 from predico.services.adapter.base_adapter import Adapter
 from predico.services.request.base_request import Request
-from predico.services.resource.base_resource import Resource
+from predico.services.resource.base_resource import Resource, Resources
 from predico.services.resource.service import ResourceService
 from predico.services.view.base_view import View
 from predico.services.view.config import ViewServiceConfig
@@ -73,6 +73,7 @@ class FakeBreadcrumbsResourcesAdapter(Adapter):
     # Adapter: Should wind up on TestInjectedDefaultAdapterView
     request: Request
     resource: Resource
+    resources: Resources
     name: str = 'Fake Breadcrumbs Resources'
     injected_flag: str = 'Got the attr off injected adapter'
 
