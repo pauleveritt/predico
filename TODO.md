@@ -1,20 +1,14 @@
 # Now
 
-- Resources as an injectable (and thus, a custom Resources class for 
-  the dict)
 
 # Next
 
-- Formalize the System/Request concepts
-
-    - System represents Sphinx, is instantiated once during the lifetime 
-      of the process, an adapter provides SphinxSystem to 
-      implement/extend the contract
-      
-    - Request is created/destroyed on every request, SphinxRequest adapter to 
-      implement/extend etc.  
+- Sometimes __call__ would be nice to pass in arguments to an adapter, for 
+  example ``parent: Parents = injected(Parents, resourceid='some/other)``
 
 - Renderer
+
+
 
 # Soon
 
@@ -30,6 +24,9 @@
 - Have the base class just be like a marker interface (e.g. Request) 
   and have a default=True registration that can be overridden by a 
   customization
+  
+- Put in a guard that doesn't allow non-dataclasses to be registered 
+  as adapters, views (or perhaps, as anything)
   
 - Schema service
 

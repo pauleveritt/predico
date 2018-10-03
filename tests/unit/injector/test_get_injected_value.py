@@ -8,6 +8,8 @@ class NonCallableSource(dict):
 
 
 class CallableSource:
+    flag: int = 27
+
     def __call__(self):
         return 'Callable Source'
 
@@ -57,6 +59,15 @@ def test_get_injected_value_callable():
     source = CallableSource()
     value = get_injected_value(field_metadata, source)
     assert 'Callable Source' == value
+
+
+def test_get_injected_value_no_call():
+    """ Instruct a callable to not call via call=False """
+
+    field_metadata = dict(call=False)
+    source = CallableSource()
+    value = get_injected_value(field_metadata, source)
+    assert 27 == value.flag
 
 
 def test_get_injected_value_noncallable():
