@@ -50,9 +50,10 @@ def get_injected_value(field_metadata, source):
     # injected(Breadcrumbs) where Breadcrumbs.__call__ does not exist
 
     if 'attr' in field_metadata:
-        return getattr(source, field_metadata['attr'])
+        return getattr(source, field_metadata['attr'], None)
     elif 'key' in field_metadata:
-        return source[field_metadata['key']]
+        target_key = field_metadata['key']
+        return source[target_key]
     elif field_metadata['call'] is True:
         # field.metadata['injected'] should have one of attr, key, or
         # call. The first two aren't there, so call should be. See if
