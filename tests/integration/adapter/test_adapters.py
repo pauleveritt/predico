@@ -171,3 +171,27 @@ def test_injectedattr_adapter_view(initialized_sm, test_resources,
     # Now the fun part...did we get the adapter
     bcr = view.breadcrumbs_resources
     assert 'Pydantic Injectedattr Section' == bcr.resource_title
+
+
+def test_nocall_view(initialized_sm, test_resources,
+                     fake_breadcrumbs_resources):
+    """ Tell an adapter with a __call__ to not use it """
+
+    # Get the request service
+    services = initialized_sm.services
+    request_service: RequestService = services['request']
+
+    request = request_service.make_request(
+        resourceid='nocall/index')
+
+    # Request: Did the request get the correct one?
+    assert 'nocall/index' == request.resource.id
+
+    # View: Did the request get the correct one?
+    view = request.view
+    assert 'TestNocallAdapterView' in view.__class__.__name__
+    assert 'Use a Nocall Adapter View' == view.name
+
+    # Now the fun part...did we get the adapter
+    nocall_adapter = view.nocall
+    assert 'Fake Nocall Adapter Adapter' == nocall_adapter.name

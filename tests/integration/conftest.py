@@ -118,7 +118,8 @@ class TestInjectedResourceIdAdapterView(View):
 class TestInjectedResourceIdAdapterView(View):
     breadcrumbs_resources: FakeBreadcrumbsResources
     viewservice_config: ViewServiceConfig
-    adapter_flag: str = injected(FakeBreadcrumbsResources, attr='injected_flag')
+    adapter_flag: str = injected(FakeBreadcrumbsResources,
+                                 attr='injected_flag')
     name: str = 'Use a ResourceId Injected Adapter'
 
 
@@ -145,6 +146,26 @@ class FakeParentIdBreadcrumbsResourcesAdapter(Adapter):
     @property
     def resource_title(self):
         return self.resource.title
+
+
+# Test the call=False option for injected()
+class FakeNocallMarker:
+    """ A marker """
+    pass
+
+
+@dataclass
+class FakeNocallAdapter(Adapter):
+    # ADAPTER: Should wind up on TestNocallAdapterView
+    request: Request
+    resource: Resource
+    name: str = 'Fake Nocall Adapter Adapter'
+
+
+@dataclass
+class TestNocallAdapterView(View):
+    nocall: FakeNocallAdapter = injected(FakeNocallMarker, call=False)
+    name: str = 'Use a Nocall Adapter View'
 
 
 @pytest.fixture
@@ -180,6 +201,8 @@ def registrations(test_registry):
                        )(TestInjectedResourceIdAdapterView)
     test_registry.view(resourceid='pydantic/injectedattr',
                        )(TestInjectedResourceIdAdapterView)
+    test_registry.view(resourceid='nocall/index',
+                       )(TestNocallAdapterView)
 
     # Adapters
     test_registry.adapter(
@@ -197,6 +220,8 @@ def registrations(test_registry):
         for_=FakeBreadcrumbsResources,
         parentid='pydantic/index'
     )(FakeParentIdBreadcrumbsResourcesAdapter)
+    # The Nocall adapter
+    test_registry.adapter(for_=FakeNocallMarker)(FakeNocallAdapter)
 
 
 @pytest.fixture
@@ -243,3 +268,7 @@ def test_resources(rs):
     rs.add_resource(rtype='testsection', id='pydantic/injectedattr',
                     title='Pydantic Injectedattr Section',
                     parentid='pydantic/index')
+
+    rs.add_resource(rtype='testsection', id='nocall/index',
+                    title='Nocall Adapter',
+                    parentid='index')
