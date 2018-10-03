@@ -2,6 +2,10 @@
 News
 ====
 
+- Make ``Resources`` an injectable, pointed at
+  ``services['resources'].resources`` which is now an instance of
+  ``Resources(dict)``
+
 - Allow ``make_request`` to pass in props from the outside, e.g.
   Sphinx pagename, body, prev, next from the page context
 

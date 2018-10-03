@@ -5,7 +5,6 @@ from predico.registry import Registry
 from predico.servicemanager.base_service import BaseService
 from predico.servicemanager.manager import ServiceManager
 from predico.services.request.base_request import Request
-from predico.services.request.common_request import CommonRequest
 from predico.services.request.config import RequestServiceConfig
 
 

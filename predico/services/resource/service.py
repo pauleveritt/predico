@@ -11,7 +11,7 @@ from predico import registry
 from predico.registry import Registry
 from predico.servicemanager.base_service import BaseService
 from predico.servicemanager.manager import ServiceManager
-from predico.services.resource.base_resource import Resource
+from predico.services.resource.base_resource import Resource, Resources
 from predico.services.resource.config import ResourceServiceConfig
 
 
@@ -21,7 +21,7 @@ class ResourceService(BaseService):
     sm: ServiceManager
     registry: Registry
     config: ResourceServiceConfig
-    resources: Dict[str, Resource] = field(default_factory=dict)
+    resources: Resources = field(default_factory=Resources)
 
     def get_resourceclass(self, rtype: str):
         """ Given name a resource type was registered with, get class """
