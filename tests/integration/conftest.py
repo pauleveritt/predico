@@ -161,6 +161,9 @@ class FakeNocallAdapter(Adapter):
     resource: Resource
     name: str = 'Fake Nocall Adapter Adapter'
 
+    def __call__(self):
+        # Should not get here
+        raise ValueError('Should be call=False')
 
 @dataclass
 class TestNocallAdapterView(View):

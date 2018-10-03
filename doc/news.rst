@@ -2,6 +2,8 @@
 News
 ====
 
+- Fixed ``call=False``, the flag wasn't being looked at correctly.
+
 - Have the injector do ``field.metadata.get(attr, None)``
   instead of ``field.metadata[attr]`` to allow missing values
   to report back with None

@@ -25,14 +25,16 @@ class InvalidInjectable(Exception):
 
 
 def get_adapted_value(request: Request,
-                      field_type: Type[Any]) -> Optional[Type[Any]]:
+                      field_type: Type[Any],
+                      call_is_true: bool,
+                      ) -> Optional[Type[Any]]:
+
     if request and hasattr(request, 'adapters'):
         adapter_instance = request.adapters[field_type]
 
-        # If the adapter has a __call__, return its result instead
-        # of the adapter itself
-        __call__ = hasattr(adapter_instance, '__call__')
-        if __call__:
+        # If the adapter has a __call__ and call=True, return its result
+        # instead of the adapter itself
+        if call_is_true and hasattr(adapter_instance, '__call__'):
             return adapter_instance.__call__()
         else:
             return adapter_instance
@@ -95,6 +97,7 @@ def inject(
             injected = field.metadata['injected']
             injected_type = injected['type_']
             injected_name = injected_type.__name__
+            call_is_true = injected.get('call', True)
 
             # Let's get a source object for the injected_type. We'll first
             # try in the injectables and use that class. If not found there,
@@ -102,7 +105,8 @@ def inject(
             source = injectables.get(injected_name, None)
             if not source:
                 # Try to get from the adapter
-                source = get_adapted_value(request, injected_type)
+                source = get_adapted_value(request, injected_type,
+                                           call_is_true)
 
             if source:
                 value = get_injected_value(injected, source)
@@ -136,7 +140,8 @@ def inject(
                 args[field_name] = injectables[injected_name]
             else:
                 # Maybe it is in the adapters
-                adapted_value = get_adapted_value(request, field.type)
+                adapted_value = get_adapted_value(request, field.type,
+                                                  call_is_true=True)
                 if adapted_value:
                     args[field_name] = adapted_value
 
