@@ -2,6 +2,10 @@
 News
 ====
 
+- Have the injector do ``field.metadata.get(attr, None)``
+  instead of ``field.metadata[attr]`` to allow missing values
+  to report back with None
+
 - Make ``Resources`` an injectable, pointed at
   ``services['resources'].resources`` which is now an instance of
   ``Resources(dict)``
