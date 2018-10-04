@@ -1,30 +1,39 @@
 # Now
 
+- Can only adapt a resource via a request, need to get an adapter when 
+  iterating over a list of resources, but for each resource
 
 # Next
+
+- Allow per-request injectables, to let parent components decorate for 
+  their children, like context stuff in React
 
 - Sometimes __call__ would be nice to pass in arguments to an adapter, for 
   example ``parent: Parents = injected(Parents, resourceid='some/other)``
 
-- Renderer
+- One registration for multiple targets, either:
 
-
+    - resources=[Section, Sectionroot]
+    
+    - Stacked decorators
 
 # Soon
 
-- Publish
-
 - Bring in jinja2_component
 
+- Fix the Optional[Request] = None problem, where returning None from 
+  get_adapter_value or get_injected_value causes the target(**args) to 
+  not construct
+
 # Later
+
+- Jinja2 renderer2
+
+- Publish
 
 - Is-a predicate matching based on isinstance with priority given to 
   most-specific class
 
-- Have the base class just be like a marker interface (e.g. Request) 
-  and have a default=True registration that can be overridden by a 
-  customization
-  
 - Put in a guard that doesn't allow non-dataclasses to be registered 
   as adapters, views (or perhaps, as anything)
   
@@ -46,8 +55,8 @@
     - Do pydantic.etc.dataclass(TargetClass) without the decorator 
       to validate, then discard
 
-- Allow per-request injectables, to let parent components decorate for 
-  their children, like context stuff in React
-
 - Let each service configure the injectables via Service.post_initialize 
   phase done after all the services are "registered"
+
+- Two phases of dataclass fields, where the second phase can use information 
+  from the first phase

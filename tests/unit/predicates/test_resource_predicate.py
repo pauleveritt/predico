@@ -18,7 +18,19 @@ class FakeRequest:
 
 @pytest.fixture
 def test_resource():
-    resource = FakeResource(rtype='FakeResource', id='more/about')
+    resource = FakeResource(rtype='fakeresource', id='more/about')
+    return resource
+
+
+@dataclass
+class AnotherFakeResource(Resource):
+    pass
+
+
+@pytest.fixture
+def another_resource():
+    resource = AnotherFakeResource(rtype='anotherfakeresource',
+                                   id='more/about')
     return resource
 
 
@@ -35,9 +47,16 @@ def resource_predicate():
 
 
 @pytest.fixture
+def another_resource_predicate():
+    pp = ResourcePredicate(AnotherFakeResource)
+    return pp
+
+
+@pytest.fixture
 def notmatches_resource_predicate():
     class BadResource:
         pass
+
     pp = ResourcePredicate(BadResource)
     return pp
 
@@ -58,3 +77,21 @@ def test_matches(resource_predicate, test_request):
 
 def test_not_matches(notmatches_resource_predicate, test_request):
     assert not notmatches_resource_predicate.matches(test_request)
+
+
+def test_matches_args(another_resource_predicate, test_request,
+                      another_resource):
+    """ Do not use resource from the request and still match """
+    assert another_resource_predicate.matches(
+        test_request,
+        resource=another_resource,
+    )
+
+
+def test_not_matches_args(resource_predicate, test_request,
+                          another_resource):
+    """ Do not use resource from the request and no match """
+    assert not resource_predicate.matches(
+        test_request,
+        resource=another_resource,
+    )
