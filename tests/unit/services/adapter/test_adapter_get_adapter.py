@@ -213,3 +213,27 @@ def test_get_adapter_for_resource_parentid_match_resourceid(
     adapter = adapterservice.get_adapter(fake_request,
                                          for_=fake_breadcrumbs_resources)
     assert 'Fake ResourceId Adapter' == adapter.name
+
+
+#  ---- args: Use resource passed-in rather than request.resource
+
+def test_get_adapter_for_passed_in_resource(
+        fakefor_adapter, fakeresourceid_adapter,
+        adapterservice, fake_article1, fake_article2,
+        fake_breadcrumbs_resources,
+        fake_request_class
+):
+    # Registrations:
+    # a. for_=FakeBreadcrumbsResources
+    # b. for_=FakeBreadcrumbsResources, resourceid='more/article2'
+    # Request:
+    # - resource is 'more/article2'
+    # - passed-in- resource is 'more/article1'
+    # Expected:
+    # - (a)
+    fake_request = fake_request_class(resource=fake_article2)
+    adapter = adapterservice.get_adapter(fake_request,
+                                         for_=fake_breadcrumbs_resources,
+                                         resource=fake_article1,
+                                         )
+    assert 'Fake Breadcrumbs Resources' == adapter.name

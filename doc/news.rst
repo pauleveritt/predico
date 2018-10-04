@@ -2,6 +2,11 @@
 News
 ====
 
+- ``get_adapter`` only worked on the resource/resourceid/parentid of
+  ``request.resource``. Now allow ``adapter_service.get_adapter`` to
+  pass in ``resource=some_resource`` to override usage of
+  ``request.resource``
+
 - Fixed ``call=False``, the flag wasn't being looked at correctly.
 
 - Have the injector do ``field.metadata.get(attr, None)``

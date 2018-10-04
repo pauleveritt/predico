@@ -1,8 +1,5 @@
 # Now
 
-- Can only adapt a resource via a request, need to get an adapter when 
-  iterating over a list of resources, but for each resource
-
 # Next
 
 - Allow per-request injectables, to let parent components decorate for 
