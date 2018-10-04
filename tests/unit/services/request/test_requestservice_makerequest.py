@@ -33,3 +33,14 @@ def test_get_request_adapters(fakearticle_adapter, requestservice,
 
     adapter = request.adapters[fake_breadcrumbs_resources]
     assert 'Fake Breadcrumbs Resources' == adapter.name
+
+
+def test_adapt_resource(fakearticle_adapter, requestservice,
+                        resourceservice, fake_article1, fake_article2,
+                        fake_breadcrumbs_resources):
+    resourceservice.resources[fake_article1.id] = fake_article1
+    request = requestservice.make_request('more/article1')
+
+    adapter = request.adapt_resource(fake_breadcrumbs_resources, fake_article2)
+    assert 'Fake Breadcrumbs Resources' == adapter.name
+    assert 'more/article2' == adapter.resource.id

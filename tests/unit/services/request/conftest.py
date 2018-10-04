@@ -32,6 +32,12 @@ def fake_article1():
     return fa1
 
 
+@pytest.fixture
+def fake_article2():
+    fa2 = FakeArticle(id='more/article2', parentids=['more/index', 'index'])
+    return fa2
+
+
 @dataclass
 class FakeArticleView(View):
     name: str = 'Fake Article View'

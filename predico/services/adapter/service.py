@@ -34,7 +34,7 @@ class AdapterService(BaseService):
                 # Use dependency injection to make an instance of
                 # that adapter class
                 adapter_instance = inject(
-                    dict(),  # props
+                    kwargs,  # props
                     self.get_injectables(request),
                     adapter_class,
                     request=request
