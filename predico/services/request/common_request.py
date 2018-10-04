@@ -6,6 +6,7 @@ from predico.registry import Registry
 from predico.servicemanager.manager import ServiceManager
 from predico.services.adapter.service import AdapterService
 from predico.services.request.base_request import Request
+from predico.services.resource.base_resource import Resource
 from predico.services.resource.service import ResourceService
 from predico.services.view.renderers import StringFormatRenderer
 from predico.services.view.service import ViewService
@@ -64,6 +65,18 @@ class CommonRequest(Request):
         adapterservice: AdapterService = self.sm.services['adapter']
         adaptersgetter = AdaptersGetter(adapterservice, self)
         return adaptersgetter
+
+    def adapt_resource(self, for_: Type[Any], resource: Resource):
+        """ Instead of using request.resource implictly, use passed-in """
+
+        adapterservice: AdapterService = self.sm.services['adapter']
+
+        adapterinstance = adapterservice.get_adapter(
+            self,
+            for_=for_,
+            resource=resource
+        )
+        return adapterinstance
 
     def render(self) -> str:
         """ Use the view and the render/template """

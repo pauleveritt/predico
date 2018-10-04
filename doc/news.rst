@@ -4,7 +4,9 @@ News
 
 - New request.adapt_resource(SomeAdapter, some_resource) finds the right
   adapter for the passed in resource *and* makes that resource the one
-  used for DI on the returned adapter instance
+  used for DI on the returned adapter instance. Uses existing
+  ``props`` feature which has higher precedence than injectables or
+  adapters.
 
 - ``get_adapter`` only worked on the resource/resourceid/parentid of
   ``request.resource``. Now allow ``adapter_service.get_adapter`` to
