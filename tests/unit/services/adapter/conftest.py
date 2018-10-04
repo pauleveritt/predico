@@ -41,6 +41,12 @@ def fake_article1():
 
 @pytest.fixture
 def fake_article2():
+    fa1 = FakeArticle(id='more/article2', parentids=['more/index', 'index'])
+    return fa1
+
+
+@pytest.fixture
+def fake_article2():
     # Used for matching resourceid
     fa1 = FakeArticle(id='more/article2', parentids=['more/index', 'index'])
     return fa1

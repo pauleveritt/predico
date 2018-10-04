@@ -38,7 +38,8 @@ class ResourcePredicate(Predicate):
     key: str = 'resource'
 
     def matches(self, request: Request, **args) -> bool:
-        resource_class = request.resource.__class__
+        resource = args.get('resource', request.resource)
+        resource_class = resource.__class__
         return resource_class is self.value
 
 
@@ -51,7 +52,9 @@ class ResourceIdPredicate(Predicate):
     rank: int = 30
 
     def matches(self, request: Request, **args) -> bool:
-        return self.value == request.resource.id
+        resource = args.get('resource', request.resource)
+        resourceid = resource.id
+        return self.value == resourceid
 
 
 @dataclass
@@ -63,7 +66,8 @@ class ParentIdPredicate(Predicate):
     rank: int = 20
 
     def matches(self, request: Request, **args) -> bool:
-        return self.value in request.resource.parentids
+        resource = args.get('resource', request.resource)
+        return self.value in resource.parentids
 
 
 @dataclass

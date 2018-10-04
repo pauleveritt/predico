@@ -18,7 +18,11 @@ class AdapterService(BaseService):
     registry: Registry
     config: AdapterServiceConfig
 
-    def get_adapter(self, request, for_: Type[Any]) -> Optional[Adapter]:
+    def get_adapter(self,
+                    request,
+                    for_: Type[Any],
+                    **kwargs
+                    ) -> Optional[Adapter]:
         """ Use the predicate registry to find the right adapter class """
 
         # Grab AdapterAction and use sorted_actions to find first match
@@ -26,7 +30,7 @@ class AdapterService(BaseService):
 
         # Find the first action which matches the args
         for action, adapter_class in sorted_actions:
-            if action.all_predicates_match(request, for_=for_):
+            if action.all_predicates_match(request, for_=for_, **kwargs):
                 # Use dependency injection to make an instance of
                 # that adapter class
                 adapter_instance = inject(
