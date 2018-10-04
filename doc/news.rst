@@ -2,6 +2,10 @@
 News
 ====
 
+- New request.adapt_resource(SomeAdapter, some_resource) finds the right
+  adapter for the passed in resource *and* makes that resource the one
+  used for DI on the returned adapter instance
+
 - ``get_adapter`` only worked on the resource/resourceid/parentid of
   ``request.resource``. Now allow ``adapter_service.get_adapter`` to
   pass in ``resource=some_resource`` to override usage of

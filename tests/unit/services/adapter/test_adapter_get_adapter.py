@@ -218,9 +218,9 @@ def test_get_adapter_for_resource_parentid_match_resourceid(
 #  ---- args: Use resource passed-in rather than request.resource
 
 def test_get_adapter_for_passed_in_resource(
-        fakefor_adapter, fakeresourceid_adapter,
-        adapterservice, fake_article1, fake_article2,
-        fake_breadcrumbs_resources,
+        fakefor_adapter, fakesubresource_adapter,
+        adapterservice, fake_article1, fake_article3,
+        fake_reference_entry,
         fake_request_class
 ):
     # Registrations:
@@ -231,9 +231,10 @@ def test_get_adapter_for_passed_in_resource(
     # - passed-in- resource is 'more/article1'
     # Expected:
     # - (a)
-    fake_request = fake_request_class(resource=fake_article2)
+    fake_request = fake_request_class(resource=fake_article1)
     adapter = adapterservice.get_adapter(fake_request,
-                                         for_=fake_breadcrumbs_resources,
-                                         resource=fake_article1,
+                                         for_=fake_reference_entry,
+                                         resource=fake_article3,
                                          )
-    assert 'Fake Breadcrumbs Resources' == adapter.name
+    assert 'Fake Subresource Adapter' == adapter.name
+    assert 'subrequest' == adapter.resource.id

@@ -48,8 +48,15 @@ def fake_article2():
 @pytest.fixture
 def fake_article2():
     # Used for matching resourceid
-    fa1 = FakeArticle(id='more/article2', parentids=['more/index', 'index'])
-    return fa1
+    fa2 = FakeArticle(id='more/article2', parentids=['more/index', 'index'])
+    return fa2
+
+
+@pytest.fixture
+def fake_article3():
+    # Used for testing request.adapt_resource
+    fa3 = FakeArticle(id='subrequest', parentids=['index'])
+    return fa3
 
 
 @dataclass
@@ -124,10 +131,32 @@ class FakeBreadcrumbsResourcesAdapter(Adapter):
         return self.name
 
 
+@dataclass
+class FakeReferenceEntry:
+    """ The result of an adapter for getting breadcrumbs """
+    pass
+
+
+@dataclass
+class FakeSubresourceAdapter(Adapter):
+    """ Test passing in resource via request.adapt_resource """
+    resource: Resource
+    name: str = 'Fake Subresource Adapter'
+
+    def __call__(self):
+        return self.name
+
+
 @pytest.fixture
 def fake_breadcrumbs_resources():
     # Use a fixture to get the right-named class into tests
     return FakeBreadcrumbsResources
+
+
+@pytest.fixture
+def fake_reference_entry():
+    # Use a fixture to get the right-named class into tests
+    return FakeReferenceEntry
 
 
 @pytest.fixture
@@ -161,6 +190,11 @@ def fakearticle_adapter(sm_registry):
     sm_registry.adapter(for_=FakeBreadcrumbsResources,
                         resource=FakeArticle)(
         FakeArticleAdapter)
+
+
+@pytest.fixture
+def fakesubresource_adapter(sm_registry):
+    sm_registry.adapter(for_=FakeReferenceEntry)(FakeSubresourceAdapter)
 
 
 @dataclass
