@@ -151,5 +151,8 @@ def inject(
             pass
 
     # Now that we have the args for the dataclass, construct it
-    t = target(**args)
+    try:
+        t = target(**args)
+    except:
+        pass
     return t
